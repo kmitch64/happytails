@@ -48,15 +48,15 @@ app
     .use(helmet())
     .use(express.static(STATIC_ASSETS()))
 
-    .use((err, _req, res, _next) => {
-        if (err.name === 'UnauthorizedError') {
-            res.status(401).json({ "error": err.name + ": " + err.message })
-        }
-        else if (err) {
-            res.status(400).json({ "error": err.name + ": " + err.message })
-            console.log(err)
-        }
-    })
+    // .use((err, _req, res, _next) => {
+    //     if (err.name === 'UnauthorizedError') {
+    //         res.status(401).json({ "error": err.name + ": " + err.message })
+    //     }
+    //     else if (err) {
+    //         res.status(400).json({ "error": err.name + ": " + err.message })
+    //         console.log(err)
+    //     }
+    // })
     .get(/^(?!\/api).*/, rateLimit/*, metadata*/);
 
 await routeMaster(app);
