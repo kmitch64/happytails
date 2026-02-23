@@ -2,6 +2,7 @@
 /* import React from 'react'; */ // importing full React to access React.JSX.Element type
 import type { JSX } from 'react'; // importing only JSX type for better performance and to avoid importing the entire React library
 import './App.css';
+import Adopt from "./pages/Adopt";
 
 // export default function App(): React.JSX.Element {
   export default function App(): JSX.Element {
@@ -9,8 +10,8 @@ import './App.css';
   // this page isn't a great example for typescript so I did this simple one.
   const title: string = "Happy Tails";
 
-  return (
-    <div className="App">
+  return ( <Adopt />
+    /* <div className="App">
       <header className="header">
         <h1>Welcome to {title}</h1>
         <p>A unified platform for pet care and adoption</p>
@@ -42,6 +43,6 @@ import './App.css';
       <footer className="footer">
         <p>© 2026 {title}. All rights reserved.</p>
       </footer>
-    </div>
+    </div> */
   );
 };
