@@ -10,8 +10,8 @@ import Adopt from "./pages/Adopt";
   // this page isn't a great example for typescript so I did this simple one.
   const title: string = "Happy Tails";
 
-  return ( <Adopt />
-    /* <div className="App">
+  return (
+    <div className="App">
       <header className="header">
         <h1>Welcome to {title}</h1>
         <p>A unified platform for pet care and adoption</p>
@@ -43,6 +43,6 @@ import Adopt from "./pages/Adopt";
       <footer className="footer">
         <p>© 2026 {title}. All rights reserved.</p>
       </footer>
-    </div> */
+    </div>
   );
 };
