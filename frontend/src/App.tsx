@@ -2,7 +2,11 @@
 /* import React from 'react'; */ // importing full React to access React.JSX.Element type
 import type { JSX } from 'react'; // importing only JSX type for better performance and to avoid importing the entire React library
 import './App.css';
-import Adopt from "./pages/Adopt";
+import { Router, Route, Routes } from 'react-router-dom'
+
+import Adopt from "./pages/Adopt/Adopt";
+import AdoptableProfile from './pages/Adopt/AdoptableProfile';
+import BrowseAdoptables from './pages/Adopt/BrowseAdoptables';
 
 // export default function App(): React.JSX.Element {
   export default function App(): JSX.Element {
@@ -11,6 +15,14 @@ import Adopt from "./pages/Adopt";
   const title: string = "Happy Tails";
 
   return (
+    /*<Router>
+      <Routes>
+          <Route path='/adopt' element={<Adopt />} />
+          <Route path='/adopt/adoptable-profile' element={<AdoptableProfile />} />
+          <Route path='/adopt/browse-adoptables' element={<BrowseAdoptables />} />
+      </Routes>
+    </Router>*/
+
     <div className="App">
       <header className="header">
         <h1>Welcome to {title}</h1>
@@ -44,5 +56,6 @@ import Adopt from "./pages/Adopt";
         <p>© 2026 {title}. All rights reserved.</p>
       </footer>
     </div>
+    
   );
 };

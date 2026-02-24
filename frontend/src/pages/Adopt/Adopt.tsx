@@ -1,5 +1,4 @@
 import type { JSX } from 'react'; 
-import '../App.css';
 
 export default function Adopt(): JSX.Element {
     return (
@@ -25,9 +24,9 @@ export default function Adopt(): JSX.Element {
                         <h3>Other</h3>
                     </div>
                     </section>
-                {/* Submit Application Section */}
+                {/* Adoption Application FAQ Section */}
                 <section className="hero">
-                    <h2>Submit an Adoption Application</h2>
+                    <h2>How to Apply to Adopt a Pet</h2>
                     <p>
                         Ready to adopt? Fill out an application to begin the adoption process
                         and give a pet a loving home.
