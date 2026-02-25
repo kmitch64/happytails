@@ -22,7 +22,6 @@ import BrowseAdoptables from './pages/Adopt/BrowseAdoptables';
           <Route path='/adopt/browse-adoptables' element={<BrowseAdoptables />} />
       </Routes>
     </Router>*/
-
     <div className="App">
       <header className="header">
         <h1>Welcome to {title}</h1>

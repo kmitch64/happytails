@@ -28,8 +28,7 @@ export default function Adopt(): JSX.Element {
                 <section className="hero">
                     <h2>How to Apply to Adopt a Pet</h2>
                     <p>
-                        Ready to adopt? Fill out an application to begin the adoption process
-                        and give a pet a loving home.
+                        Ready to adopt? 1. Browse adoptables → 2. View a profile → 3. Submit an application → 4. Meet & finalize adoption.
                     </p>
                     <button className="cta-button">Start Application</button>
                 </section>

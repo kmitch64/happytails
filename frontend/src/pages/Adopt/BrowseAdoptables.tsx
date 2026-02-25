@@ -15,8 +15,8 @@ export default function BrowseAdoptables(): JSX.Element {
 
             </section>
 
-            {/*Grid of adoptables - RIGHT SIDE*/}
-            <section className="adoptables-grid">
+            {/*Grid of adoptables - RIGHT SIDE -- adoptable CARDS*/}
+            <section className="adoptables-grid"> 
 
             </section>
 
