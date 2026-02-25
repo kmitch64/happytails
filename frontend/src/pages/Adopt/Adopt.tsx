@@ -1,4 +1,5 @@
 import type { JSX } from 'react'; 
+import { Link } from "react-router-dom";
 
 export default function Adopt(): JSX.Element {
     return (
@@ -11,7 +12,9 @@ export default function Adopt(): JSX.Element {
                 <section className="hero">
                     <h2>Browse pets available for adoption.</h2>
                     <p>Pet types include: Dogs, Cats, Other (Gerbils, Reptiles, Birds, etc.)</p>
-                    <button className="cta-button">See All Adoptables!</button>
+                        <Link to="/adopt/browse" className="cta-button">
+                            See All Adoptables!
+                        </Link>
                 </section>
                 <section className="features">
                     <div className="feature-card">

@@ -80,6 +80,16 @@
   color: #4CAF50;
 }
 
+.card-link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.feature-card:hover {
+  transform: translateY(-5px);
+  cursor: pointer;
+}
+
 .footer {
   background-color: #333;
   color: white;
