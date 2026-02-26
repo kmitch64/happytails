@@ -1,4 +1,6 @@
 import type { JSX } from 'react'; 
+import "./BrowseAdoptables.css";
+import { Link } from "react-router-dom";
 {/*insert Header component here*/}
 
 export default function BrowseAdoptables(): JSX.Element {
@@ -15,10 +17,16 @@ export default function BrowseAdoptables(): JSX.Element {
 
             </section>
 
-            {/*Grid of adoptables - RIGHT SIDE*/}
-            <section className="adoptables-grid">
-
+            {/*Grid of adoptables - RIGHT SIDE -- flippable CARDS*/}
+            <section className="adopt-grid">
+            {/* PLACEHOLDER card just to test linking to the PROFILE PAGE */}
+                <Link to="/adopt/profile" className="card-link">
+                    <div className="adopt-card">
+                    <div className="adopt-image-placeholder">Photo</div>
+                    </div>
+                </Link>
             </section>
+
 
             {/*How to Adopt - Bottom section*/}
             <section className="how-to-adopt">
