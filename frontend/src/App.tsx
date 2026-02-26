@@ -2,7 +2,7 @@
 import type { JSX } from 'react'; // importing only JSX type for better performance and to avoid importing the entire React library
 import './App.css';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom'; 
 
 import Home from "./pages/Home/Home";
 import Adopt from './pages/Adopt/Adopt';
