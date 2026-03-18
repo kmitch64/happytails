@@ -1,7 +1,7 @@
 
 import express from 'express';
 import UserModel from '../models/user.model.js';
-import otplib from 'otplib';
+import {generateSecret, generateURI} from 'otplib';
 import qrcoce from 'qrcode';
 import { generateToken } from '../utils/jwt.js';
 
@@ -76,8 +76,8 @@ export default {
   setup2FA: async (req, res) => {
   const { email } = req.body;
   try {
-    const secret = otplib.authenticator.generateSecret();
-    const otpauth = otplib.authenticator.keyuri(email, 'goodsie.ca', secret);
+    const secret = generateSecret();
+    const otpauth = generateURI(email, 'goodsie.ca', secret);
 
     const user = await UserModel.findOneAndUpdate(
       { email },
