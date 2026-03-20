@@ -23,7 +23,7 @@ const
 
 //MONGO_DB Connection
 // bypass for testing without mongo installed.
-const hasMongo = false;
+const hasMongo = true;
 if (hasMongo) {
     try {
         await mongoose.connect(mongoUri);

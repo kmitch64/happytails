@@ -39,18 +39,17 @@ export default {
         }
         catch (e) {
           const eresp = e.errorResponse;
-          if (eresp.code === 11000) {
+          if (eresp && eresp.code === 11000) {
             const kv = Object.entries(eresp.keyValue)[0];
             return res.status(400).json({ message: `${kv[0].toUpperCase()}: [ ${kv[1]} ] is already in use.` });
-          };
+          }
         };
       }
       catch (e) {
-        // console.debug("USER Err: ", e);
         throw new Error(e);
       };
 
-      return res.status(201).json({ success: true, message: "User created successfully" });
+      return res.status(201).json(user);
     }
     catch (e) {
       return res.status(500).json({ message: e.message });
