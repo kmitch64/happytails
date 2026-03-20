@@ -23,7 +23,7 @@ const
 
 //MONGO_DB Connection
 // bypass for testing without mongo installed.
-const hasMongo = false;
+const hasMongo = true;
 if (hasMongo) {
     try {
         await mongoose.connect(mongoUri);
@@ -48,15 +48,7 @@ app
     .use(helmet())
     .use(express.static(STATIC_ASSETS()))
 
-    // .use((err, _req, res, _next) => {
-    //     if (err.name === 'UnauthorizedError') {
-    //         res.status(401).json({ "error": err.name + ": " + err.message })
-    //     }
-    //     else if (err) {
-    //         res.status(400).json({ "error": err.name + ": " + err.message })
-    //         console.log(err)
-    //     }
-    // })
+    .get('/health', (_, res) => { rateLimit, res.status(200).json({ status: 'OK' }); })
     .get(/^(?!\/api).*/, rateLimit/*, metadata*/);
 
 await routeMaster(app);

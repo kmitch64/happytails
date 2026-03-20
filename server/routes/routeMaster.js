@@ -1,11 +1,12 @@
 
 import express from 'express';
 
+import authRouter from './v1/auth.js';
+import userRouter from './v1/user.js';
 
-//API Routes (Json)
+
 export default async function RouteMaster(/**@type {express.Express} */app) {
     app
-        .get('/api/health', (_, res) => {
-            res.status(200).json({ status: 'OK' });
-        });
+        .use('/api/v1/auth', authRouter)
+        .use('/api/v1/users', userRouter);
 };
