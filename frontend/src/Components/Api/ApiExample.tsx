@@ -1,4 +1,4 @@
-import { getAuthHeaders, fetchHelper } from "./apiHelper";
+import { getAuthHeaders, fetchHelper } from "./ApiHelper";
 
 /**
  * Example Interface for the Pet Data
