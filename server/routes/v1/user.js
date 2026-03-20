@@ -1,11 +1,11 @@
 
 import { Router } from 'express';
-import authMiddleware from '../../middlewares/auth.js';
+import isAuthorized from '../../middlewares/auth.js';
 import Controller from '../../controllers/user.controller.js';
 
 export default Router()
-  .get('/', authMiddleware, Controller.getAllUsers)
-  .get('/:id', authMiddleware, Controller.getUserById)
+  .get('/', isAuthorized, Controller.getAllUsers)
+  .get('/:id', isAuthorized, Controller.getUserById)
   .post('/create', Controller.createUser)
-  .put('/update/:id', authMiddleware, Controller.updateUser)
-  .delete('/:id', authMiddleware, Controller.deleteUser)
+  .put('/update/:id', isAuthorized, Controller.updateUser)
+  .delete('/:id', isAuthorized, Controller.deleteUser)
