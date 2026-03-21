@@ -1,32 +1,26 @@
 
 import { useState, useEffect } from 'react';
-import { AuthContext } from './AuthContext';
+import { AuthContext, User } from './AuthContext';
 
-interface User {
-  email: string;
-  is2FAEnabled?: boolean;
-  [key: string]: any;
-}
 
-export default function AuthProvider({ children }: { children: React.ReactNode }) {
+//added mostly to make AuthProvider look cool xD
+interface AuthProviderProps {
+  children: React.ReactNode;
+};
+
+/**
+ * AuthProvider component to provide authentication context to its children.
+ * Handles user session validation, login, logout, registration, 2FA verification, and 2FA disabling.
+ */
+export default function AuthProvider({ children }: AuthProviderProps) {
   const
     [isLoggedIn, setIsLoggedIn] = useState<boolean>(false),
     [user, setUser] = useState<User | null>(null),
-    [isLoading, setIsLoading] = useState(true)
+    [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
     /**
-     * Validates the current user session by checking with the authentication API.
-     * 
-     * Makes a request to '/api/auth/validate' with credentials to verify if the user
-     * has a valid session. Updates the authentication state based on the response:
-     * - On success: sets isLoggedIn to true and updates user data
-     * - On failure or error: sets isLoggedIn to false and clears user data
-     * 
-     * Always sets isLoading to false after completion, regardless of outcome.
-     * 
-     * @returns {Promise<void>} A promise that resolves when the session check is complete
-     * @throws {Error} Silently catches and handles any errors during the session validation
+     * Checks the user's session by making a request to the backend. If the session is valid, it updates the authentication state accordingly.
      */
     async function checkSession(): Promise<void> {
       try {
@@ -45,108 +39,87 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
         };
       }
       catch (e) {
-        // console.error('Session check failed:', e);
         setIsLoggedIn(false);
         setUser(null);
-      };
-      setIsLoading(false);
-    };
+      }
+      finally {
+        setIsLoading(false);
+      }
+    }
     checkSession();
   }, []);
 
   /**
-   * Authenticates a user with email and password credentials.
-   * 
-   * @param {string} email - The user's email address
-   * @param {string} password - The user's password
-   * @returns {Promise<{success: boolean, message?: string}>} An object containing the success status and an optional error message
-   * @throws {Error} Throws an error if the login request fails
-   * 
-   * @description
-   * Sends a POST request to the '/api/auth/login' endpoint with the provided credentials.
-   * On successful authentication:
-   * - Sets the logged-in state to true
-   * - Updates the user state with the returned user data
-   * - Returns a success object
-   * 
-   * On failure:
-   * - Returns an object with success: false and the error message
+   * Logs in a user with the provided email and password.
+   * @param email - The user's email address
+   * @param password - The user's password
    */
-  async function login(email: any, password: any): Promise<{ success: boolean; requires2FA?: boolean; userEmail?: string; message?: string; }> {
+  async function login(email: string, password: string) {
     try {
       const res = await fetch('/api/v1/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
-        credentials: 'include'
+        credentials: 'include',
       });
 
-      if (!res.ok) return { success: false, message: (await res.json()).message };
+      if (!res.ok)
+        return { success: false, message: (await res.json()).message };
 
-      const user = (await res.json()).user;
-      if (user.is2FAEnabled) {
-        return { success: true, requires2FA: true, userEmail: user.email };
-      }
+      const data = await res.json();
+      if (data.user.is2FAEnabled)
+        return { success: true, message: '', requires2FA: true, userEmail: data.user.email };
+
       else {
         setIsLoggedIn(true);
-        setUser(user);
+        setUser(data.user);
+        return { success: true, message: '' };
       };
-
-
-      return { success: true };
     }
     catch (e: any) {
-      // console.error('Login error:', e);
-      return { success: false, message: e.message };
-    };
-  };
-
-  async function verify2FA(email: any, token: any): Promise<{ success: boolean; message?: string; }> {
-    try {
-      const res = await fetch('/api/v1/auth/2fa/verify', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, token }),
-        credentials: 'include'
-      });
-
-      if (!res.ok) return { success: false, message: (await res.json()).message };
-
-      const user = (await res.json()).user;
-      setIsLoggedIn(true);
-      setUser(user);
-
-      return { success: true };
-    }
-    catch (e: any) {
-      // console.error('2FA verification error:', e);
       return { success: false, message: e.message };
     };
   };
 
   /**
-   * Registers a new user account.
-   * 
-   * @param {string} username - The username for the new account.
-   * @param {string} email - The email address for the new account.
-   * @param {string} password - The password for the new account.
-   * @returns {Promise<{success: boolean, message?: string}>} A promise that resolves to an object containing:
-   *   - success: boolean indicating if registration was successful
-   *   - message: optional error message if registration failed
-   * @throws Will catch and return fetch errors or network failures as {success: false, message: string}
+   * Logs out the currently logged-in user.
    */
-  async function register(username: any, email: any, password: any): Promise<{ success: boolean; message?: string; }> {
+  async function logout() {
+    try {
+      await fetch('/api/v1/auth/logout', {
+        method: 'POST',
+        credentials: 'include',
+      });
+
+      setIsLoggedIn(false);
+      setUser(null);
+
+      return { success: true, message: '' };
+    }
+    catch (e: any) {
+      return { success: false, message: e.message };
+    };
+  };
+
+  /**
+   * Registers a new user with the provided username, email, and password.
+   * @param username - The user's chosen username
+   * @param email - The user's email address
+   * @param password - The user's password
+   */
+  async function register(username: string, email: string, password: string) {
     try {
       const res = await fetch('/api/v1/users/create', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, email, password }),
-        credentials: 'include'
+        credentials: 'include',
       });
 
-      if (!res.ok) return { success: false, message: (await res.json()).message };
+      if (!res.ok)
+        return { success: false, message: (await res.json()).message };
 
-      return { success: true };
+      return { success: true, message: '' };
     }
     catch (e: any) {
       return { success: false, message: e.message };
@@ -154,55 +127,63 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
   };
 
   /**
-   * Logs out the current user by calling the logout API endpoint.
-   * Clears the user session and resets authentication state.
-   * 
-   * @returns {Promise<{success: boolean, message?: string}>} Returns an object indicating success or failure of the logout operation. On success, returns `{success: true}`. On failure, returns `{success: false, message: string}` with the error message.
-   * @throws {Error} Does not throw - errors are caught and returned in the result object
+   * Verifies a user's 2FA token.
+   * @param email - The user's email address
+   * @param token - The 2FA token
    */
-  async function logout(): Promise<{ success: boolean; message?: string; }> {
+  async function verify2FA(email: string, token: string) {
     try {
-      await fetch('/api/v1/auth/logout', {
+      const res = await fetch('/api/v1/auth/2fa/verify', {
         method: 'POST',
-        credentials: 'include'
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, token }),
+        credentials: 'include',
       });
 
-      setIsLoggedIn(false);
-      setUser(null);
-      return { success: true };
+      if (!res.ok)
+        return { success: false, message: (await res.json()).message };
+
+      const data = await res.json();
+      setIsLoggedIn(true);
+      setUser(data.user);
+
+      return { success: true, message: '' };
     }
     catch (e: any) {
-      // console.error('Logout error:', e);
       return { success: false, message: e.message };
     };
   };
 
-  async function disable2FA(): Promise<{ success: boolean; message?: string; }> {
+  /**
+   * Disables 2FA for the currently logged-in user.
+   */
+  async function disable2FA() {
     try {
       if (!user) return { success: false, message: 'No user logged in' };
       const res = await fetch('/api/v1/auth/2fa/disable', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: user.email }),
-        credentials: 'include'
+        credentials: 'include',
       });
 
-      if (!res.ok) return { success: false, message: (await res.json()).message };
+      if (!res.ok)
+        return { success: false, message: (await res.json()).message };
 
-      const updatedUser = (await res.json()).user;
-      setUser(updatedUser);
+      const data = await res.json();
+      setUser(data.user);
 
-      return { success: true };
+      return { success: true, message: '' };
     }
     catch (e: any) {
-      // console.error('Disable 2FA error:', e);
       return { success: false, message: e.message };
     };
-  }
+  };
 
   return (
     <AuthContext.Provider value={{ isLoading, isLoggedIn, user, register, login, logout, verify2FA, disable2FA }}>
       {children}
     </AuthContext.Provider>
   );
+
 };

@@ -5,7 +5,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 // import { Link } from 'react-router-dom'; 
 
 import Home from "./pages/Home/Home";
-
+import AuthProvider from './components/auth/AuthProvider';
 //auth pages
 import Login from './pages/login/login';
 import Register from './pages/register/register';
@@ -17,25 +17,26 @@ import Adopt from './pages/Adopt/Adopt';
 import AdoptableProfile from './pages/Adopt/AdoptableProfile';
 import BrowseAdoptables from './pages/Adopt/BrowseAdoptables';
 
+
 // export default function App(): React.JSX.Element {
-  export default function App(): JSX.Element {
+export default function App(): JSX.Element {
   return (
+    <AuthProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Home />} />
 
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Home />} />
 
-            
-            <Route path='/login' element={<Login />} />
-            <Route path='/register' element={<Register />} />
-            <Route path='/logout' element={<Logout />} />
-            <Route path='/2fa' element={<TwoFactorAuth />} />
+          <Route path='/login' element={<Login />} />
+          <Route path='/register' element={<Register />} />
+          <Route path='/logout' element={<Logout />} />
+          <Route path='/2fa' element={<TwoFactorAuth />} />
 
-            <Route path='/adopt' element={<Adopt />} />
-            <Route path='/adopt/profile' element={<AdoptableProfile />} />
-            <Route path='/adopt/browse' element={<BrowseAdoptables />} />
-          </Routes>
-        </BrowserRouter>
-
+          <Route path='/adopt' element={<Adopt />} />
+          <Route path='/adopt/profile' element={<AdoptableProfile />} />
+          <Route path='/adopt/browse' element={<BrowseAdoptables />} />
+        </Routes>
+      </BrowserRouter>
+    </AuthProvider>
   );
 };

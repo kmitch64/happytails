@@ -14,8 +14,15 @@ export default {
    * @returns 
    */
   validate: async (req, res) => {
-    const user = await UserModel.findById(req.user._id).select('-password -otpSecret');
+    try {
+      if (!req.user) return res.status(401).json({ message: "Unauthorized: no user data in token" });
+        const user = await UserModel.findById(req.user._id).select('-password -otpSecret');
     return res.status(200).json({ user });
+    }
+    catch (e) {
+      console.error('Validation error:', e);
+      return res.status(500).json({ message: 'Internal Server Error' });
+    };
   },
 
   /**
@@ -53,7 +60,7 @@ export default {
     }
     catch (e) {
       console.error('Login error:', e);
-      return res.status(500).json('Internal Server Error');
+      return res.status(500).json({ message: 'Internal Server Error' });
     };
   },
 
@@ -64,7 +71,7 @@ export default {
    */
   logout: (_, res) => {
     res.clearCookie('token');
-    return res.status(200).json("Logged out successfully");
+    return res.status(200).json({ message: "Logged out successfully" });
   },
 
   /**
@@ -117,6 +124,7 @@ export default {
       }
       res.status(200).json({ message: '2FA disabled successfully' });
     } catch (error) {
+      console.error('Error in disable2FA:', error);
       res.status(500).json({ message: 'Error disabling 2FA', error });
     }
   },

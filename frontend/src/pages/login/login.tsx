@@ -19,12 +19,12 @@ export default function Login() {
     { login } = useAuth(),
     navigate = useNavigate(),
 
-    handleChange = (e: any) => {
+    handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       const { name, value } = e.target;
       setFormData({ ...formData, [name]: value });
     },
 
-    handleSubmit = async (e: any) => {
+    handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
       e.preventDefault();
       setIsLoading(true);
       setError('');
@@ -36,7 +36,7 @@ export default function Login() {
             navigate('/2fa', { state: { email: userEmail, from: '/login' } });
           }
           else {
-            navigate('/dashboard');
+            navigate('/');
           };
         }
         else {

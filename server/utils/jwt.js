@@ -18,7 +18,7 @@ import { join } from 'path';
 async function generateToken(user) {
 
   const
-    key_path = join(process.cwd(), 'etc/secrets/ec-private-key.pem'),
+    key_path = join(process.cwd(), process.env.NODE_ENV === 'production' ? 'etc/secrets/ec-private-key.pem' : '../etc/secrets/ec-private-key.pem'),
     key_file = await readFile(key_path, 'utf8');
 
   return await new Promise(async (resolve, reject) => {
@@ -45,7 +45,7 @@ async function generateToken(user) {
 
 async function verifyToken(token) {
   const
-    publicKey = await readFile(join(process.cwd(), 'etc/secrets/ec-public-key.pem'), 'utf8');
+    publicKey = await readFile(join(process.cwd(), process.env.NODE_ENV === 'production' ? 'etc/secrets/ec-public-key.pem' : '../etc/secrets/ec-public-key.pem'), 'utf8');
 
     return await new Promise((resolve, reject) => {
 

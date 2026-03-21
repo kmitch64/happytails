@@ -27,14 +27,14 @@ async function isAuthorized(req, res, next) {
     if (authheader && authheader.startsWith('Bearer ')) token = authheader.split(" ")[1];
     else if (req.cookies.token) token = req.cookies.token;
 
-    if (!token) return res.status(401).json({ message: "Unauthorized: missing token" });
+    if (!token) return //res.status(401).json({ message: "Unauthorized: missing token" });
 
     req.user = await verifyToken(token);
     next();
   }
   catch (e) {
-    // console.log("Error in Auth Middleware: ", e);
-    return res.status(401).json({ message: "Internal Server Error (auth)" });
+    console.log("Error in Auth Middleware: ", e);
+    return res.status(500).json({ message: "Internal Server Error (auth)" });
   };
 
 };
