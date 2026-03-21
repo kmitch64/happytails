@@ -1,11 +1,18 @@
 
 import { useState, useEffect } from 'react';
+import type { ReactNode } from 'react';
 import { AuthContext } from './AuthContext';
 
-export default function AuthProvider({ children }) {
+interface User {
+  email: string;
+  is2FAEnabled?: boolean;
+  [key: string]: any;
+}
+
+export default function AuthProvider({ children }: { children: ReactNode }) {
   const
-    [isLoggedIn, setIsLoggedIn] = useState(false),
-    [user, setUser] = useState(null),
+    [isLoggedIn, setIsLoggedIn] = useState<boolean>(false),
+    [user, setUser] = useState<User | null>(null),
     [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
@@ -22,7 +29,7 @@ export default function AuthProvider({ children }) {
      * @returns {Promise<void>} A promise that resolves when the session check is complete
      * @throws {Error} Silently catches and handles any errors during the session validation
      */
-    async function checkSession() {
+    async function checkSession(): Promise<void> {
       try {
         const res = await fetch('/api/v1/auth/validate', {
           credentials: 'include'
@@ -66,7 +73,7 @@ export default function AuthProvider({ children }) {
    * On failure:
    * - Returns an object with success: false and the error message
    */
-  async function login(email, password) {
+  async function login(email: any, password: any): Promise<{ success: boolean; requires2FA?: boolean; userEmail?: string; message?: string; }> {
     try {
       const res = await fetch('/api/v1/auth/login', {
         method: 'POST',
@@ -89,13 +96,13 @@ export default function AuthProvider({ children }) {
 
       return { success: true };
     }
-    catch (e) {
+    catch (e: any) {
       // console.error('Login error:', e);
       return { success: false, message: e.message };
     };
   };
 
-  async function verify2FA(email, token) {
+  async function verify2FA(email: any, token: any): Promise<{ success: boolean; message?: string; }> {
     try {
       const res = await fetch('/api/v1/auth/2fa/verify', {
         method: 'POST',
@@ -112,7 +119,7 @@ export default function AuthProvider({ children }) {
 
       return { success: true };
     }
-    catch (e) {
+    catch (e: any) {
       // console.error('2FA verification error:', e);
       return { success: false, message: e.message };
     };
@@ -129,7 +136,7 @@ export default function AuthProvider({ children }) {
    *   - message: optional error message if registration failed
    * @throws Will catch and return fetch errors or network failures as {success: false, message: string}
    */
-  async function register(username, email, password) {
+  async function register(username: any, email: any, password: any): Promise<{ success: boolean; message?: string; }> {
     try {
       const res = await fetch('/api/v1/users/create', {
         method: 'POST',
@@ -142,7 +149,7 @@ export default function AuthProvider({ children }) {
 
       return { success: true };
     }
-    catch (e) {
+    catch (e: any) {
       return { success: false, message: e.message };
     };
   };
@@ -154,7 +161,7 @@ export default function AuthProvider({ children }) {
    * @returns {Promise<{success: boolean, message?: string}>} Returns an object indicating success or failure of the logout operation. On success, returns `{success: true}`. On failure, returns `{success: false, message: string}` with the error message.
    * @throws {Error} Does not throw - errors are caught and returned in the result object
    */
-  async function logout() {
+  async function logout(): Promise<{ success: boolean; message?: string; }> {
     try {
       await fetch('/api/v1/auth/logout', {
         method: 'POST',
@@ -165,14 +172,15 @@ export default function AuthProvider({ children }) {
       setUser(null);
       return { success: true };
     }
-    catch (e) {
+    catch (e: any) {
       // console.error('Logout error:', e);
       return { success: false, message: e.message };
     };
   };
 
-  async function disable2FA() {
+  async function disable2FA(): Promise<{ success: boolean; message?: string; }> {
     try {
+      if (!user) return { success: false, message: 'No user logged in' };
       const res = await fetch('/api/v1/auth/2fa/disable', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -187,7 +195,7 @@ export default function AuthProvider({ children }) {
 
       return { success: true };
     }
-    catch (e) {
+    catch (e: any) {
       // console.error('Disable 2FA error:', e);
       return { success: false, message: e.message };
     };

@@ -1,0 +1,42 @@
+.register-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.form-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #555;
+}
+
+.form-input {
+  padding: 10px 15px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: #007bff;
+}
+
+.error-message {
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.register-footer {
+  margin-top: auto;
+  text-align: center;
+}
+
+.register-footer a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.register-footer a:hover {
+  text-decoration: underline;
+}

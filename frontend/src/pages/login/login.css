@@ -1,0 +1,36 @@
+
+.login-card {
+  min-height: 100vh;
+  padding: 120px 10px 10px;
+  position: relative;
+  background: var(--bg-card);
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 30px;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.error-message {
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.login-footer {
+  margin-top: auto;
+  text-align: center;
+}
+
+.login-footer a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.login-footer a:hover {
+  text-decoration: underline;
+}
+

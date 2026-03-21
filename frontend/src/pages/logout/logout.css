@@ -1,0 +1,31 @@
+/**/
+.logout-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+.logout-buttons {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.logout-button {
+  background-color: rgba(44, 21, 21, 0.795);
+  color: #ff5555;
+}
+
+.logout-button:hover {
+  background-color: #ff5555;
+  color: #ffffff;
+}
+.cancel-button {
+  background-color: rgba(100, 100, 100, 0.795);
+  color: #ffffff;
+  margin-left: 10px;
+}
+.cancel-button:hover {
+  background-color: #555555;
+  color: #ffffff;
+}
