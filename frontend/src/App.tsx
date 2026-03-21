@@ -5,6 +5,14 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 // import { Link } from 'react-router-dom'; 
 
 import Home from "./pages/Home/Home";
+
+//auth pages
+import Login from './pages/login/login';
+import Register from './pages/register/register';
+import Logout from './pages/logout/logout';
+import TwoFactorAuth from './pages/2fa/2fa';
+
+//adopt pages
 import Adopt from './pages/Adopt/Adopt';
 import AdoptableProfile from './pages/Adopt/AdoptableProfile';
 import BrowseAdoptables from './pages/Adopt/BrowseAdoptables';
@@ -16,6 +24,12 @@ import BrowseAdoptables from './pages/Adopt/BrowseAdoptables';
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Home />} />
+
+            
+            <Route path='/login' element={<Login />} />
+            <Route path='/register' element={<Register />} />
+            <Route path='/logout' element={<Logout />} />
+            <Route path='/2fa' element={<TwoFactorAuth />} />
 
             <Route path='/adopt' element={<Adopt />} />
             <Route path='/adopt/profile' element={<AdoptableProfile />} />
