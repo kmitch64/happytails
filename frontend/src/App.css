@@ -96,3 +96,42 @@
   padding: 1rem;
   margin-top: auto;
 }
+
+
+
+
+
+.auth-spinner {
+  width: 24px;
+  height: 24px;
+  border: 4px solid;
+  border-color: var(--primary-blue) transparent transparent transparent;
+  border-radius: 50%;
+  animation: auth-spin 1s linear infinite;
+}
+
+@keyframes auth-spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.card {
+  text-align: center;
+  padding: 20px 2rem;
+  background: var(--bg-card);
+  border-radius: 12px;
+  border: var(--card-border);
+  margin: 0 auto;
+  position: relative;
+  overflow: hidden;
+}
+
+.card-650 {
+  width: 100%;
+  max-width: 650px;
+}
+
+.card-hover {
+  border: var(--card-border-hover);
+  box-shadow: var(--box-shadow-hover);
+}
