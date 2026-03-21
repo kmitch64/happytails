@@ -1,6 +1,5 @@
 
 import { useState, useEffect } from 'react';
-import type { ReactNode } from 'react';
 import { AuthContext } from './AuthContext';
 
 interface User {
@@ -9,7 +8,7 @@ interface User {
   [key: string]: any;
 }
 
-export default function AuthProvider({ children }: { children: ReactNode }) {
+export default function AuthProvider({ children }: { children: React.ReactNode }) {
   const
     [isLoggedIn, setIsLoggedIn] = useState<boolean>(false),
     [user, setUser] = useState<User | null>(null),
