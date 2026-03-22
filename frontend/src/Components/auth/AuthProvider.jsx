@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from 'react';
-import { AuthContext, User } from './AuthContext';
+import { AuthContext } from './AuthContext.js';
 
 
 //added mostly to make AuthProvider look cool xD
@@ -14,9 +14,9 @@ import { AuthContext, User } from './AuthContext';
  */
 export default function AuthProvider({ children }/*: AuthProviderProps) */) {
   const
-    [isLoggedIn, setIsLoggedIn] = useState<boolean>(false),
-    [user, setUser] = useState<User | null>(null),
-    [isLoading, setIsLoading] = useState<boolean>(true);
+    [isLoggedIn, setIsLoggedIn] = useState(false),
+    [user, setUser] = useState(null),
+    [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     /**
