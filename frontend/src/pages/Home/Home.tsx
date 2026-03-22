@@ -4,17 +4,11 @@ import { Link } from "react-router-dom";
 
 
 export default function Home(): JSX.Element {
-    // this page isn't a great example for typescript so I did this simple one.
-    const title: string = "Happy Tails";
     
     return (
         
-        <div className="App">
-            {/*Header and header styling to go into components/header*/}
-            <header className="header">
-                <h1>Welcome to {title}</h1>
-                <p>A unified platform for pet care and adoption</p>
-            </header>
+        <>
+            
 
             <main className="main-content">
 
@@ -43,11 +37,8 @@ export default function Home(): JSX.Element {
                 </div>
             </section>
         </main>
-        {/*footer and footer styling to go into components/footer*/}
-        <footer className="footer">
-            <p>© 2026 {title}. All rights reserved.</p>
-        </footer>
-    </div>
+       
+    </>
     
     )
-}
+};
