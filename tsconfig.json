@@ -3,7 +3,7 @@
    "compilerOptions": {
     "target": "ESNext",
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
-    "allowJs": false,
+    "allowJs": true,
     "skipLibCheck": false,
     "esModuleInterop": false,
     "allowSyntheticDefaultImports": true,
@@ -17,4 +17,6 @@
     "noEmit": true,
     "jsx": "react-jsx"
   },
+  "include": ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.d.ts"],
+  "exclude": ["node_modules"]
 }

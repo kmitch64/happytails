@@ -24,7 +24,7 @@ const
 //MONGO_DB Connection
 // bypass for testing without mongo installed.
 const hasMongo = true;
-if (hasMongo) {
+if (hasMongo && mongoUri) {
     try {
         await mongoose.connect(mongoUri);
         console.log('Connected to MongoDB successfully!')
@@ -48,7 +48,8 @@ app
     .use(helmet())
     .use(express.static(STATIC_ASSETS()))
 
-    .get('/health', (_, res) => { rateLimit, res.status(200).json({ status: 'OK' }); })
+    
+    .get('/health', rateLimit, (_, res) => res.status(200).json({ status: 'OK' }) )
     .get(/^(?!\/api).*/, rateLimit/*, metadata*/);
 
 await routeMaster(app);
