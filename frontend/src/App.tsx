@@ -2,7 +2,7 @@
 import type { JSX } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
-import AuthProvider from './components/auth/AuthProvider.tsx';
+import AuthProvider from './components/auth/AuthProvider.js';
 // import ProtectedRoute from './Components/auth/ProtectedRoute';
 
 //layout
