@@ -6,6 +6,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 import Home from "./pages/Home/Home";
 import AuthProvider from './components/auth/AuthProvider';
+import ProtectedRoute from './components/auth/ProtectedRoute';
 //auth pages
 import Login from './pages/login/login';
 import Register from './pages/register/register';
@@ -26,13 +27,14 @@ export default function App(): JSX.Element {
         <Routes>
           <Route path="/" element={<Home />} />
 
-
           <Route path='/login' element={<Login />} />
           <Route path='/register' element={<Register />} />
           <Route path='/logout' element={<Logout />} />
           <Route path='/2fa' element={<TwoFactorAuth />} />
 
-          <Route path='/adopt' element={<Adopt />} />
+          {/* using the ProtectedRoute component to protect a route saves adding unneeded authentication logic into each component */}
+          <Route path='/adopt' element={<ProtectedRoute><Adopt /></ProtectedRoute>} />
+          
           <Route path='/adopt/profile' element={<AdoptableProfile />} />
           <Route path='/adopt/browse' element={<BrowseAdoptables />} />
         </Routes>
