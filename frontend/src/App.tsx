@@ -2,11 +2,11 @@
 import type { JSX } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
-import AuthProvider from './components/auth/AuthProvider';
-// import ProtectedRoute from './components/auth/ProtectedRoute';
+import AuthProvider from './Components/auth/AuthProvider';
+// import ProtectedRoute from './Components/auth/ProtectedRoute';
 
 //layout
-import DefaultLayout from './components/layouts/DefaultLayout';
+import DefaultLayout from './Components/layouts/DefaultLayout';
 
 //auth pages
 // Frontend peeps can decide if these go in the layout or not, currently inside.

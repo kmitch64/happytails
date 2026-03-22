@@ -1,8 +1,8 @@
 
 import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useAuth } from '../../components/auth/AuthContext.js';
-// import MetaData from '../../components/metadata/MetaData.jsx';
+import { useAuth } from '../../Components/auth/AuthContext';
+// import MetaData from '../../Components/metadata/MetaData.jsx';
 
 
 export default function TwoFactorAuth() {
