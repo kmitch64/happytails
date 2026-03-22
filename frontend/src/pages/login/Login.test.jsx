@@ -2,7 +2,7 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import Login from './login.jsx';
-import { useAuth } from '../../Components/auth/AuthContext';
+import { useAuth } from '../../components/auth/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
 
