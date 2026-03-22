@@ -2,7 +2,7 @@
 import type { JSX } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
-import AuthProvider from './components/auth/AuthProvider.js';
+import AuthProvider from './components/auth/AuthProvider';
 // import ProtectedRoute from './Components/auth/ProtectedRoute';
 
 //layout
@@ -19,7 +19,7 @@ import TwoFactorAuth from './pages/2fa/2fa';
 import Home from './pages/Home/Home';
 
 //adopt pages
-import Adopt from './pages/Adopt/Adopt.jsx';
+import Adopt from './pages/Adopt/Adopt';
 import AdoptableProfile from './pages/Adopt/AdoptableProfile';
 import BrowseAdoptables from './pages/Adopt/BrowseAdoptables';
 
