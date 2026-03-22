@@ -29,17 +29,17 @@ export default function App(): JSX.Element {
       <BrowserRouter>
         <Routes>
           <Route element={<DefaultLayout />}>
-            <Route path="/" element={<Home />} />
+
             <Route path='/login' element={<Login />} />
             <Route path='/register' element={<Register />} />
             <Route path='/logout' element={<Logout />} />
             <Route path='/2fa' element={<TwoFactorAuth />} />
 
-            {/* using the ProtectedRoute component to protect a route saves adding unneeded authentication logic into each component */}
-            <Route path='/adopt' element={/*<ProtectedRoute>*/<Adopt />/*</ProtectedRoute>*/} />
-
+            <Route path="/" element={<Home />} />
+            <Route path='/adopt' element={<Adopt />} />
             <Route path='/adopt/profile' element={<AdoptableProfile />} />
             <Route path='/adopt/browse' element={<BrowseAdoptables />} />
+            
           </Route>
         </Routes>
       </BrowserRouter>
