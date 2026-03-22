@@ -4,6 +4,12 @@ import UserModel from '../models/user.model.js';
 
 export default {
 
+  /**
+   * 
+   * @param {import("express").Request} req 
+   * @param {import("express").Response} res 
+   * @returns {Promise<import("express").Response>}
+   */
   getAllUsers: async (req, res) => {
     try {
       const users = await UserModel.find();
@@ -14,6 +20,12 @@ export default {
     };
   },
 
+  /**
+   * 
+   * @param {import("express").Request} req 
+   * @param {import("express").Response} res 
+   * @returns {Promise<import("express").Response>}
+   */
   getUserById: async (req, res) => {
     try {
       const user = await UserModel.findById(req.params.id);
@@ -27,6 +39,12 @@ export default {
     };
   },
 
+  /**
+   * 
+   * @param {import("express").Request} req 
+   * @param {import("express").Response} res 
+   * @returns {Promise<import("express").Response>}
+   */
   createUser: async (req, res) => {
     try {
       let
@@ -56,6 +74,12 @@ export default {
     };
   },
 
+  /**
+   * 
+   * @param {import("express").Request} req 
+   * @param {import("express").Response} res 
+   * @returns {Promise<import("express").Response>}
+   */
   updateUser: async (req, res) => {
     try {
       const updatedUser = await UserModel.findByIdAndUpdate(req.params.id, req.body, {
@@ -73,6 +97,12 @@ export default {
     };
   },
 
+  /**
+   * 
+   * @param {import("express").Request} req 
+   * @param {import("express").Response} res 
+   * @returns {Promise<import("express").Response>}
+   */
   deleteUser: async (req, res) => {
     try {
       const deletedUser = await UserModel.findByIdAndDelete(req.params.id);

@@ -9,15 +9,11 @@ import { verifyToken } from "../utils/jwt.js";
  * verifies it using ES512 algorithm with an elliptic curve public key,
  * and attaches the decoded user data to the request object.
  * 
- * @param {Object} req - Express request object
- * @param {Object} req.headers - Request headers
- * @param {string} [req.headers.authorization] - Authorization header containing Bearer token
- * @param {Object} req.cookies - Request cookies
- * @param {string} [req.cookies.token] - JWT token stored in cookies
- * @param {Object} res - Express response object
- * @param {Function} next - Express next middleware function
- * @returns {Promise<void>} Calls next() on success, or sends 401 error response on failure
- * @throws {Error} Returns 401 status with error message if token is missing or invalid
+ * @param {import("express").Request} req - The Express request object
+ * @param {import("express").Response} res - The Express response object
+ * @param {import("express").NextFunction} next - The next middleware function
+ * @returns {Promise<import("express").Response|void>} A promise that resolves to a response if unauthorized, or calls next() if authorized
+ * @throws {Error} If token verification fails or an unexpected error occurs
  */
 async function isAuthorized(req, res, next) {
   try {
