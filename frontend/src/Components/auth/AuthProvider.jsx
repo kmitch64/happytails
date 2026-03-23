@@ -1,28 +1,28 @@
 
 import { useState, useEffect } from 'react';
-import { AuthContext, User } from './AuthContext';
+import { AuthContext } from './AuthContext.js';
 
 
 //added mostly to make AuthProvider look cool xD
-interface AuthProviderProps {
-  children: React.ReactNode;
-};
+// interface AuthProviderProps {
+//   children: React.ReactNode;
+// };
 
 /**
  * AuthProvider component to provide authentication context to its children.
  * Handles user session validation, login, logout, registration, 2FA verification, and 2FA disabling.
  */
-export default function AuthProvider({ children }: AuthProviderProps) {
+export default function AuthProvider({ children }/*: AuthProviderProps) */) {
   const
-    [isLoggedIn, setIsLoggedIn] = useState<boolean>(false),
-    [user, setUser] = useState<User | null>(null),
-    [isLoading, setIsLoading] = useState<boolean>(true);
+    [isLoggedIn, setIsLoggedIn] = useState(false),
+    [user, setUser] = useState(null),
+    [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     /**
      * Checks the user's session by making a request to the backend. If the session is valid, it updates the authentication state accordingly.
      */
-    async function checkSession(): Promise<void> {
+    async function checkSession()/*: Promise<void> */ {
       try {
         const res = await fetch('/api/v1/auth/validate', {
           credentials: 'include'
@@ -54,7 +54,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
    * @param email - The user's email address
    * @param password - The user's password
    */
-  async function login(email: string, password: string) {
+  async function login(email, password)/*: Promise<{ success: boolean; message: string; requires2FA?: boolean; userEmail?: string }> */ {
     try {
       const res = await fetch('/api/v1/auth/login', {
         method: 'POST',
@@ -76,7 +76,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
         return { success: true, message: '' };
       };
     }
-    catch (e: any) {
+    catch (e) {
       return { success: false, message: e.message };
     };
   };
@@ -96,7 +96,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
 
       return { success: true, message: '' };
     }
-    catch (e: any) {
+    catch (e) {
       return { success: false, message: e.message };
     };
   };
@@ -107,7 +107,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
    * @param email - The user's email address
    * @param password - The user's password
    */
-  async function register(username: string, email: string, password: string) {
+  async function register(username, email, password)/*: Promise<{ success: boolean; message: string }> */ {
     try {
       const res = await fetch('/api/v1/users/create', {
         method: 'POST',
@@ -121,7 +121,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
 
       return { success: true, message: '' };
     }
-    catch (e: any) {
+    catch (e) {
       return { success: false, message: e.message };
     };
   };
@@ -131,7 +131,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
    * @param email - The user's email address
    * @param token - The 2FA token
    */
-  async function verify2FA(email: string, token: string) {
+  async function verify2FA(email, token)/*: Promise<{ success: boolean; message: string }> */ {
     try {
       const res = await fetch('/api/v1/auth/2fa/verify', {
         method: 'POST',
@@ -149,7 +149,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
 
       return { success: true, message: '' };
     }
-    catch (e: any) {
+    catch (e) {
       return { success: false, message: e.message };
     };
   };
@@ -157,7 +157,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
   /**
    * Disables 2FA for the currently logged-in user.
    */
-  async function disable2FA() {
+  async function disable2FA()/*: Promise<{ success: boolean; message: string }> */ {
     try {
       if (!user) return { success: false, message: 'No user logged in' };
       const res = await fetch('/api/v1/auth/2fa/disable', {
@@ -175,7 +175,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
 
       return { success: true, message: '' };
     }
-    catch (e: any) {
+    catch (e) {
       return { success: false, message: e.message };
     };
   };
