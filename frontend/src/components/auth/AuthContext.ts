@@ -1,7 +1,8 @@
 
 import { createContext, useContext } from 'react';
 
-export const AuthContext = createContext(null);
+
+export const AuthContext = createContext<AuthContextType | null>(null);
 
 /**
  * Custom hook to access the authentication context.
@@ -13,4 +14,3 @@ export function useAuth() {
     }
     return context;
 };
-

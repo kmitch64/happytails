@@ -1,12 +1,7 @@
 
 import { useState, useEffect } from 'react';
-import { AuthContext, User } from './AuthContext';
+import { AuthContext } from './AuthContext';
 
-
-//added mostly to make AuthProvider look cool xD
-interface AuthProviderProps {
-  children: React.ReactNode;
-};
 
 /**
  * AuthProvider component to provide authentication context to its children.
@@ -49,11 +44,6 @@ export default function AuthProvider({ children }: AuthProviderProps) {
     checkSession();
   }, []);
 
-  /**
-   * Logs in a user with the provided email and password.
-   * @param email - The user's email address
-   * @param password - The user's password
-   */
   async function login(email: string, password: string) {
     try {
       const res = await fetch('/api/v1/auth/login', {
