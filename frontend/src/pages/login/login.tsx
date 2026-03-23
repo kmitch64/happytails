@@ -1,7 +1,7 @@
 
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../components/auth/AuthContext.js';
+import { useAuth } from '../../components/auth/AuthContext';
 // import MetaData from '../../components/metadata/MetaData.jsx';
 
 import './login.css';
