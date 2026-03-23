@@ -2,11 +2,11 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import Login from './login.jsx';
-import { useAuth } from '../../components/auth/AuthContext.js';
+import { useAuth } from '../../components/auth/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
 
-jest.mock('../../Components/auth/AuthContext');
+jest.mock('../../components/auth/AuthContext');
 jest.mock('react-router-dom', () => ({
   useNavigate: jest.fn(),
 }));
