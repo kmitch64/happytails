@@ -2,7 +2,7 @@
 import type { JSX } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
-import AuthProvider from './components/auth/AuthProvider';
+// import AuthProvider from './components/auth/AuthProvider';
 // import ProtectedRoute from './components/auth/ProtectedRoute';
 
 //layout
@@ -29,7 +29,7 @@ import './App.css';
 
 export default function App(): JSX.Element {
   return (
-    <AuthProvider>
+    // <AuthProvider>
       <BrowserRouter>
         <Routes>
 
@@ -49,6 +49,6 @@ export default function App(): JSX.Element {
 
         </Routes>
       </BrowserRouter>
-    </AuthProvider>
+    // </AuthProvider>
   );
 };
