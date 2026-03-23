@@ -6,7 +6,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 // import ProtectedRoute from './components/auth/ProtectedRoute';
 
 //layout
-import DefaultLayout from './components/layouts/DefaultLayout';
+// import DefaultLayout from './components/layouts/DefaultLayout';
 
 //auth pages
 // Frontend peeps can decide if these go in the layout or not, currently inside.
@@ -33,7 +33,7 @@ export default function App(): JSX.Element {
       <BrowserRouter>
         <Routes>
 
-          <Route element={<DefaultLayout />}>
+          {/* <Route element={<DefaultLayout />}> */}
 
             <Route path='/login' element={<Login />} />
             <Route path='/register' element={<Register />} />
@@ -45,7 +45,7 @@ export default function App(): JSX.Element {
             <Route path='/adopt/profile' element={<AdoptableProfile />} />
             <Route path='/adopt/browse' element={<BrowseAdoptables />} />
 
-          </Route>
+          {/* </Route> */}
 
         </Routes>
       </BrowserRouter>
