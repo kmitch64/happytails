@@ -1,20 +1,33 @@
 
 declare global {
 
-  /**
-   * Defines the shape of the properties expected by the AuthProvider component, which includes a single property 'children' that represents the nested components that will have access to the authentication context provided by AuthProvider.
-   */
-   interface AuthProviderProps {
-    children: React.ReactNode;
-  }
+
+  /*********************************
+   * User interface
+   *********************************/
 
   /**
-   * Defines the shape of a User object, which includes an email property (string) and an optional is2FAEnabled property (boolean) to indicate whether the user has two-factor authentication enabled. The interface also allows for additional properties using an index signature, making it flexible to accommodate various user-related data that may be returned from the backend or used within the application.
+   * The User interface defines the structure of a user object in the authentication context. It includes properties such as email (string) to store the user's email address, an optional is2FAEnabled (boolean) to indicate whether the user has two-factor authentication enabled, and an index signature [key: string]: any to allow for additional properties that may be added to the user object without causing TypeScript errors. This interface can be extended in the future to include more specific user-related properties as needed.
    */
   interface User {
     email: string;
     is2FAEnabled?: boolean;
     [key: string]: any;
+  }
+
+
+  /*********************************
+   * Authentication related types
+   *********************************/
+
+  /** shortcut type--why not */ 
+  type ReactNode = React.ReactNode;
+
+  /**
+   * Defines the shape of the properties expected by the AuthProvider component, which includes a single property 'children' that represents the nested components that will have access to the authentication context provided by AuthProvider.
+   */
+   interface AuthProviderProps {
+    children: ReactNode;
   }
 
   /**
