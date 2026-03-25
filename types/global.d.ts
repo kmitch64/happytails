@@ -10,6 +10,7 @@ declare global {
    * The User interface defines the structure of a user object in the authentication context. It includes properties such as email (string) to store the user's email address, an optional is2FAEnabled (boolean) to indicate whether the user has two-factor authentication enabled, and an index signature [key: string]: any to allow for additional properties that may be added to the user object without causing TypeScript errors. This interface can be extended in the future to include more specific user-related properties as needed.
    */
   interface User {
+    username: string;
     email: string;
     is2FAEnabled?: boolean;
     [key: string]: any;
