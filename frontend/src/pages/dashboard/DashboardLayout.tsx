@@ -43,6 +43,14 @@ export default function DashboardLayout() {
               </Link>
             </li>
 
+            <li className="nav-section-header">My Pets</li>
+            <li>
+              <Link to="/dashboard/my-pets" className="nav-link">
+                <FontAwesomeIcon icon={faPaw} />
+                <span>My Pets</span>
+              </Link>
+            </li>
+
             <li className="nav-section-header">Pet Adoption</li>
             <li>
               <Link to="/dashboard/adopt" className="nav-link">

@@ -18,15 +18,20 @@ import TwoFactorAuth from './pages/2fa/2fa';
 //home page
 import Home from "./pages/Home/Home";
 
-//adopt pages
-import Adopt from './pages/Adopt/Adopt';
-import AdoptableProfile from './pages/Adopt/AdoptableProfile';
-import BrowseAdoptables from './pages/Adopt/BrowseAdoptables';
+
 
 //dashboard
 import DashboardLayout from './pages/dashboard/DashboardLayout';
 import DashboardOverview from './pages/dashboard/DashboardOverview';
-// import MyPets from './pages/dashboard/MyPets';
+import MyPets from './pages/dashboard/MyPets';
+import AddEditPet from './pages/dashboard/AddEditPet';
+import MyPetProfile from './pages/dashboard/MyPetProfile';
+
+//adopt pages
+import Adopt from './pages/dashboard/DashboardAdopt';
+import AdoptableProfile from './pages/dashboard/DashboardPetProfile';
+import BrowseAdoptables from './pages/dashboard/DashboardBrowseAdoptables';
+
 // import MyApplications from './pages/dashboard/MyApplications';
 // import Favorites from './pages/dashboard/Favorites';
 // import AIAdvice from './pages/dashboard/AIAdvice';
@@ -34,6 +39,7 @@ import DashboardOverview from './pages/dashboard/DashboardOverview';
 
 //global styles
 import './App.css';
+
 
 export default function App(): JSX.Element {
   return (
@@ -52,15 +58,19 @@ export default function App(): JSX.Element {
 
             <Route path='/dashboard/*' element={<DashboardLayout />}>
               <Route index element={<DashboardOverview />} />
-              {/* <Route path='my-pets' element={<MyPets />} />
-              <Route path='my-applications' element={<MyApplications />} />
+              <Route path='adopt' element={<Adopt />} />
+              <Route path='adopt/browse' element={<BrowseAdoptables />} />
+              <Route path='adopt/pet/:id' element={<AdoptableProfile />} />
+              <Route path='my-pets' element={<MyPets />} />
+              <Route path='my-pets/add' element={<AddEditPet  />} />
+              <Route path='my-pets/edit/:id' element={<AddEditPet  />} />
+              <Route path='my-pets/:id' element={<MyPetProfile  />} />
+
+              {/* <Route path='my-applications' element={<MyApplications />} />
               <Route path='favorites' element={<Favorites />} />
               <Route path='ai-assistant' element={<AIAdvice />} />
               <Route path='sitters' element={<Sitters />} /> */}
             </Route>
-            <Route path='/adopt' element={<Adopt />} />
-            <Route path='/adopt/profile' element={<AdoptableProfile />} />
-            <Route path='/adopt/browse' element={<BrowseAdoptables />} />
 
           </Route>
 
