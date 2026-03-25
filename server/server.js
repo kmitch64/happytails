@@ -49,7 +49,8 @@ app
     .use(express.static(STATIC_ASSETS()))
 
     .get('/health', (_, res) => { rateLimit, res.status(200).json({ status: 'OK' }); })
-    .get(/^(?!\/api).*/, rateLimit/*, metadata*/);
-
-await routeMaster(app);
+    .get(/^(?!\/api).*/, rateLimit/*, metadata*/)
+    
 await serverListener(app);
+await routeMaster(app);
+
