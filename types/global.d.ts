@@ -27,7 +27,7 @@ declare global {
     type?: string;
     breed: string;
     age: string;
-    images: string[];
+    images: { data: string; contentType: string }[];
     status: 'Active' | 'Available' | 'Adopted' | 'Pending' | 'Reserved';
   }
 
@@ -50,6 +50,13 @@ declare global {
   careReminders: CareReminder[];
   medicalRecords: MedicalRecord[];
 }
+
+interface PetCarouselProps {
+  petId: string;
+  images: { data: string; contentType: string }[];
+  petName: string;
+}
+
 
 interface CareReminder {
   _id: string;

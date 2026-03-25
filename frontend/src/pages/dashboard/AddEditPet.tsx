@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -22,44 +22,34 @@ export default function AddEditPet() {
     compatibility: [] as string[],
     breed: '',
     type: 'Dog',
-    images: [] as string[]
+    images: [] as { data: string; contentType: string }[]
   });
   const [isLoading, setIsLoading] = useState(!!id);
   const [error, setError] = useState('');
+  const [imageFiles, setImageFiles] = useState<File[]>([]);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // mocked
   useEffect(() => {
     if (id) {
       const fetchPet = async () => {
         try {
           setIsLoading(true);
-          // const response = await fetch(`/api/pets/${id}`);
-          // const data = await response.json();
-          // setPet(data);
-
-          const mockPet = {
-            name: "Buddy",
-            bio: "Buddy is our beloved family dog. He's a 3-year-old Golden Retriever who loves to play fetch and go for long walks.",
-            sex: "M",
-            age: "3 years",
-            size: "L",
-            energyLevel: "High",
-            spayedNeutered: "Y",
-            compatibility: ["Dogs", "Children"],
-            breed: "Golden Retriever",
-            type: "Dog",
-            images: [
-              "https://via.placeholder.com/300x200/4CAF50/FFFFFF?text=Buddy+1",
-              "https://via.placeholder.com/300x200/4CAF50/FFFFFF?text=Buddy+2"
-            ]
+          const response = await fetch(`/api/v1/pets/${id}`);
+          if (response.ok) {
+            const data = await response.json();
+            setPet(data);
+          }
+          else {
+            setError('Failed to load pet data');
           };
-          setPet(mockPet);
-        } catch (err) {
+        }
+        catch (err) {
           setError('Failed to load pet data');
           console.error(err);
-        } finally {
-          setIsLoading(false);
         }
+        finally {
+          setIsLoading(false);
+        };
       };
 
       fetchPet();
@@ -82,10 +72,28 @@ export default function AddEditPet() {
   };
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(e.target.files || []);
-    const imageUrls = files.map(file => URL.createObjectURL(file));
-    setPet(prev => ({ ...prev, images: [...prev.images, ...imageUrls] }));
-  };
+  if (e.target.files) {
+    const filesArray = Array.from(e.target.files).slice(0, 5 - pet.images.length);
+    setImageFiles(prev => [...prev, ...filesArray]);
+    
+    filesArray.forEach(file => {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        if (event.target?.result) {
+          const base64Data = event.target.result as string;
+          setPet(prev => ({
+            ...prev,
+            images: [...prev.images, {
+              data: base64Data,
+              contentType: file.type
+            }]
+          }));
+        }
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+};
 
   const removeImage = (index: number) => {
     setPet(prev => ({
@@ -95,24 +103,40 @@ export default function AddEditPet() {
   };
 
   const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    try {
-      // const method = id ? 'PUT' : 'POST';
-      // const url = id ? `/api/pets/${id}` : '/api/pets';
-      // const response = await fetch(url, {
-      //   method,
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify(pet)
-      // });
-      // const data = await response.json();
+  e.preventDefault();
+  try {
+    const response = await fetch(id ? `/api/v1/pets/${id}` : '/api/v1/pets', {
+      method: id ? 'PUT' : 'POST',
+      body: JSON.stringify(pet),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
 
-      console.log('Pet saved:', pet);
+    if (response.ok) {
+      const data = await response.json();
       navigate('/dashboard/my-pets');
-    } catch (err) {
-      setError('Failed to save pet profile');
-      console.error(err);
+    } else {
+      const errorData = await response.json();
+      setError(errorData.message || 'Failed to save pet profile');
     }
-  };
+  } catch (err) {
+    console.log(err);
+    setError('Failed to save pet profile');
+    console.error(err);
+  }
+};
+
+  // useEffect(() => {
+  //   return () => {
+  //     pet.images.forEach(image => {
+  //       if (image.data.startsWith('blob:')) {
+  //         URL.revokeObjectURL(image.data);
+  //       }
+  //     });
+  //   };
+  // }, [pet.images]);
+
 
   if (isLoading) {
     return (
@@ -384,7 +408,7 @@ export default function AddEditPet() {
                 <div className="image-preview">
                   {pet.images.map((image, index) => (
                     <div key={index} className="image-thumbnail">
-                      <img src={image} alt={`Preview ${index + 1}`} />
+                      <img src={image.data} alt={`Preview ${index + 1}`} />
                       <button
                         type="button"
                         onClick={() => removeImage(index)}

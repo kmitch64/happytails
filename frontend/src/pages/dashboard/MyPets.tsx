@@ -7,57 +7,62 @@ import { useAuth } from '../../components/auth/AuthContext';
 
 
 export default function MyPets() {
-  const { user } = useAuth();
+  const { user, isLoading: isUserLoading } = useAuth();
   const [pets, setPets] = useState<Pet[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
 
-  // mocked
+
+
   useEffect(() => {
+    if (!user) return;
+
     const fetchPets = async () => {
       try {
         setIsLoading(true);
-        // const response = await fetch(`/api/users/${user.id}/pets`);
-        // const data = await response.json();
-        // setPets(data);
-
-        const mockPets: Pet[] = [
-          {
-            _id: "1",
-            id: "PET-001",
-            name: "Buddy",
-            type: "Dog",
-            breed: "Golden Retriever",
-            age: "3 years",
-            images: ["https://via.placeholder.com/300x200/4CAF50/FFFFFF?text=Buddy"],
-            status: "Active"
-          },
-          {
-            _id: "2",
-            id: "PET-002",
-            name: "Whiskers",
-            type: "Cat",
-            breed: "Siamese",
-            age: "2 years",
-            images: ["https://via.placeholder.com/300x200/607D8B/FFFFFF?text=Whiskers"],
-            status: "Active"
-          }
-        ];
-        setPets(mockPets);
-      } catch (err) {
-        console.error("Failed to fetch pets:", err);
-      } finally {
-        setIsLoading(false);
+        const response = await fetch(`/api/v1/users/${user._id}/pets`);
+        if (response.ok) {
+          const data = await response.json();
+          setPets(data);
+        } 
+        else {
+          console.error("Failed to fetch pets:", response.statusText);
+        };
       }
+      catch (err) {
+        console.log("Failed to fetch pets:", err);
+      } 
+      finally {
+        setIsLoading(false);
+      };
     };
 
     fetchPets();
-  }, [user]);
+  }, [user, isUserLoading]);
 
-  const filteredPets = pets.filter(pet =>
+  const filteredPets = (pets || []).filter(pet =>
     pet.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     pet.breed.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  if (isUserLoading) {
+    return (
+      <div className="dashboard-page my-pets-page">
+        <div className="loading-spinner">Loading user data...</div>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return (
+      <div className="dashboard-page my-pets-page">
+        <div className="page-header">
+          <h1><FontAwesomeIcon icon={faPaw} /> My Pets</h1>
+          <p>Please log in to manage your pets' profiles and care information.</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="dashboard-page my-pets-page">
@@ -78,11 +83,11 @@ export default function MyPets() {
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
-            
+
           </div>
           <Link to="/dashboard/my-pets/add" className="add-pet-button">
-              <FontAwesomeIcon icon={faPlus} /> Add New Pet
-            </Link>
+            <FontAwesomeIcon icon={faPlus} /> Add New Pet
+          </Link>
         </div>
 
         {isLoading ? (
@@ -94,7 +99,7 @@ export default function MyPets() {
                 <div className="pet-card">
                   <div className="pet-image">
                     {pet.images.length > 0 ? (
-                      <img src={pet.images[0]} alt={pet.name} />
+                      <img src={pet.images[0].data} alt={pet.name} />
                     ) : (
                       <div className="no-image">
                         <FontAwesomeIcon icon={pet.type?.toLowerCase() === 'dog' ? faDog : faCat} size="3x" color="#ccc" />
@@ -112,7 +117,6 @@ export default function MyPets() {
                         ) : (
                           <FontAwesomeIcon icon={faCat} />
                         )}
-                        {pet.type}
                       </span>
                     </div>
                   </div>

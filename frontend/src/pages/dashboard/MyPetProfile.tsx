@@ -8,6 +8,7 @@ import {
   faPlus, faVial, faNotesMedical, faClock, faUserFriends
 } from '@fortawesome/free-solid-svg-icons';
 import { useAuth } from '../../components/auth/AuthContext';
+import PetCarousel from '../../components/PetCarousel/PetCarousel';
 
 // Define TypeScript interface for Pet
 
@@ -26,77 +27,34 @@ export default function MyPetProfile() {
     const fetchPetData = async () => {
       try {
         setIsLoading(true);
-        // const response = await fetch(`/api/pets/${id}`);
-        // const data = await response.json();
-        // setPet(data);
+        const response = await fetch(`/api/v1/pets/${id}`);
+        const data = await response.json();
+        setPet(data);
 
-        const mockPet: MyPet = {
-          _id: "1",
-          id: "PET-001",
-          name: "Buddy",
-          bio: "Buddy is our beloved family dog. He's a 3-year-old Golden Retriever who loves to play fetch and go for long walks. He's very friendly with both people and other dogs.",
-          sex: "M",
-          age: "3 years",
-          size: "L",
-          energyLevel: "High",
-          spayedNeutered: "Y",
-          compatibility: ["Dogs", "Children", "Cats"],
-          breed: "Golden Retriever",
-          images: [
-            "https://via.placeholder.com/600x400/4CAF50/FFFFFF?text=Buddy+1",
-            "https://via.placeholder.com/600x400/4CAF50/FFFFFF?text=Buddy+2",
-            "https://via.placeholder.com/600x400/4CAF50/FFFFFF?text=Buddy+3"
-          ],
-          status: "Adopted",
-          createdAt: new Date('2022-05-15'),
-          updatedAt: new Date('2023-10-20'),
-          careReminders: [
-            {
-              _id: "1",
-              type: "vaccination",
-              description: "Rabies vaccination booster",
-              date: new Date('2024-03-15'),
-              frequency: "yearly",
-              completed: false
-            },
-            {
-              _id: "2",
-              type: "medication",
-              description: "Heartworm prevention",
-              date: new Date('2024-04-01'),
-              frequency: "monthly",
-              completed: false
-            }
-          ],
-          medicalRecords: [
-            {
-              _id: "1",
-              type: "checkup",
-              description: "Annual wellness exam",
-              date: new Date('2023-09-10'),
-              veterinarian: "Dr. Smith",
-              notes: "All vitals normal. Recommended dental cleaning in 6 months."
-            }
-          ]
-        };
-        setPet(mockPet);
-      } catch (err) {
+
+      }
+      catch (err) {
         setError('Failed to load pet profile');
         console.error(err);
-      } finally {
-        setIsLoading(false);
       }
+      finally {
+        setIsLoading(false);
+      };
     };
 
     fetchPetData();
   }, [id]);
 
-  const handleDelete = () => {
-    // Implement delete functionality
+  const handleDelete = async () => {
     if (window.confirm(`Are you sure you want to delete ${pet?.name}'s profile?`)) {
-      // API call to delete pet
-      // await fetch(`/api/pets/${id}`, { method: 'DELETE' });
-      navigate('/dashboard/my-pets');
+      try {
+        await fetch(`/api/v1/pets/${id}`, { method: 'DELETE' });
+        navigate('/dashboard/my-pets');
+      }
+      catch (err) {
+        setError('Failed to delete pet profile');
+        console.error(err);
+      };
     }
   };
 
@@ -198,28 +156,12 @@ export default function MyPetProfile() {
           {activeTab === 'profile' && (
             <>
               {/* Carousel Section */}
-              <section className="pet-carousel">
-                <div className="carousel-container">
-                  {pet.images.length > 0 ? (
-                    pet.images.map((image, index) => (
-                      <div key={index} className="carousel-slide">
-                        <img src={image} alt={`${pet.name} - Photo ${index + 1}`} className="pet-photo" />
-                      </div>
-                    ))
-                  ) : (
-                    <div className="no-images">
-                      <FontAwesomeIcon icon={faPlus} size="3x" color="#ccc" />
-                      <p>No photos added yet</p>
-                    </div>
-                  )}
-                </div>
-                {pet.images.length > 1 && (
-                  <div className="carousel-nav">
-                    {pet.images.map((_, index) => (
-                      <button key={index} className="carousel-dot"></button>
-                    ))}
-                  </div>
-                )}
+              <section className="pet-carousel-section">
+                <PetCarousel
+                  petId={pet._id}
+                  images={pet.images || []}
+                  petName={pet.name}
+                />
               </section>
 
               {/* Pet Details Section */}
@@ -240,7 +182,7 @@ export default function MyPetProfile() {
                       <div className="pet-basic-info">
                         <p><FontAwesomeIcon icon={faBirthdayCake} /> {pet.age}</p>
                         <p><FontAwesomeIcon icon={faRuler} /> {pet.size}</p>
-                        <p><FontAwesomeIcon icon={faUserFriends} /> {pet.compatibility.join(', ')}</p>
+                        <p><FontAwesomeIcon icon={faUserFriends} /> {pet.compatibility?.join(', ')}</p>
                       </div>
                     </div>
 

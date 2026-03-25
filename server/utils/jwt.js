@@ -28,7 +28,6 @@ async function generateToken(user) {
         _id: user._id,
         email: user.email,
         username: user.username,
-        is2FAEnabled: user.is2FAEnabled,
         isAdmin: user.isAdmin
       },
       key_file,
