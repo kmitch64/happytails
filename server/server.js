@@ -1,6 +1,6 @@
 
 import 'dotenv/config';
-import { INDEX_HTML, STATIC_ASSETS } from '../enums/SERVER_ENUMS.js';
+import { INDEX_HTML, STATIC_ASSETS, INDEX_AS_STRING } from '../enums/SERVER_ENUMS.js';
 
 import mongoose from 'mongoose';
 import express from 'express';
@@ -14,10 +14,6 @@ import rateLimit from './middlewares/rateLimiter.js'
 import routeMaster from './routes/routeMaster.js';
 import serverListener from './listener.js';
 
-import fs from 'fs';
-console.log('Static assets path:', STATIC_ASSETS());
-console.log('Index HTML path:', INDEX_HTML());
-console.log('Does index.html exist?', fs.existsSync(INDEX_HTML()));
 
 const
     mongoUri = process.env.NODE_ENV === 'production'
@@ -54,7 +50,7 @@ app
     .use(express.static(STATIC_ASSETS()))
 
     .get('/health', (_, res) => { rateLimit, res.status(200).json({ status: 'OK' }); })
-    .get(/^(?!\/api).*/, rateLimit, (_, res) => res.sendFile(INDEX_HTML));
+    .get(/^(?!\/api).*/, rateLimit, async (_, res) => res.send(await INDEX_AS_STRING()));
     
 await routeMaster(app);
 await serverListener(app);
