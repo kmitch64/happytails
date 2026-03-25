@@ -14,6 +14,11 @@ import rateLimit from './middlewares/rateLimiter.js'
 import routeMaster from './routes/routeMaster.js';
 import serverListener from './listener.js';
 
+import fs from 'fs';
+console.log('Static assets path:', STATIC_ASSETS());
+console.log('Index HTML path:', INDEX_HTML());
+console.log('Does index.html exist?', fs.existsSync(INDEX_HTML()));
+
 const
     mongoUri = process.env.NODE_ENV === 'production'
         ? process.env.MONGO_PROD    // Cloud server (Live)
