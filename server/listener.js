@@ -5,7 +5,7 @@ import express from 'express';
 export default async function serverListener(/**@type {express.Express} */app) {
 
   app
-    .listen(process.env.PORT, () => {
+    .listen(3000, () => {
       console.info('\n╔══════════════════════════════════════════════════════════╗');
       console.info('║              🚀 Express Server Starting                  ║');
       console.info('╚══════════════════════════════════════════════════════════╝\n');
