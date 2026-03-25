@@ -7,7 +7,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: `${process.env.DOMAIN}:${process.env.PORT}`,
+        target: `${process.env.DOMAIN}`,
         changeOrigin: true
       }
     }
