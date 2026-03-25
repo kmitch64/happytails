@@ -7,7 +7,7 @@ import { useAuth } from '../../components/auth/AuthContext';
 
 
 export default function MyPets() {
-  const { user, isLoading: isUserLoading } = useAuth();
+  const { user } = useAuth();
   const [pets, setPets] = useState<Pet[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
@@ -24,6 +24,7 @@ export default function MyPets() {
         if (response.ok) {
           const data = await response.json();
           setPets(data);
+          setIsLoading(false);
         } 
         else {
           console.error("Failed to fetch pets:", response.statusText);
@@ -38,14 +39,14 @@ export default function MyPets() {
     };
 
     fetchPets();
-  }, [user, isUserLoading]);
+  }, [user]);
 
   const filteredPets = (pets || []).filter(pet =>
     pet.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     pet.breed.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  if (isUserLoading) {
+  if (isLoading) {
     return (
       <div className="dashboard-page my-pets-page">
         <div className="loading-spinner">Loading user data...</div>
