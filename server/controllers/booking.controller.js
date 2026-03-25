@@ -2,7 +2,7 @@
 import Booking from '../models/booking.model.js';
 import Pet from '../models/pet.model.js';
 import PetSitter from '../models/pet_sitter.model.js';
-import User from '../models/user.model.js';
+// import User from '../models/user.model.js';
 
 export default {
   getAllBookings: async (req, res) => {
