@@ -23,6 +23,14 @@ import Adopt from './pages/Adopt/Adopt';
 import AdoptableProfile from './pages/Adopt/AdoptableProfile';
 import BrowseAdoptables from './pages/Adopt/BrowseAdoptables';
 
+//dashboard
+import DashboardLayout from './pages/dashboard/DashboardLayout';
+import DashboardOverview from './pages/dashboard/DashboardOverview';
+// import MyPets from './pages/dashboard/MyPets';
+// import MyApplications from './pages/dashboard/MyApplications';
+// import Favorites from './pages/dashboard/Favorites';
+// import AIAdvice from './pages/dashboard/AIAdvice';
+// import Sitters from './pages/dashboard/Sitters';
 
 //global styles
 import './App.css';
@@ -41,6 +49,15 @@ export default function App(): JSX.Element {
             <Route path='/2fa' element={<TwoFactorAuth />} />
 
             <Route path="/" element={<Home />} />
+
+            <Route path='/dashboard/*' element={<DashboardLayout />}>
+              <Route index element={<DashboardOverview />} />
+              {/* <Route path='my-pets' element={<MyPets />} />
+              <Route path='my-applications' element={<MyApplications />} />
+              <Route path='favorites' element={<Favorites />} />
+              <Route path='ai-assistant' element={<AIAdvice />} />
+              <Route path='sitters' element={<Sitters />} /> */}
+            </Route>
             <Route path='/adopt' element={<Adopt />} />
             <Route path='/adopt/profile' element={<AdoptableProfile />} />
             <Route path='/adopt/browse' element={<BrowseAdoptables />} />
