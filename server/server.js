@@ -1,6 +1,6 @@
 
 import 'dotenv/config';
-import { STATIC_ASSETS } from '../enums/SERVER_ENUMS.js';
+import { INDEX_HTML, STATIC_ASSETS } from '../enums/SERVER_ENUMS.js';
 
 import mongoose from 'mongoose';
 import express from 'express';
@@ -49,8 +49,8 @@ app
     .use(express.static(STATIC_ASSETS()))
 
     .get('/health', (_, res) => { rateLimit, res.status(200).json({ status: 'OK' }); })
-    .get(/^(?!\/api).*/, rateLimit/*, metadata*/)
+    .get(/^(?!\/api).*/, rateLimit, (_, res) => res.sendFile(INDEX_HTML));
     
-await serverListener(app);
 await routeMaster(app);
+await serverListener(app);
 
