@@ -18,6 +18,66 @@ declare global {
 
 
   /*********************************
+   * Pet interface
+   *********************************/
+  interface Pet {
+    _id: string;
+    id: string;
+    name: string;
+    type?: string;
+    breed: string;
+    age: string;
+    images: { data: string; contentType: string }[];
+    status: 'Active' | 'Available' | 'Adopted' | 'Pending' | 'Reserved';
+  }
+
+  interface MyPet extends Pet {
+  _id: string;
+  // id: string;
+  // name: string;
+  bio: string;
+  sex: 'M' | 'F' | 'Unknown';
+  // age: string;
+  size: 'XS' | 'S' | 'M' | 'L' | 'XL' | 'XXL';
+  energyLevel: 'Low' | 'Moderate' | 'High' | 'Very High';
+  spayedNeutered: 'Y' | 'N' | 'Unknown';
+  compatibility: string[];
+  // breed: string;
+  // images: string[];
+  // status: 'Available' | 'Adopted' | 'Pending' | 'Reserved';
+  createdAt: Date;
+  updatedAt: Date;
+  careReminders: CareReminder[];
+  medicalRecords: MedicalRecord[];
+}
+
+interface PetCarouselProps {
+  petId: string;
+  images: { data: string; contentType: string }[];
+  petName: string;
+}
+
+
+interface CareReminder {
+  _id: string;
+  type: 'vaccination' | 'medication' | 'appointment' | 'grooming';
+  description: string;
+  date: Date;
+  frequency: 'daily' | 'weekly' | 'monthly' | 'yearly' | 'one-time';
+  completed: boolean;
+}
+
+interface MedicalRecord {
+  _id: string;
+  type: 'vaccination' | 'surgery' | 'checkup' | 'medication';
+  description: string;
+  date: Date;
+  veterinarian: string;
+  notes: string;
+}
+
+
+  /*********************************
    * Authentication related types
    *********************************/
 

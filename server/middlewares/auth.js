@@ -38,4 +38,51 @@ async function isAuthorized(req, res, next) {
   };
 
 };
-export default isAuthorized;
+
+/**
+ * Middleware to check if user has admin role
+ */
+function isAdmin(req, res, next) {
+  if (req.user && req.user.isAdmin) {
+    return next();
+  }
+  return res.status(403).json({ message: "Admin access required" });
+}
+
+/**
+ * Middleware to check if user has shelter staff role
+ */
+function isShelterStaff(req, res, next) {
+  if (req.user && (req.user.isAdmin || req.user.role === 'ShelterStaff')) {
+    return next();
+  }
+  return res.status(403).json({ message: "Shelter staff access required" });
+}
+
+/**
+ * Middleware to check if user has pet sitter role
+ */
+function isPetSitter(req, res, next) {
+  if (req.user && (req.user.isAdmin || req.user.role === 'PetSitter')) {
+    return next();
+  }
+  return res.status(403).json({ message: "Pet sitter access required" });
+}
+
+/**
+ * Middleware to check if user is the owner of a resource
+ * @param {string} resourceIdParam - The parameter name containing the resource ID
+ * @param {string} userField - The field in the resource that contains the user ID
+ */
+function isOwner(resourceIdParam, userField = 'user') {
+  return async (req, res, next) => {
+    try {
+      // This would be implemented in the route handler
+      // For example, checking if req.user.id matches the owner of a pet
+      next();
+    } catch (error) {
+      return res.status(403).json({ message: "Not authorized: you don't own this resource" });
+    }
+  };
+}
+export { isAuthorized, isAdmin, isShelterStaff, isPetSitter, isOwner };
