@@ -1,5 +1,6 @@
 
-import { Outlet, Link, useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../auth/AuthContext';
 
 import './default.css';
@@ -15,8 +16,13 @@ export default function DefaultLayout() {
       logout();
       navigate('/');
     },
+    { pathname } = useLocation(),
 
     title = "Happy Tails";
+
+    useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
 
   return (
     <div className="app-container">
