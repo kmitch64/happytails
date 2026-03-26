@@ -3,10 +3,14 @@ import type { JSX } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 import AuthProvider from './components/auth/AuthProvider';
-// import ProtectedRoute from './components/auth/ProtectedRoute';
+import ProtectedRoute from './components/auth/ProtectedRoute';
 
 //layout
 import DefaultLayout from './components/layouts/default/DefaultLayout';
+
+//legal
+import PrivacyPolicy from './pages/legal/PrivacyPolicy';
+import TermsOfService from './pages/legal/TermsOfService';
 
 //auth pages
 // Frontend peeps can decide if these go in the layout or not, currently inside.
@@ -52,6 +56,9 @@ export default function App(): JSX.Element {
 
           <Route element={<DefaultLayout />}>
 
+            <Route path="/privacy" element={<PrivacyPolicy />} />
+            <Route path="/terms" element={<TermsOfService />} />
+
             <Route path='/login' element={<Login />} />
             <Route path='/register' element={<Register />} />
             <Route path='/logout' element={<Logout />} />
@@ -66,7 +73,7 @@ export default function App(): JSX.Element {
               <Route path="users/:id/edit" element={<UserForm />} />
             </Route>
 
-            <Route path='/dashboard/*' element={<DashboardLayout />}>
+            <Route path='/dashboard/*' element={<ProtectedRoute><DashboardLayout /></ProtectedRoute>}>
               <Route index element={<DashboardOverview />} />
               <Route path='adopt' element={<Adopt />} />
               <Route path='adopt/browse' element={<BrowseAdoptables />} />

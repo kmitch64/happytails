@@ -12,27 +12,12 @@ import './dashboard.scss';
 
 export default function DashboardLayout() {
   const
-    { isLoggedIn, user, logout } = useAuth(),
+    { user, logout } = useAuth(),
     navigate = useNavigate(),
     handleLogout = () => {
       logout();
       navigate('/');
     };
-
-  if (!isLoggedIn) {
-    
-    return (
-      <div className="dashboard-container">
-        <div className="not-logged-in">
-          <h2>You must be logged in to access the dashboard</h2>
-          <button onClick={() => navigate('/login')} className="login-button">
-            <FontAwesomeIcon icon={faUser} className="mr-2" />
-            Go to Login
-          </button>
-        </div>
-      </div>
-    );
-  };
 
   return (
     <div className="dashboard-container">
