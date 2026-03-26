@@ -8,6 +8,10 @@ import ProtectedRoute from './components/auth/ProtectedRoute';
 //layout
 import DefaultLayout from './components/layouts/default/DefaultLayout';
 
+//legal
+import PrivacyPolicy from './pages/legal/PrivacyPolicy';
+import TermsOfService from './pages/legal/TermsOfService';
+
 //auth pages
 // Frontend peeps can decide if these go in the layout or not, currently inside.
 import Login from './pages/login/login';
@@ -51,6 +55,9 @@ export default function App(): JSX.Element {
         <Routes>
 
           <Route element={<DefaultLayout />}>
+
+            <Route path="/privacy" element={<PrivacyPolicy />} />
+            <Route path="/terms" element={<TermsOfService />} />
 
             <Route path='/login' element={<Login />} />
             <Route path='/register' element={<Register />} />
