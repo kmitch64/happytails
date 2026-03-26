@@ -33,6 +33,7 @@ import DashboardOverview from './pages/dashboard/DashboardOverview';
 import MyPets from './pages/dashboard/MyPets';
 import AddEditPet from './pages/dashboard/AddEditPet';
 import MyPetProfile from './pages/dashboard/MyPetProfile';
+import AIAssistant from './pages/dashboard/AIAssistant';
 
 //adopt pages
 import Adopt from './pages/dashboard/DashboardAdopt';
@@ -82,10 +83,11 @@ export default function App(): JSX.Element {
               <Route path='my-pets/add' element={<AddEditPet />} />
               <Route path='my-pets/edit/:id' element={<AddEditPet />} />
               <Route path='my-pets/:id' element={<MyPetProfile />} />
+              <Route path='ai-assistant' element={<AIAssistant />} />
 
               {/* <Route path='my-applications' element={<MyApplications />} />
               <Route path='favorites' element={<Favorites />} />
-              <Route path='ai-assistant' element={<AIAdvice />} />
+              
               <Route path='sitters' element={<Sitters />} /> */}
             </Route>
 
