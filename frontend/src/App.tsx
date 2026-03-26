@@ -3,7 +3,7 @@ import type { JSX } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 import AuthProvider from './components/auth/AuthProvider';
-// import ProtectedRoute from './components/auth/ProtectedRoute';
+import ProtectedRoute from './components/auth/ProtectedRoute';
 
 //layout
 import DefaultLayout from './components/layouts/default/DefaultLayout';
@@ -66,7 +66,7 @@ export default function App(): JSX.Element {
               <Route path="users/:id/edit" element={<UserForm />} />
             </Route>
 
-            <Route path='/dashboard/*' element={<DashboardLayout />}>
+            <Route path='/dashboard/*' element={<ProtectedRoute><DashboardLayout /></ProtectedRoute>}>
               <Route index element={<DashboardOverview />} />
               <Route path='adopt' element={<Adopt />} />
               <Route path='adopt/browse' element={<BrowseAdoptables />} />

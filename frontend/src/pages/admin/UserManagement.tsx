@@ -1,8 +1,10 @@
-// pages/admin/UserManagement.tsx
+
 import { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch, faUserPlus, faEdit, faTrash, faUser } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
+
+import Loading from '../../components/loader/Loading';
 
 export default function UserManagement() {
   const [users, setUsers] = useState<User[]>([]);
@@ -38,6 +40,11 @@ export default function UserManagement() {
     user.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
     user.email.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  if (isLoading) {
+    return <Loading message="Loading users..." />;
+  };
+
 
   return (
     <div className="user-management">

@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPaw, faDog, faCat, faPlus, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { useAuth } from '../../components/auth/AuthContext';
+import Loading from '../../components/loader/Loading';
 
 
 export default function MyPets() {
@@ -21,18 +22,17 @@ export default function MyPets() {
       try {
         setIsLoading(true);
         const response = await fetch(`/api/v1/users/${user._id}/pets`);
-        if (response.ok) {
-          const data = await response.json();
-          setPets(data);
-          setIsLoading(false);
-        } 
-        else {
-          console.error("Failed to fetch pets:", response.statusText);
+        if (!response.ok) {
+          throw new Error('Failed to fetch pets');
         };
+
+        const data = await response.json();
+        setPets(data);
+        setIsLoading(false);
       }
       catch (err) {
         console.log("Failed to fetch pets:", err);
-      } 
+      }
       finally {
         setIsLoading(false);
       };
@@ -49,7 +49,11 @@ export default function MyPets() {
   if (isLoading) {
     return (
       <div className="dashboard-page my-pets-page">
-        <div className="loading-spinner">Loading user data...</div>
+        <div className="page-header">
+          <h1><FontAwesomeIcon icon={faPaw} /> My Pets</h1>
+          <p>Manage your pets' profiles and care information</p>
+        </div>
+        <Loading message="Loading pets..." />
       </div>
     );
   }
@@ -92,7 +96,7 @@ export default function MyPets() {
         </div>
 
         {isLoading ? (
-          <div className="loading-spinner">Loading your pets...</div>
+          <Loading message="Loading pets..." />
         ) : filteredPets.length > 0 ? (
           <div className="pets-grid">
             {filteredPets.map(pet => (

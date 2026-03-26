@@ -5,6 +5,7 @@ import { useAuth } from '../../components/auth/AuthContext';
 // import MetaData from '../../components/metadata/MetaData.jsx';
 
 import './register.css';
+import Loading from '../../components/loader/Loading';
 
 export default function Register() {
   const { register } = useAuth();
@@ -103,7 +104,7 @@ export default function Register() {
               className="btn-submit"
               disabled={isLoading}
             >
-              {isLoading ? <div className="auth-spinner"></div> : 'Register'}
+              {isLoading ? <Loading message="Registering..." /> : 'Register'}
             </button>
           </form>
           <div className="register-footer">

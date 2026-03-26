@@ -5,6 +5,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSave, faArrowLeft, faUser } from '@fortawesome/free-solid-svg-icons';
 
+import Loading from '../../components/loader/Loading';
 
 export default function UserForm() {
   const { id } = useParams();
@@ -95,9 +96,17 @@ export default function UserForm() {
 
   if (isLoading) {
     return (
-      <div className="loading-spinner">Loading...</div>
+      <div className="user-form-container">
+        <div className="form-header">
+          <h2 className="form-title">
+            <FontAwesomeIcon icon={faUser} className="form-icon" />
+            {id ? 'Edit User' : 'Create New User'}
+          </h2>
+        </div>
+        <Loading message="Loading user data..." />
+      </div>
     );
-  }
+  };
 
   return (
     <div className="user-form-container">

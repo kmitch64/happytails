@@ -5,6 +5,7 @@ import { useAuth } from '../../components/auth/AuthContext';
 // import MetaData from '../../components/metadata/MetaData.jsx';
 
 import './logout.css';
+import Loading from '../../components/loader/Loading';
 
 
 export default function Logout() {
@@ -54,7 +55,7 @@ export default function Logout() {
               className="logout-button"
               disabled={isLoading}
             >
-              {isLoading ? <div className="auth-spinner"></div> : 'Logout'}
+              {isLoading ? <Loading message="Logging out..." /> : 'Logout'}
             </button>
             <button
               onClick={() => navigate(-1)}
