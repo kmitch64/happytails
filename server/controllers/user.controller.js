@@ -60,7 +60,7 @@ export default {
   updateUser: async (req, res) => {
     try {
       const updatedUser = await UserModel.findByIdAndUpdate(req.params.id, req.body, {
-        new: true
+        returnDocument: 'after'
       });
 
       if (!updatedUser) {

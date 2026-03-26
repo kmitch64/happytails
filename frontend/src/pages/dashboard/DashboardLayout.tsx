@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faTachometerAlt, faPaw, faUser, faRobot, faEnvelope,
   faBell, faCog, faCalendarAlt, faCreditCard, faHome,
-  faSignOutAlt, faDog, faCat, faSearch, faHeart
+  faSignOutAlt, faDog, faCat, faSearch, faHeart, faUserShield
 } from '@fortawesome/free-solid-svg-icons';
 
 import './dashboard.scss';
@@ -41,6 +41,14 @@ export default function DashboardLayout() {
 
         <nav className="sidebar-nav">
           <ul>
+            {user?.isAdmin && (
+              <li className="admin-access mb-6">
+                <Link to="/dashboard/admin" className="nav-link" style={{ fontWeight: 'bold', color: '#2c3e50' }}>
+                  <FontAwesomeIcon icon={faUserShield} className="mr-2" />
+                  Admin Dashboard
+                </Link>
+              </li>
+            )}
             <li>
               <Link to="/dashboard" className="nav-link active">
                 <FontAwesomeIcon icon={faTachometerAlt} />
@@ -76,7 +84,7 @@ export default function DashboardLayout() {
               </Link>
             </li>
 
-            {user?.role === 'Shelter' && (
+            {(user?.role === 'ShelterStaff' || user?.isAdmin) && (
               <>
                 <li className="nav-section-header">Shelter Tools</li>
                 <li>
@@ -114,7 +122,7 @@ export default function DashboardLayout() {
               </Link>
             </li>
 
-            {(user?.role === 'Sitter' || user?.role === 'Admin') && (
+            {(user?.role === 'PetSitter' || user?.isAdmin) && (
               <>
                 <li className="nav-section-header">Pet Sitting</li>
                 <li>

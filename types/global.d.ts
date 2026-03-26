@@ -7,13 +7,30 @@ declare global {
    *********************************/
 
   /**
+   * Defines a type 
+   */
+  type userRole = 'PetOwner' | 'PetSitter' | 'ShelterStaff' | 'Admin';
+
+  /**
    * The User interface defines the structure of a user object in the authentication context. It includes properties such as email (string) to store the user's email address, an optional is2FAEnabled (boolean) to indicate whether the user has two-factor authentication enabled, and an index signature [key: string]: any to allow for additional properties that may be added to the user object without causing TypeScript errors. This interface can be extended in the future to include more specific user-related properties as needed.
    */
   interface User {
     username: string;
+    firstName?: string;
+    lastName?: string;
     email: string;
     is2FAEnabled?: boolean;
     [key: string]: any;
+  }
+
+  interface UserFormData {
+    firstname: string;
+    lastname: string;
+    username: string;
+    email: string;
+    role: userRole;
+    password?: string;
+    confirmPassword?: string;
   }
 
 
@@ -32,62 +49,62 @@ declare global {
   }
 
   interface MyPet extends Pet {
-  _id: string;
-  // id: string;
-  // name: string;
-  bio: string;
-  sex: 'M' | 'F' | 'Unknown';
-  // age: string;
-  size: 'XS' | 'S' | 'M' | 'L' | 'XL' | 'XXL';
-  energyLevel: 'Low' | 'Moderate' | 'High' | 'Very High';
-  spayedNeutered: 'Y' | 'N' | 'Unknown';
-  compatibility: string[];
-  // breed: string;
-  // images: string[];
-  // status: 'Available' | 'Adopted' | 'Pending' | 'Reserved';
-  createdAt: Date;
-  updatedAt: Date;
-  careReminders: CareReminder[];
-  medicalRecords: MedicalRecord[];
-}
+    _id: string;
+    // id: string;
+    // name: string;
+    bio: string;
+    sex: 'M' | 'F' | 'Unknown';
+    // age: string;
+    size: 'XS' | 'S' | 'M' | 'L' | 'XL' | 'XXL';
+    energyLevel: 'Low' | 'Moderate' | 'High' | 'Very High';
+    spayedNeutered: 'Y' | 'N' | 'Unknown';
+    compatibility: string[];
+    // breed: string;
+    // images: string[];
+    // status: 'Available' | 'Adopted' | 'Pending' | 'Reserved';
+    createdAt: Date;
+    updatedAt: Date;
+    careReminders: CareReminder[];
+    medicalRecords: MedicalRecord[];
+  }
 
-interface PetCarouselProps {
-  petId: string;
-  images: { data: string; contentType: string }[];
-  petName: string;
-}
+  interface PetCarouselProps {
+    petId: string;
+    images: { data: string; contentType: string }[];
+    petName: string;
+  }
 
 
-interface CareReminder {
-  _id: string;
-  type: 'vaccination' | 'medication' | 'appointment' | 'grooming';
-  description: string;
-  date: Date;
-  frequency: 'daily' | 'weekly' | 'monthly' | 'yearly' | 'one-time';
-  completed: boolean;
-}
+  interface CareReminder {
+    _id: string;
+    type: 'vaccination' | 'medication' | 'appointment' | 'grooming';
+    description: string;
+    date: Date;
+    frequency: 'daily' | 'weekly' | 'monthly' | 'yearly' | 'one-time';
+    completed: boolean;
+  }
 
-interface MedicalRecord {
-  _id: string;
-  type: 'vaccination' | 'surgery' | 'checkup' | 'medication';
-  description: string;
-  date: Date;
-  veterinarian: string;
-  notes: string;
-}
+  interface MedicalRecord {
+    _id: string;
+    type: 'vaccination' | 'surgery' | 'checkup' | 'medication';
+    description: string;
+    date: Date;
+    veterinarian: string;
+    notes: string;
+  }
 
 
   /*********************************
    * Authentication related types
    *********************************/
 
-  /** shortcut type--why not */ 
+  /** shortcut type--why not */
   type ReactNode = React.ReactNode;
 
   /**
    * Defines the shape of the properties expected by the AuthProvider component, which includes a single property 'children' that represents the nested components that will have access to the authentication context provided by AuthProvider.
    */
-   interface AuthProviderProps {
+  interface AuthProviderProps {
     children: ReactNode;
   }
 
@@ -156,4 +173,4 @@ interface MedicalRecord {
 
 }
 
-export {};
+export { };
