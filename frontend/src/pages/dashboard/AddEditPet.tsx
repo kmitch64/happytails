@@ -7,6 +7,7 @@ import {
   faRuler, faBolt, faBriefcaseMedical, faDog, faCat,
   faPlus, faTimes
 } from '@fortawesome/free-solid-svg-icons';
+import Loading from '../../components/loader/Loading';
 
 export default function AddEditPet() {
   const { id } = useParams();
@@ -72,28 +73,28 @@ export default function AddEditPet() {
   };
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-  if (e.target.files) {
-    const filesArray = Array.from(e.target.files).slice(0, 5 - pet.images.length);
-    setImageFiles(prev => [...prev, ...filesArray]);
-    
-    filesArray.forEach(file => {
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        if (event.target?.result) {
-          const base64Data = event.target.result as string;
-          setPet(prev => ({
-            ...prev,
-            images: [...prev.images, {
-              data: base64Data,
-              contentType: file.type
-            }]
-          }));
-        }
-      };
-      reader.readAsDataURL(file);
-    });
-  }
-};
+    if (e.target.files) {
+      const filesArray = Array.from(e.target.files).slice(0, 5 - pet.images.length);
+      setImageFiles(prev => [...prev, ...filesArray]);
+
+      filesArray.forEach(file => {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          if (event.target?.result) {
+            const base64Data = event.target.result as string;
+            setPet(prev => ({
+              ...prev,
+              images: [...prev.images, {
+                data: base64Data,
+                contentType: file.type
+              }]
+            }));
+          }
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+  };
 
   const removeImage = (index: number) => {
     setPet(prev => ({
@@ -103,40 +104,29 @@ export default function AddEditPet() {
   };
 
   const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
-  e.preventDefault();
-  try {
-    const response = await fetch(id ? `/api/v1/pets/${id}` : '/api/v1/pets', {
-      method: id ? 'PUT' : 'POST',
-      body: JSON.stringify(pet),
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    });
+    e.preventDefault();
+    try {
+      const response = await fetch(id ? `/api/v1/pets/${id}` : '/api/v1/pets', {
+        method: id ? 'PUT' : 'POST',
+        body: JSON.stringify(pet),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
 
-    if (response.ok) {
-      const data = await response.json();
-      navigate('/dashboard/my-pets');
-    } else {
-      const errorData = await response.json();
-      setError(errorData.message || 'Failed to save pet profile');
-    }
-  } catch (err) {
-    console.log(err);
-    setError('Failed to save pet profile');
-    console.error(err);
-  }
-};
-
-  // useEffect(() => {
-  //   return () => {
-  //     pet.images.forEach(image => {
-  //       if (image.data.startsWith('blob:')) {
-  //         URL.revokeObjectURL(image.data);
-  //       }
-  //     });
-  //   };
-  // }, [pet.images]);
-
+      if (response.ok) {
+        const data = await response.json();
+        navigate('/dashboard/my-pets');
+      } 
+      else {
+        const errorData = await response.json();
+        setError(errorData.message || 'Failed to save pet profile');
+      };
+    } 
+    catch (err) {
+      setError('Failed to save pet profile');
+    };
+  };
 
   if (isLoading) {
     return (
@@ -147,10 +137,10 @@ export default function AddEditPet() {
           </button>
           <h1>{id ? 'Edit' : 'Add'} Pet Profile</h1>
         </div>
-        <div className="loading-spinner">Loading...</div>
+        <Loading message="Loading pet data..." />
       </div>
     );
-  }
+  };
 
   return (
     <div className="dashboard-page add-edit-pet">

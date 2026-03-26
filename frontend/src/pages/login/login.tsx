@@ -5,6 +5,7 @@ import { useAuth } from '../../components/auth/AuthContext';
 // import MetaData from '../../components/metadata/MetaData.jsx';
 
 import './login.css';
+import Loading from '../../components/loader/Loading';
 
 export default function Login() {
 
@@ -103,7 +104,7 @@ export default function Login() {
               className="btn-submit"
               disabled={isLoading}
             >
-              {isLoading ? <div className="auth-spinner"></div> : 'Login'}
+              {isLoading ? <Loading message="Logging in..." /> : 'Login'}
             </button>
           </form>
 

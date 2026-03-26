@@ -14,34 +14,49 @@ export default function AuthProvider({ children }: AuthProviderProps) {
     [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    /**
-     * Checks the user's session by making a request to the backend. If the session is valid, it updates the authentication state accordingly.
-     */
+    let isMounted = true;
+    const controller = new AbortController();
+
     async function checkSession(): Promise<void> {
       try {
+        const timeout = setTimeout(() => controller.abort(), 5000);
         const res = await fetch('/api/v1/auth/validate', {
-          credentials: 'include'
+          credentials: 'include',
+          signal: controller.signal,
         });
+
+        clearTimeout(timeout);
+
+        if (!isMounted) return;
 
         if (res.ok) {
           const data = await res.json();
           setIsLoggedIn(true);
           setUser(data.user);
-        }
+        } 
         else {
           setIsLoggedIn(false);
           setUser(null);
         };
-      }
-      catch (e) {
+      } 
+      catch {
+        if (!isMounted) return;
+
         setIsLoggedIn(false);
         setUser(null);
-      }
+      } 
       finally {
-        setIsLoading(false);
-      }
-    }
+        if (isMounted) {
+          setIsLoading(false);
+        };
+      };
+    };
     checkSession();
+    return () => {
+      isMounted = false;
+      controller.abort();
+    };
+
   }, []);
 
   async function login(email: string, password: string) {
@@ -57,14 +72,16 @@ export default function AuthProvider({ children }: AuthProviderProps) {
         return { success: false, message: (await res.json()).message };
 
       const data = await res.json();
+      // console.log("User data from login:", data);
+      if (data.user.isAdmin)
+        data.user.role = 'Admin';
       if (data.user.is2FAEnabled)
         return { success: true, message: '', requires2FA: true, userEmail: data.user.email };
 
-      else {
-        setIsLoggedIn(true);
-        setUser(data.user);
-        return { success: true, message: '' };
-      };
+      setIsLoggedIn(true);
+      setUser(data.user);
+      return { success: true, message: '' };
+
     }
     catch (e: any) {
       return { success: false, message: e.message };

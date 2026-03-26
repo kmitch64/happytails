@@ -5,19 +5,19 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faTachometerAlt, faPaw, faUser, faRobot, faEnvelope,
   faBell, faCog, faCalendarAlt, faCreditCard, faHome,
-  faSignOutAlt, faDog, faCat, faSearch, faHeart
+  faSignOutAlt, faDog, faCat, faSearch, faHeart, faUserShield
 } from '@fortawesome/free-solid-svg-icons';
 
 import './dashboard.scss';
 
 export default function DashboardLayout() {
-  const { user, logout } = useAuth();
-  const navigate = useNavigate();
-
-  const handleLogout = () => {
-    logout();
-    navigate('/');
-  };
+  const
+    { user, logout } = useAuth(),
+    navigate = useNavigate(),
+    handleLogout = () => {
+      logout();
+      navigate('/');
+    };
 
   return (
     <div className="dashboard-container">
@@ -26,7 +26,12 @@ export default function DashboardLayout() {
         <div className="sidebar-header">
           <h2>Happy Tails</h2>
           <div className="user-profile">
-            <div className="user-avatar">{user?.username?.charAt(0) || 'U'}</div>
+            <div className="user-avatar">
+              {user?.avatar
+                ? <img src={user.avatar} alt="User Avatar" />
+                : <img src="/images/avatars/no-avatar.png" width={48} alt="Default Avatar" />
+              }
+            </div>
             <div className="user-info">
               <p className="user-name">{user?.username || 'User'}</p>
               <p className="user-role">{user?.role || 'Pet Lover'}</p>
@@ -36,6 +41,14 @@ export default function DashboardLayout() {
 
         <nav className="sidebar-nav">
           <ul>
+            {user?.isAdmin && (
+              <li className="admin-access mb-6">
+                <Link to="/dashboard/admin" className="nav-link" style={{ fontWeight: 'bold', color: '#2c3e50' }}>
+                  <FontAwesomeIcon icon={faUserShield} className="mr-2" />
+                  Admin Dashboard
+                </Link>
+              </li>
+            )}
             <li>
               <Link to="/dashboard" className="nav-link active">
                 <FontAwesomeIcon icon={faTachometerAlt} />
@@ -71,7 +84,7 @@ export default function DashboardLayout() {
               </Link>
             </li>
 
-            {user?.role === 'Shelter' && (
+            {(user?.role === 'ShelterStaff' || user?.isAdmin) && (
               <>
                 <li className="nav-section-header">Shelter Tools</li>
                 <li>
@@ -109,7 +122,7 @@ export default function DashboardLayout() {
               </Link>
             </li>
 
-            {user?.role === 'Sitter' && (
+            {(user?.role === 'PetSitter' || user?.isAdmin) && (
               <>
                 <li className="nav-section-header">Pet Sitting</li>
                 <li>

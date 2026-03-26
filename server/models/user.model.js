@@ -5,6 +5,8 @@ import bcrypt from 'bcrypt';
 
 const userSchema = new mongoose.Schema({
   username: { type: String, unique: true, required: true },
+  firstname: { type: String, default: null },
+  lastname: { type: String, default: null },
   email: { type: String, unique: true, required: true },
   password: { type: String, required: true },
   avatar: {
@@ -34,11 +36,10 @@ const userSchema = new mongoose.Schema({
   updatedAt: { type: Date, default: Date.now }
 }, { timestamps: true });
 
-userSchema.pre('save', async function(next) {
+userSchema.pre('save', async function() {
   if (this.isModified('password') || this.isNew) {
     this.password = await bcrypt.hash(this.password, 10);
   }
-  next();
 });
 
 userSchema.methods.comparePassword = async function(password) {

@@ -1,0 +1,130 @@
+{
+  "name": "HappyTails - Pet Care Community",
+  "short_name": "HappyTails",
+  "description": "A community platform for pet owners to connect, share, and manage their pets' care information",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "display_override": ["window-controls-overlay", "standalone", "minimal-ui"],
+  "orientation": "any",
+  "background_color": "#4CAF50",
+  "theme_color": "#2E7D32",
+  "categories": ["pets", "community", "animal care", "pet health"],
+  "lang": "en-US",
+  "dir": "ltr",
+  "icons": [
+    {
+      "src": "/icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/images/screenshots/desktop.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "HappyTails Dashboard on Desktop"
+    },
+    {
+      "src": "/images/screenshots/mobile-dashboard.png",
+      "sizes": "750x1334",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "HappyTails Dashboard on Mobile"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "My Pets",
+      "short_name": "My Pets",
+      "description": "View and manage your pets' profiles",
+      "url": "/dashboard/my-pets",
+      "icons": [
+        {
+          "src": "/icons/pets-96.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Community",
+      "short_name": "Community",
+      "description": "Connect with other pet owners",
+      "url": "/community",
+      "icons": [
+        {
+          "src": "/icons/community-96.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Pet Sitters",
+      "short_name": "Sitters",
+      "description": "Find trusted pet sitters",
+      "url": "/sitters",
+      "icons": [
+        {
+          "src": "/icons/sitters-96.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Adoptions",
+      "short_name": "Adoptions",
+      "description": "Browse pets available for adoption",
+      "url": "/adoptions",
+      "icons": [
+        {
+          "src": "/icons/adoptions-96.png",
+          "sizes": "96x96"
+        }
+      ]
+    }
+  ],
+  "share_target": {
+    "action": "/share",
+    "method": "POST",
+    "enctype": "multipart/form-data",
+    "params": {
+      "title": "name",
+      "text": "description",
+      "url": "link",
+      "files": [
+        {
+          "name": "photos",
+          "accept": ["image/*"]
+        }
+      ]
+    }
+  },
+  "handle_links": "preferred",
+  "protocol_handlers": [
+    {
+      "protocol": "web+happytails",
+      "url": "/handle-link?url=%s"
+    }
+  ]
+}
