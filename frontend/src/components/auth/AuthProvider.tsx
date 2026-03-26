@@ -57,14 +57,16 @@ export default function AuthProvider({ children }: AuthProviderProps) {
         return { success: false, message: (await res.json()).message };
 
       const data = await res.json();
+      // console.log("User data from login:", data);
+      if (data.user.isAdmin)
+        data.user.role = 'Admin';
       if (data.user.is2FAEnabled)
         return { success: true, message: '', requires2FA: true, userEmail: data.user.email };
 
-      else {
-        setIsLoggedIn(true);
-        setUser(data.user);
-        return { success: true, message: '' };
-      };
+      setIsLoggedIn(true);
+      setUser(data.user);
+      return { success: true, message: '' };
+
     }
     catch (e: any) {
       return { success: false, message: e.message };

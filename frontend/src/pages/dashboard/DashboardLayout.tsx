@@ -11,13 +11,13 @@ import {
 import './dashboard.scss';
 
 export default function DashboardLayout() {
-  const { user, logout } = useAuth();
-  const navigate = useNavigate();
-
-  const handleLogout = () => {
-    logout();
-    navigate('/');
-  };
+  const
+    { user, logout } = useAuth(),
+    navigate = useNavigate(),
+    handleLogout = () => {
+      logout();
+      navigate('/');
+    };
 
   return (
     <div className="dashboard-container">
@@ -26,7 +26,12 @@ export default function DashboardLayout() {
         <div className="sidebar-header">
           <h2>Happy Tails</h2>
           <div className="user-profile">
-            <div className="user-avatar">{user?.username?.charAt(0) || 'U'}</div>
+            <div className="user-avatar">
+              {user?.avatar
+                ? <img src={user.avatar} alt="User Avatar" />
+                : <img src="/images/avatars/no-avatar.png" width={48} alt="Default Avatar" />
+              }
+            </div>
             <div className="user-info">
               <p className="user-name">{user?.username || 'User'}</p>
               <p className="user-role">{user?.role || 'Pet Lover'}</p>
@@ -109,7 +114,7 @@ export default function DashboardLayout() {
               </Link>
             </li>
 
-            {user?.role === 'Sitter' && (
+            {(user?.role === 'Sitter' || user?.role === 'Admin') && (
               <>
                 <li className="nav-section-header">Pet Sitting</li>
                 <li>
