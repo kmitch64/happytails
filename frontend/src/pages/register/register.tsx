@@ -34,7 +34,6 @@ export default function Register() {
       navigate('/login');
     }
     catch (e: any) {
-      console.log("Registration error:", e);
       setIsLoading(false);
       setError(e.message || 'An error occurred during registration. Please try again.');
     };
