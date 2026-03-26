@@ -28,7 +28,7 @@ export default {
           'Authorization': `Bearer ${process.env.MISTRAL_API_KEY}`
         },
         body: JSON.stringify({
-          model: 'mistral-large-latest', // or mistral-small, mistral-medium
+          model: 'mistral-large-latest',
           messages: mistralMessages,
           temperature: 0.7,
           max_tokens: 500
@@ -38,7 +38,7 @@ export default {
       if (!response.ok) {
         const errorData = await response.json();
         console.log('Mistral API error:', errorData);
-        throw new Error(errorData.message || 'Mistral API error');
+        throw new Error(errorData.detail || 'Mistral API error');
       }
 
       const data = await response.json();
