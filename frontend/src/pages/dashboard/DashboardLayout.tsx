@@ -64,6 +64,26 @@ export default function DashboardLayout() {
               </Link>
             </li>
 
+            <li className="nav-section-header">Pet Care</li>
+            <li>
+              <Link to="/dashboard/my-pets" className="nav-link">
+                <FontAwesomeIcon icon={faHome} />
+                <span>My Pets</span>
+              </Link>
+            </li>
+            <li>
+              <Link to="/dashboard/ai-assistant" className="nav-link">
+                <FontAwesomeIcon icon={faRobot} />
+                <span>AI Care Assistant</span>
+              </Link>
+            </li>
+            <li>
+              <Link to="/dashboard/reminders" className="nav-link">
+                <FontAwesomeIcon icon={faCalendarAlt} />
+                <span>Care Reminders</span>
+              </Link>
+            </li>
+
             <li className="nav-section-header">Pet Adoption</li>
             <li>
               <Link to="/dashboard/adopt" className="nav-link">
@@ -102,25 +122,7 @@ export default function DashboardLayout() {
               </>
             )}
 
-            <li className="nav-section-header">Pet Care</li>
-            <li>
-              <Link to="/dashboard/my-pets" className="nav-link">
-                <FontAwesomeIcon icon={faHome} />
-                <span>My Pets</span>
-              </Link>
-            </li>
-            <li>
-              <Link to="/dashboard/ai-assistant" className="nav-link">
-                <FontAwesomeIcon icon={faRobot} />
-                <span>AI Care Assistant</span>
-              </Link>
-            </li>
-            <li>
-              <Link to="/dashboard/reminders" className="nav-link">
-                <FontAwesomeIcon icon={faCalendarAlt} />
-                <span>Care Reminders</span>
-              </Link>
-            </li>
+            
 
             {(user?.role === 'PetSitter' || user?.isAdmin) && (
               <>
