@@ -41,33 +41,30 @@ export default function DashboardLayout() {
 
         <nav className="sidebar-nav">
           <ul>
-            {user?.isAdmin && (
-              <li className="admin-access mb-6">
-                <Link to="/dashboard/admin" className="nav-link" style={{ fontWeight: 'bold', color: '#2c3e50' }}>
-                  <FontAwesomeIcon icon={faUserShield} className="mr-2" />
-                  Admin Dashboard
-                </Link>
-              </li>
-            )}
+            
             <li>
               <Link to="/dashboard" className="nav-link active">
-                <FontAwesomeIcon icon={faTachometerAlt} />
+                <FontAwesomeIcon icon={faHome} />
                 <span>Dashboard</span>
               </Link>
             </li>
 
-            <li className="nav-section-header">My Pets</li>
-            <li>
-              <Link to="/dashboard/my-pets" className="nav-link">
-                <FontAwesomeIcon icon={faPaw} />
-                <span>My Pets</span>
-              </Link>
-            </li>
+            {user?.isAdmin && (
+              <>
+                <li className="nav-section-header">Admin</li>
+                <li>
+                  <Link to="/dashboard/admin" className="nav-link">
+                    <FontAwesomeIcon icon={faUserShield} className="mr-2" />
+                    Admin Dashboard
+                  </Link>
+                </li>
+              </>
+            )}
 
             <li className="nav-section-header">Pet Care</li>
             <li>
               <Link to="/dashboard/my-pets" className="nav-link">
-                <FontAwesomeIcon icon={faHome} />
+                <FontAwesomeIcon icon={faPaw} />
                 <span>My Pets</span>
               </Link>
             </li>
@@ -122,7 +119,7 @@ export default function DashboardLayout() {
               </>
             )}
 
-            
+
 
             {(user?.role === 'PetSitter' || user?.isAdmin) && (
               <>
