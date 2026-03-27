@@ -34,6 +34,11 @@
   font-weight: 600;
 }
 
+.logo-link {
+  color: var(--light-text);
+  text-decoration: none;
+}
+
 .tagline {
   margin: 0.25rem 0 0;
   font-size: 0.9rem;
