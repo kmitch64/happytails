@@ -1,0 +1,11 @@
+User-agent: *
+Disallow: /dashboard/
+Disallow: /dashboard/admin/
+Disallow: /login
+Disallow: /register
+Disallow: /logout
+Disallow: /2fa
+
+Allow: /
+
+Sitemap: https://www.happytails.com/sitemap.xml

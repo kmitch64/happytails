@@ -1,14 +1,17 @@
 
-import { Outlet, Link, useNavigate } from 'react-router-dom';
+import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../components/auth/AuthContext';
+import DefaultFooter from '../../components/layouts/default/DefaultFooter';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  faTachometerAlt, faPaw, faUser, faRobot, faEnvelope,
+  faPaw, faUser, faRobot, faEnvelope,
   faBell, faCog, faCalendarAlt, faCreditCard, faHome,
   faSignOutAlt, faDog, faCat, faSearch, faHeart, faUserShield
 } from '@fortawesome/free-solid-svg-icons';
 
 import './dashboard.scss';
+
 
 export default function DashboardLayout() {
   const
@@ -17,14 +20,15 @@ export default function DashboardLayout() {
     handleLogout = () => {
       logout();
       navigate('/');
-    };
+    },
+    { pathname } = useLocation();
 
   return (
     <div className="dashboard-container">
 
       <aside className="dashboard-sidebar">
         <div className="sidebar-header">
-          <h2>Happy Tails</h2>
+          {/* <h2>Happy Tails</h2> */}
           <div className="user-profile">
             <div className="user-avatar">
               {user?.avatar
@@ -41,26 +45,43 @@ export default function DashboardLayout() {
 
         <nav className="sidebar-nav">
           <ul>
-            {user?.isAdmin && (
-              <li className="admin-access mb-6">
-                <Link to="/dashboard/admin" className="nav-link" style={{ fontWeight: 'bold', color: '#2c3e50' }}>
-                  <FontAwesomeIcon icon={faUserShield} className="mr-2" />
-                  Admin Dashboard
-                </Link>
-              </li>
-            )}
+            
             <li>
               <Link to="/dashboard" className="nav-link active">
-                <FontAwesomeIcon icon={faTachometerAlt} />
+                <FontAwesomeIcon icon={faHome} />
                 <span>Dashboard</span>
               </Link>
             </li>
 
-            <li className="nav-section-header">My Pets</li>
+            {user?.isAdmin && (
+              <>
+                <li className="nav-section-header">Admin</li>
+                <li>
+                  <Link to="/dashboard/admin" className="nav-link">
+                    <FontAwesomeIcon icon={faUserShield} />
+                    <span>Admin Dashboard</span>
+                  </Link>
+                </li>
+              </>
+            )}
+
+            <li className="nav-section-header">Pet Care</li>
             <li>
               <Link to="/dashboard/my-pets" className="nav-link">
                 <FontAwesomeIcon icon={faPaw} />
                 <span>My Pets</span>
+              </Link>
+            </li>
+            <li>
+              <Link to="/dashboard/ai-assistant" className="nav-link">
+                <FontAwesomeIcon icon={faRobot} />
+                <span>AI Care Assistant</span>
+              </Link>
+            </li>
+            <li>
+              <Link to="/dashboard/reminders" className="nav-link">
+                <FontAwesomeIcon icon={faCalendarAlt} />
+                <span>Care Reminders</span>
               </Link>
             </li>
 
@@ -102,25 +123,7 @@ export default function DashboardLayout() {
               </>
             )}
 
-            <li className="nav-section-header">Pet Care</li>
-            <li>
-              <Link to="/dashboard/my-pets" className="nav-link">
-                <FontAwesomeIcon icon={faHome} />
-                <span>My Pets</span>
-              </Link>
-            </li>
-            <li>
-              <Link to="/dashboard/ai-assistant" className="nav-link">
-                <FontAwesomeIcon icon={faRobot} />
-                <span>AI Care Assistant</span>
-              </Link>
-            </li>
-            <li>
-              <Link to="/dashboard/reminders" className="nav-link">
-                <FontAwesomeIcon icon={faCalendarAlt} />
-                <span>Care Reminders</span>
-              </Link>
-            </li>
+
 
             <li>
               <Link to="/dashboard/medical-records" className="nav-link">
@@ -193,6 +196,7 @@ export default function DashboardLayout() {
 
       <div className="dashboard-main">
         <Outlet />
+        <DefaultFooter path={pathname} />
       </div>
     </div>
   );
