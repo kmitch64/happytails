@@ -8,12 +8,12 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 
 
-export default function careReminders() {
+
+export default function MedicalRecords() {
   return (
     <div>
-      <h1>Care Reminders</h1>
-      <p>All reminders go here</p>
-      
+      <h1>Medical Records</h1>
+      <p>All Medical Records go here</p>
     </div>
   );
 }

@@ -122,6 +122,13 @@ export default function DashboardLayout() {
               </Link>
             </li>
 
+            <li>
+              <Link to="/dashboard/medical-records" className="nav-link">
+                <FontAwesomeIcon icon={faCalendarAlt} />
+                <span>Medical Records</span>
+              </Link>
+            </li>
+
             {(user?.role === 'PetSitter' || user?.isAdmin) && (
               <>
                 <li className="nav-section-header">Pet Sitting</li>
