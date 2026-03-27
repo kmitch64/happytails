@@ -3,9 +3,11 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '../../auth/AuthContext';
 
 
-export default function DefaultFooter() {
+export default function DefaultFooter({ path }: { path?: string }) {
   const { isLoggedIn } = useAuth(),
     title = "Happy Tails";
+
+  if (!path) return null;
   return (
     <footer className="main-footer">
       <div className="footer-wrapper">
@@ -14,9 +16,9 @@ export default function DefaultFooter() {
             <h3>Quick Links</h3>
             <ul>
               {isLoggedIn && <li><Link to="/dashboard">Dashboard</Link></li>}
-              <li><Link to="adopt">Adopt a Pet</Link></li>
-              <li><Link to="sitters">Find a Sitter</Link></li>
-              <li><Link to="ai-assistant">AI Care Assistant</Link></li>
+              <li><Link to="/adopt">Adopt a Pet</Link></li>
+              <li><Link to="/sitters">Find a Sitter</Link></li>
+              <li><Link to="/dashboard/ai-assistant">AI Care Assistant</Link></li>
             </ul>
           </div>
           <div className="footer-section">
@@ -27,8 +29,8 @@ export default function DefaultFooter() {
           <div className="footer-section">
             <h3>Legal</h3>
             <ul>
-              <li><Link to="privacy">Privacy Policy</Link></li>
-              <li><Link to="terms">Terms of Service</Link></li>
+              <li><Link to="/privacy">Privacy Policy</Link></li>
+              <li><Link to="/terms">Terms of Service</Link></li>
             </ul>
           </div>
         </div>

@@ -2,7 +2,7 @@
 import { useEffect } from 'react';
 import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../auth/AuthContext';
-
+import DefaultFooter from '../../layouts/default/DefaultFooter';
 
 import './default.css';
 
@@ -53,6 +53,7 @@ export default function DefaultLayout() {
       <main className="main-content">
         <Outlet />
       </main>
+      {!pathname.includes('/dashboard') && <DefaultFooter path={pathname} />}
     </div>
   );
 };

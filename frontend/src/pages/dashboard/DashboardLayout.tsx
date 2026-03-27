@@ -1,32 +1,34 @@
 
-import { Outlet, Link, useNavigate } from 'react-router-dom';
+import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../components/auth/AuthContext';
+import DefaultFooter from '../../components/layouts/default/DefaultFooter';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  faTachometerAlt, faPaw, faUser, faRobot, faEnvelope,
+  faPaw, faUser, faRobot, faEnvelope,
   faBell, faCog, faCalendarAlt, faCreditCard, faHome,
   faSignOutAlt, faDog, faCat, faSearch, faHeart, faUserShield
 } from '@fortawesome/free-solid-svg-icons';
-import DefaultFooter from '../../components/layouts/default/DefaultFooter';
 
 import './dashboard.scss';
 
+
 export default function DashboardLayout() {
   const
-    { isLoggedIn, user, logout } = useAuth(),
+    { user, logout } = useAuth(),
     navigate = useNavigate(),
     handleLogout = () => {
       logout();
       navigate('/');
     },
-    title = "Happy Tails";
+    { pathname } = useLocation();
 
   return (
     <div className="dashboard-container">
 
       <aside className="dashboard-sidebar">
         <div className="sidebar-header">
-          <h2>Happy Tails</h2>
+          {/* <h2>Happy Tails</h2> */}
           <div className="user-profile">
             <div className="user-avatar">
               {user?.avatar
@@ -187,9 +189,8 @@ export default function DashboardLayout() {
 
       <div className="dashboard-main">
         <Outlet />
-        <DefaultFooter />
+        <DefaultFooter path={pathname} />
       </div>
-      
     </div>
   );
 };

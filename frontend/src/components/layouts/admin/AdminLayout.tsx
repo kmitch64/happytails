@@ -14,6 +14,10 @@ export default function AdminLayout() {
   return (
     <div className="admin-dashboard">
       <div className="admin-header">
+        <h1 className="admin-title">
+          <FontAwesomeIcon icon={faUserShield} className="admin-icon" />
+          Admin Dashboard
+        </h1>
         <button
           onClick={() => navigate('/dashboard')}
           title="Back to User Dashboard"
@@ -21,19 +25,14 @@ export default function AdminLayout() {
             { //this should go to a class
               border: 'none',
               backgroundColor: 'transparent',
-              color: '#084168',
-              fontSize: '18px'
+              color: 'var(--light-text)',
+              // fontSize: '18px'
             }
           }
         >
           <FontAwesomeIcon icon={faArrowLeft} className="admin-icon"/>
           Back to User Dashboard
         </button>
-
-        <h1 className="admin-title">
-          <FontAwesomeIcon icon={faUserShield} className="admin-icon" />
-          Admin Dashboard
-        </h1>
       </div>
 
       <div className="admin-content-wrapper">

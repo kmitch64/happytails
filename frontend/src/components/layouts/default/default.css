@@ -11,7 +11,7 @@
 .main-header {
   background-color: var(--primary-color);
   color: var(--light-text);
-  padding: 1rem 2rem;
+  padding: 1rem;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   position: sticky;
   top: 0;
@@ -92,7 +92,7 @@
 
 .main-content {
   flex: 1;
-  padding: 0;
+  padding: 0 1rem 1rem 1rem;
 }
 
 
@@ -101,7 +101,7 @@
 .main-footer {
   background-color: var(--bg-dark);
   color: var(--light-text);
-  padding: 1rem 2rem 0.5rem 2rem;
+  padding: 1rem 2rem;
   margin-top: 2rem;
 }
 
