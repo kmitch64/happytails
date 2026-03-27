@@ -13,7 +13,8 @@ export default function AdminLayout() {
 
   return (
     <div className="admin-dashboard">
-      <div className="admin-header">
+      
+      <header className="admin-header">
         <h1 className="admin-title">
           <FontAwesomeIcon icon={faUserShield} className="admin-icon" />
           Admin Dashboard
@@ -30,19 +31,18 @@ export default function AdminLayout() {
             }
           }
         >
-          <FontAwesomeIcon icon={faArrowLeft} className="admin-icon"/>
+          <FontAwesomeIcon icon={faArrowLeft} className="admin-icon" />
           Back to User Dashboard
         </button>
-      </div>
+      </header>
 
       <div className="admin-content-wrapper">
-        <div className="admin-sidebar">
-          <AdminMenu />
-        </div>
 
-        <div className="admin-main-content">
+        <AdminMenu />
+
+        <main className="admin-main-content">
           <Outlet />
-        </div>
+        </main>
       </div>
     </div>
   );

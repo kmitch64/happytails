@@ -30,14 +30,22 @@
 
 .logo-section h1 {
   margin: 0;
-  font-size: 1.8rem;
+  font-size: 1.5rem;
   font-weight: 600;
 }
 
 .logo-link {
+  display: flex;
+  align-items: center;
   color: var(--light-text);
   text-decoration: none;
 }
+
+.logo-image {
+  margin-right: 0.75rem;
+}
+
+
 
 .tagline {
   margin: 0.25rem 0 0;

@@ -60,6 +60,7 @@ export default function App(): JSX.Element {
         <Routes>
 
           <Route element={<DefaultLayout />}>
+            <Route path="/" index element={<Home />} />
 
             <Route path="/privacy" element={<PrivacyPolicy />} />
             <Route path="/terms" element={<TermsOfService />} />
@@ -68,15 +69,6 @@ export default function App(): JSX.Element {
             <Route path='/register' element={<Register />} />
             <Route path='/logout' element={<Logout />} />
             <Route path='/2fa' element={<TwoFactorAuth />} />
-
-            <Route path="/" element={<Home />} />
-
-            <Route path="/dashboard/admin" element={<AdminLayout />} >
-              <Route index element={<UserManagement />} />
-              <Route path="users" element={<UserManagement />} />
-              <Route path="users/create" element={<UserForm />} />
-              <Route path="users/:id/edit" element={<UserForm />} />
-            </Route>
 
             <Route path='/dashboard/*' element={<ProtectedRoute><DashboardLayout /></ProtectedRoute>}>
               <Route index element={<DashboardOverview />} />
@@ -91,18 +83,19 @@ export default function App(): JSX.Element {
               <Route path='reminders' element={<CareReminders />} />
               <Route path='my-pets/:id/add-reminder' element={<AddReminder />} />
               <Route path="medical-records" element={<MedicalRecords />} />
-              <Route path="my-pets/:id/add-medical-record"element={<AddMedicalRecord />} />
-
-
-
-
+              <Route path="my-pets/:id/add-medical-record" element={<AddMedicalRecord />} />
 
               {/* <Route path='my-applications' element={<MyApplications />} />
               <Route path='favorites' element={<Favorites />} />
-              
               <Route path='sitters' element={<Sitters />} /> */}
             </Route>
+          </Route>
 
+          <Route path="/dashboard/admin" element={<ProtectedRoute><AdminLayout /></ProtectedRoute>} >
+            <Route index element={<UserManagement />} />
+            <Route path="users" element={<UserManagement />} />
+            <Route path="users/create" element={<UserForm />} />
+            <Route path="users/:id/edit" element={<UserForm />} />
           </Route>
 
         </Routes>

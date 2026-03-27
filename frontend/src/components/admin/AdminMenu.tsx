@@ -35,22 +35,24 @@ export default function AdminMenu() {
   ];
 
   return (
-    <div className="admin-menu">
-      {adminMenuItems.map((item, index) => (
-        <Link
-          key={index}
-          to={item.path}
-          className={`admin-menu-item ${location.pathname.startsWith(item.path) ? 'active' : ''}`}
-        >
-          <div className="admin-menu-icon">
-            <FontAwesomeIcon icon={item.icon} />
-          </div>
-          <div>
-            <h3 className="admin-menu-title">{item.title}</h3>
-            <p className="admin-menu-description">{item.description}</p>
-          </div>
-        </Link>
-      ))}
+    <div className="admin-sidebar">
+      <div className="admin-menu">
+        {adminMenuItems.map((item, index) => (
+          <Link
+            key={index}
+            to={item.path}
+            className={`admin-menu-item ${location.pathname.startsWith(item.path) ? 'active' : ''}`}
+          >
+            <div className="admin-menu-icon">
+              <FontAwesomeIcon icon={item.icon} />
+            </div>
+            <div>
+              <h3 className="admin-menu-title">{item.title}</h3>
+              <p className="admin-menu-description">{item.description}</p>
+            </div>
+          </Link>
+        ))}
+      </div>
     </div>
   );
 };

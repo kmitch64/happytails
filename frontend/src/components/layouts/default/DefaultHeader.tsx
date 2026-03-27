@@ -24,6 +24,7 @@ export default function DefaultHeader({ path }: { path?: string }) {
       <div className="header-content">
         <div className="logo-section">
           <Link to="/" className="logo-link">
+            <img src="/favicon-180.png" width={50} alt="Happy Tails Logo" className="logo-image" />
             <h1>{title}</h1>
           </Link>
           <p className="tagline">A unified platform for pet care and adoption</p>
