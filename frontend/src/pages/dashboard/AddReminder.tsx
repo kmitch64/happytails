@@ -22,6 +22,8 @@ export default function AddReminder() {
     <div>
       <h1>Add Reminder for Pet</h1>
 
+      {/*Very simple form for now*/}   
+
       <form onSubmit={handleSubmit}>
 
         <label>Type</label>

@@ -8,7 +8,7 @@ export default function AddMedicalRecord() {
   const navigate = useNavigate();
 
   const [type, useType] = useState("");
-  const [notes, useMedicalNotes] = useState("");
+  const [notes, useDescription] = useState("");
   const [file, setFile] = useState<File | null>(null);
 
   const handleSubmit = (e: FormEvent) => {
@@ -22,6 +22,8 @@ export default function AddMedicalRecord() {
     <div className="add-medical-container">
       <h1>Add Medical Record for Pet</h1>
 
+
+        {/*Very simple form for now*/}        
       <form onSubmit={handleSubmit}>
 
 
@@ -31,18 +33,18 @@ export default function AddMedicalRecord() {
           <option value="vaccination">Vaccination</option>
           <option value="surgery">Surgery</option>
           <option value="checkup">Check-Up</option>
-          <option value="labtest">Lab Test</option>
+          <option value="Medication">Medication</option>
         </select>
 
-        <label>Notes</label>
+        <label>Description</label>
         <textarea
           value={notes}
-          onChange={(e) => useMedicalNotes(e.target.value)}
+          onChange={(e) => useDescription(e.target.value)}
         />
 
 
         {/*txt for now can add more later*/}
-        <label>Upload File (TXT only for now)</label> 
+        <label>Upload File (TXT Only)</label> 
         <input
           type="file"
           accept=".txt"

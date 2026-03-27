@@ -10,6 +10,10 @@ import {
 import { useAuth } from '../../components/auth/AuthContext';
 import PetCarousel from '../../components/PetCarousel/PetCarousel';
 
+import "./MyPetProfile.css";
+
+
+
 // Define TypeScript interface for Pet
 
 
@@ -155,7 +159,10 @@ export default function MyPetProfile() {
         <div className="tab-content">
           {activeTab === 'profile' && (
             <>
+            
               {/* Carousel Section */}
+              <div className="pet-profile-layout">
+              <div className="left-column">
               <section className="pet-carousel-section">
                 <PetCarousel
                   petId={pet._id}
@@ -163,8 +170,11 @@ export default function MyPetProfile() {
                   petName={pet.name}
                 />
               </section>
+              </div>
 
               {/* Pet Details Section */}
+              <div className="right-column">
+
               <section className="pet-details-section">
                 <div className="details-grid">
                   {/* Left Column - Bio and Info */}
@@ -232,6 +242,8 @@ export default function MyPetProfile() {
                   </div>
                 </div>
               </section>
+              </div>
+              </div>
             </>
           )}
 
