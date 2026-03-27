@@ -28,16 +28,16 @@ import UserManagement from './pages/admin/UserManagement';
 import UserForm from './pages/admin/UserForm';
 
 //user dashboard
-import DashboardLayout from './pages/dashboard/DashboardLayout';
+import DashboardLayout from './components/layouts/dashboard/DashboardLayout';
 import DashboardOverview from './pages/dashboard/DashboardOverview';
 import MyPets from './pages/dashboard/MyPets';
-import AddEditPet from './pages/dashboard/AddEditPet';
+import AddEditPet from './components/dashboard/AddEditPet';
 import MyPetProfile from './pages/dashboard/MyPetProfile';
 import AIAssistant from './pages/dashboard/AIAssistant';
 import CareReminders from './pages/dashboard/CareReminders';
-import AddReminder from './pages/dashboard/AddReminder';
+import AddReminder from './components/dashboard/AddReminder';
 import MedicalRecords from './pages/dashboard/MedicalRecords';
-import AddMedicalRecord from './pages/dashboard/AddMedicalRecord';
+import AddMedicalRecord from './components/dashboard/AddMedicalRecord';
 
 //adopt pages
 import Adopt from './pages/dashboard/DashboardAdopt';

@@ -1,7 +1,7 @@
 
 import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom';
-import { useAuth } from '../../components/auth/AuthContext';
-import DefaultFooter from '../../components/layouts/default/DefaultFooter';
+import { useAuth } from '../../auth/AuthContext';
+import DefaultFooter from '../default/DefaultFooter';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
