@@ -37,7 +37,7 @@ export default function Login() {
             navigate('/2fa', { state: { email: userEmail, from: '/login' } });
           }
           else {
-            navigate('/');
+            navigate('/dashboard');
           };
         }
         else {
