@@ -84,6 +84,12 @@ export default function DashboardLayout() {
                 <span>Care Reminders</span>
               </Link>
             </li>
+            <li>
+              <Link to="/dashboard/medical-records" className="nav-link">
+                <FontAwesomeIcon icon={faNotesMedical} />
+                <span>Medical Records</span>
+              </Link>
+            </li>
 
             <li className="nav-section-header">Pet Adoption</li>
             <li>
@@ -122,15 +128,7 @@ export default function DashboardLayout() {
                 </li>
               </>
             )}
-
-
-
-            <li>
-              <Link to="/dashboard/medical-records" className="nav-link">
-                <FontAwesomeIcon icon={faNotesMedical} />
-                <span>Medical Records</span>
-              </Link>
-            </li>
+            
 
             {(user?.role === 'PetSitter' || user?.isAdmin) && (
               <>
