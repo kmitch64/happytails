@@ -16,10 +16,11 @@ export default function AIAssistant() {
   const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const messagesContainerRef = useRef<HTMLDivElement>(null);
 
   // Scroll to bottom of messages
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    messagesContainerRef.current?.scrollTo({ top: messagesContainerRef.current.scrollHeight, behavior: 'smooth' });
   }, [messages]);
 
   const handleSendMessage = async () => {
@@ -58,15 +59,14 @@ export default function AIAssistant() {
 
       const data = await response.json();
 
-      // Add AI response
-      setMessages(prev => [...prev, {
-        id: Date.now().toString(),
-        content: data.response,
-        sender: 'assistant',
-        timestamp: new Date()
-      }]);
-
-    } catch (error) {
+    // Add AI response
+    setMessages(prev => [...prev, {
+      id: Date.now().toString(),
+      content: data.response,
+      sender: 'assistant',
+      timestamp: new Date()
+    }]);
+  } catch (error) {
       console.error('Error:', error);
       setMessages(prev => [...prev, {
         id: Date.now().toString(),
@@ -99,7 +99,7 @@ export default function AIAssistant() {
       </div>
 
       <div className="ai-chat-container">
-        <div className="ai-messages">
+        <div className="ai-messages" ref={messagesContainerRef}>
           {messages.map(message => (
             <div
               key={message.id}

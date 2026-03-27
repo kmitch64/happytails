@@ -4,6 +4,7 @@ import { useAuth } from '../../components/auth/AuthContext';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPaw, faUser, faRobot } from '@fortawesome/free-solid-svg-icons';
+import DefaultFooter from '../../components/layouts/default/DefaultFooter';
 
 import './home.css'
 
@@ -107,6 +108,7 @@ export default function Home() {
                     <Link to="/dashboard" className="cta-button primary large">Go to Dashboard</Link>
                 )}
             </section>
+            <DefaultFooter />
         </div>
     );
 }

@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../auth/AuthContext';
 
+
 import './default.css';
 
 
@@ -10,8 +11,6 @@ export default function DefaultLayout() {
   const
     { isLoggedIn, user, logout } = useAuth(),
     navigate = useNavigate(),
-
-    handleLoginClick = () => navigate('/login'),
     handleLogout = () => {
       logout();
       navigate('/');
@@ -20,7 +19,7 @@ export default function DefaultLayout() {
 
     title = "Happy Tails";
 
-    useEffect(() => {
+  useEffect(() => {
     window.scrollTo(0, 0);
   }, [pathname]);
 
@@ -43,7 +42,7 @@ export default function DefaultLayout() {
               </>
             ) : (
               <>
-                <button onClick={handleLoginClick} className="nav-button login">Login</button>
+                <button onClick={() => navigate('/login')} className="nav-button login">Login</button>
                 <button onClick={() => navigate('/register')} className="nav-button register">Register</button>
               </>
             )}
@@ -54,37 +53,6 @@ export default function DefaultLayout() {
       <main className="main-content">
         <Outlet />
       </main>
-
-      <footer className="main-footer">
-        <div className="footer-wrapper"> 
-          <div className="footer-content">
-            <div className="footer-section">
-              <h3>Quick Links</h3>
-              <ul>
-                {isLoggedIn && <li><Link to="/dashboard">Dashboard</Link></li>}
-                <li><Link to="adopt">Adopt a Pet</Link></li>
-                <li><Link to="sitters">Find a Sitter</Link></li>
-                <li><Link to="ai-assistant">AI Care Assistant</Link></li>
-              </ul>
-            </div>
-            <div className="footer-section">
-              <h3>Contact Us</h3>
-              <p>Email: support@happytails.com <br />
-              Phone: (123) 456-7890</p>
-            </div>
-            <div className="footer-section">
-              <h3>Legal</h3>
-              <ul>
-                <li><Link to="privacy">Privacy Policy</Link></li>
-                <li><Link to="terms">Terms of Service</Link></li>
-              </ul>
-            </div>
-          </div>
-        </div>
-        <div className="copyright">
-          <p>© 2026 {title}. All rights reserved.</p>
-        </div>
-      </footer>
     </div>
   );
 };

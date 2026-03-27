@@ -7,17 +7,19 @@ import {
   faBell, faCog, faCalendarAlt, faCreditCard, faHome,
   faSignOutAlt, faDog, faCat, faSearch, faHeart, faUserShield
 } from '@fortawesome/free-solid-svg-icons';
+import DefaultFooter from '../../components/layouts/default/DefaultFooter';
 
 import './dashboard.scss';
 
 export default function DashboardLayout() {
   const
-    { user, logout } = useAuth(),
+    { isLoggedIn, user, logout } = useAuth(),
     navigate = useNavigate(),
     handleLogout = () => {
       logout();
       navigate('/');
-    };
+    },
+    title = "Happy Tails";
 
   return (
     <div className="dashboard-container">
@@ -54,8 +56,8 @@ export default function DashboardLayout() {
                 <li className="nav-section-header">Admin</li>
                 <li>
                   <Link to="/dashboard/admin" className="nav-link">
-                    <FontAwesomeIcon icon={faUserShield} className="mr-2" />
-                    Admin Dashboard
+                    <FontAwesomeIcon icon={faUserShield} />
+                    <span>Admin Dashboard</span>
                   </Link>
                 </li>
               </>
@@ -185,7 +187,9 @@ export default function DashboardLayout() {
 
       <div className="dashboard-main">
         <Outlet />
+        <DefaultFooter />
       </div>
+      
     </div>
   );
 };

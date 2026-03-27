@@ -101,14 +101,14 @@
 .main-footer {
   background-color: var(--bg-dark);
   color: var(--light-text);
-  padding: 1rem 2rem 0.5rem 2rem; 
-  margin-top: auto;
+  padding: 1rem 2rem 0.5rem 2rem;
+  margin-top: 2rem;
 }
 
 .footer-content {
   display: flex;
   max-width: 1200px;
-  margin: 0 auto;
+  margin: auto;
   flex-wrap: wrap;
   gap: 10rem;
 }
@@ -119,8 +119,8 @@
 }
 
 .footer-section {
-  flex: unset;
-  min-width: unset;
+  flex: 1;
+  min-width: 200px;
   text-align: left;
 }
 
