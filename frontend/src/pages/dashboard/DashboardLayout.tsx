@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faPaw, faUser, faRobot, faEnvelope,
   faBell, faCog, faCalendarAlt, faCreditCard, faHome,
-  faSignOutAlt, faDog, faCat, faSearch, faHeart, faUserShield
+  faSignOutAlt, faDog, faCat, faSearch, faHeart, faUserShield, faNotesMedical
 } from '@fortawesome/free-solid-svg-icons';
 
 import './dashboard.scss';
@@ -124,6 +124,13 @@ export default function DashboardLayout() {
             )}
 
 
+
+            <li>
+              <Link to="/dashboard/medical-records" className="nav-link">
+                <FontAwesomeIcon icon={faNotesMedical} />
+                <span>Medical Records</span>
+              </Link>
+            </li>
 
             {(user?.role === 'PetSitter' || user?.isAdmin) && (
               <>

@@ -10,6 +10,10 @@ import {
 import { useAuth } from '../../components/auth/AuthContext';
 import PetCarousel from '../../components/PetCarousel/PetCarousel';
 
+import "./MyPetProfile.css";
+
+
+
 // Define TypeScript interface for Pet
 
 
@@ -155,7 +159,10 @@ export default function MyPetProfile() {
         <div className="tab-content">
           {activeTab === 'profile' && (
             <>
+            
               {/* Carousel Section */}
+              <div className="pet-profile-layout">
+              <div className="left-column">
               <section className="pet-carousel-section">
                 <PetCarousel
                   petId={pet._id}
@@ -163,8 +170,11 @@ export default function MyPetProfile() {
                   petName={pet.name}
                 />
               </section>
+              </div>
 
               {/* Pet Details Section */}
+              <div className="right-column">
+
               <section className="pet-details-section">
                 <div className="details-grid">
                   {/* Left Column - Bio and Info */}
@@ -232,6 +242,8 @@ export default function MyPetProfile() {
                   </div>
                 </div>
               </section>
+              </div>
+              </div>
             </>
           )}
 
@@ -279,17 +291,26 @@ export default function MyPetProfile() {
                       </div>
                     ))}
                   </div>
+                  
+                  <Link to={`/dashboard/my-pets/${pet._id}/add-reminder`}>
+
                   <button className="add-reminder-button">
                     <FontAwesomeIcon icon={faPlus} /> Add New Reminder
                   </button>
+                  </Link>
+
                 </>
               ) : (
                 <div className="no-reminders">
                   <FontAwesomeIcon icon={faCalendarAlt} size="3x" color="#ccc" />
                   <p>No care reminders set up for {pet.name}</p>
-                  <button className="add-reminder-button">
-                    <FontAwesomeIcon icon={faPlus} /> Add First Reminder
-                  </button>
+                  <Link to={`/dashboard/my-pets/${pet._id}/add-reminder`}>
+
+                    <button className="add-reminder-button">
+                      <FontAwesomeIcon icon={faPlus} /> Add First Reminder
+                    </button>
+                  </Link>
+
                 </div>
               )}
             </section>
@@ -328,17 +349,22 @@ export default function MyPetProfile() {
                       </div>
                     ))}
                   </div>
-                  <button className="add-record-button">
-                    <FontAwesomeIcon icon={faPlus} /> Add Medical Record
-                  </button>
+                  <Link to={`/dashboard/my-pets/${pet._id}/add-medical-record`}>
+                    <button className="add-record-button">
+                      <FontAwesomeIcon icon={faPlus} /> Add Medical Record
+                    </button>
+                  </Link>
                 </>
               ) : (
                 <div className="no-records">
                   <FontAwesomeIcon icon={faNotesMedical} size="3x" color="#ccc" />
                   <p>No medical records for {pet.name}</p>
-                  <button className="add-record-button">
-                    <FontAwesomeIcon icon={faPlus} /> Add First Record
-                  </button>
+                  <Link to={`/dashboard/my-pets/${pet._id}/add-medical-record`}>
+
+                    <button className="add-record-button">
+                      <FontAwesomeIcon icon={faPlus} /> Add First Record
+                    </button>
+                  </Link>
                 </div>
               )}
             </section>

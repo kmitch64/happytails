@@ -33,7 +33,10 @@ import DashboardOverview from './pages/dashboard/DashboardOverview';
 import MyPets from './pages/dashboard/MyPets';
 import AddEditPet from './pages/dashboard/AddEditPet';
 import MyPetProfile from './pages/dashboard/MyPetProfile';
-import AIAssistant from './pages/dashboard/AIAssistant';
+import CareReminders from './pages/dashboard/CareReminders';
+import AddReminder from './pages/dashboard/AddReminder';
+import MedicalRecords from './pages/dashboard/MedicalRecords';
+import AddMedicalRecord from './pages/dashboard/AddMedicalRecord';
 
 //adopt pages
 import Adopt from './pages/dashboard/DashboardAdopt';
@@ -83,7 +86,14 @@ export default function App(): JSX.Element {
               <Route path='my-pets/add' element={<AddEditPet />} />
               <Route path='my-pets/edit/:id' element={<AddEditPet />} />
               <Route path='my-pets/:id' element={<MyPetProfile />} />
-              <Route path='ai-assistant' element={<AIAssistant />} />
+              <Route path='reminders' element={<CareReminders />} />
+              <Route path='my-pets/:id/add-reminder' element={<AddReminder />} />
+              <Route path="medical-records" element={<MedicalRecords />} />
+              <Route path="my-pets/:id/add-medical-record"element={<AddMedicalRecord />} />
+
+
+
+
 
               {/* <Route path='my-applications' element={<MyApplications />} />
               <Route path='favorites' element={<Favorites />} />

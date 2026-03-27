@@ -1,0 +1,45 @@
+
+/*move the image to the left*/
+.pet-profile-layout {
+  display: flex;
+  gap: 32px;
+  padding: 25px;
+  align-items: flex-start;
+}
+
+.left-column {
+  width: 350px; /* Fixes Image */
+}
+
+/*move the cards to the right*/
+.right-column {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+/* Fixes spacing so all details are shown*/
+.details-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1.6fr;
+  gap: 24px;
+}
+
+.pet-bio {
+  min-width: 320px;
+}
+
+.attribute {
+  white-space: nowrap;
+}
+
+.info-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+.info-card {
+  white-space: nowrap;
+}
