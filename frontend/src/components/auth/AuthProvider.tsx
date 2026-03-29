@@ -14,52 +14,36 @@ export default function AuthProvider({ children }: AuthProviderProps) {
     [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    let isMounted = true;
-    const controller = new AbortController();
-
     async function checkSession(): Promise<void> {
       try {
-        const timeout = setTimeout(() => controller.abort(), 5000);
         const res = await fetch('/api/v1/auth/validate', {
-          credentials: 'include',
-          signal: controller.signal,
+          credentials: 'include'
         });
-
-        clearTimeout(timeout);
-
-        if (!isMounted) return;
 
         if (res.ok) {
           const data = await res.json();
           setIsLoggedIn(true);
           setUser(data.user);
-        } 
+        }
         else {
           setIsLoggedIn(false);
           setUser(null);
         };
-      } 
+      }
       catch {
-        if (!isMounted) return;
-
         setIsLoggedIn(false);
         setUser(null);
-      } 
+      }
       finally {
-        if (isMounted) {
-          setIsLoading(false);
-        };
+        setIsLoading(false);
       };
     };
     checkSession();
-    return () => {
-      isMounted = false;
-      controller.abort();
-    };
 
   }, []);
 
   async function login(email: string, password: string) {
+    setIsLoading(true);
     try {
       const res = await fetch('/api/v1/auth/login', {
         method: 'POST',
@@ -85,6 +69,9 @@ export default function AuthProvider({ children }: AuthProviderProps) {
     }
     catch (e: any) {
       return { success: false, message: e.message };
+    }
+    finally {
+      setIsLoading(false);
     };
   };
 
@@ -92,6 +79,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
    * Logs out the currently logged-in user.
    */
   async function logout() {
+    setIsLoading(true);
     try {
       await fetch('/api/v1/auth/logout', {
         method: 'POST',
@@ -105,6 +93,9 @@ export default function AuthProvider({ children }: AuthProviderProps) {
     }
     catch (e: any) {
       return { success: false, message: e.message };
+    }
+    finally {
+      setIsLoading(false);
     };
   };
 
@@ -139,6 +130,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
    * @param token - The 2FA token
    */
   async function verify2FA(email: string, token: string) {
+    setIsLoading(true);
     try {
       const res = await fetch('/api/v1/auth/2fa/verify', {
         method: 'POST',
@@ -158,6 +150,9 @@ export default function AuthProvider({ children }: AuthProviderProps) {
     }
     catch (e: any) {
       return { success: false, message: e.message };
+    }
+    finally {
+      setIsLoading(false);
     };
   };
 
@@ -165,6 +160,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
    * Disables 2FA for the currently logged-in user.
    */
   async function disable2FA() {
+    setIsLoading(true);
     try {
       if (!user) return { success: false, message: 'No user logged in' };
       const res = await fetch('/api/v1/auth/2fa/disable', {
@@ -184,6 +180,9 @@ export default function AuthProvider({ children }: AuthProviderProps) {
     }
     catch (e: any) {
       return { success: false, message: e.message };
+    }
+    finally {
+      setIsLoading(false);
     };
   };
 
