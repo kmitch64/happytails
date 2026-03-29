@@ -59,7 +59,7 @@ export default function Logout() {
             </button>
             <button
               onClick={() => navigate(-1)}
-              className="cancel-button"
+              className="cancel-logout-button"
               disabled={isLoading}
             >
               Cancel

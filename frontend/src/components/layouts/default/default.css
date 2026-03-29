@@ -87,12 +87,12 @@
 }
 
 .logout {
-  background-color: #e74c3c;
+  background-color: #d16060;
   color: var(--light-text);
 }
 
 .logout:hover {
-  background-color: #c0392b;
+  background-color: #e74c3c;
 }
 
 .main-content {

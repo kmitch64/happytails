@@ -5,6 +5,7 @@
   align-items: center;
   min-height: 100vh;
 }
+
 .logout-buttons {
   display: flex;
   justify-content: center;
@@ -12,20 +13,35 @@
 }
 
 .logout-button {
-  background-color: rgba(44, 21, 21, 0.795);
-  color: #ff5555;
+  /* width: 100%; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 1.5rem;
+  background-color: #f5f5f5;
+  border: none;
+  border-radius: 5px;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
 .logout-button:hover {
-  background-color: #ff5555;
-  color: #ffffff;
+  background-color: #f79494;
 }
-.cancel-button {
-  background-color: rgba(100, 100, 100, 0.795);
-  color: #ffffff;
+
+.cancel-logout-button {
+  padding: 0.75rem 1.5rem;
   margin-left: 10px;
+  border: 1px solid #d1d5db;
+  background: white;
+  color: #4b5563;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
 }
-.cancel-button:hover {
-  background-color: #555555;
-  color: #ffffff;
+
+.cancel-logout-button:hover {
+  background-color: #b5f092;
 }

@@ -15,12 +15,8 @@ import './dashboard.scss';
 
 export default function DashboardLayout() {
   const
-    { user, logout } = useAuth(),
+    { user } = useAuth(),
     navigate = useNavigate(),
-    handleLogout = () => {
-      logout();
-      navigate('/');
-    },
     { pathname } = useLocation();
 
   return (
@@ -185,7 +181,7 @@ export default function DashboardLayout() {
         </nav>
 
         <div className="sidebar-footer">
-          <button onClick={handleLogout} className="logout-button">
+          <button onClick={() => navigate('/logout')} className="logout-button">
             <FontAwesomeIcon icon={faSignOutAlt} />
             <span>Logout</span>
           </button>

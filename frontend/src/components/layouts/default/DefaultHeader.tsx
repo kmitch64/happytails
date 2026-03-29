@@ -2,18 +2,15 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../auth/AuthContext';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 
 export default function DefaultHeader({ path }: { path?: string }) {
 
   const
     title = "Happy Tails",
-    { isLoggedIn, user, logout } = useAuth(),
-    navigate = useNavigate(),
-
-    handleLogout = () => {
-      logout();
-      navigate('/');
-    };
+    { isLoggedIn, user } = useAuth(),
+    navigate = useNavigate();
 
   if (path?.includes('/admin')) {
     return null;
@@ -33,8 +30,8 @@ export default function DefaultHeader({ path }: { path?: string }) {
           {isLoggedIn ? (
             <>
               <span className="user-greeting">Welcome, {user?.username || 'User'}!</span>
-              <button onClick={() => navigate('/dashboard')} className="nav-button">Dashboard</button>
-              <button onClick={handleLogout} className="nav-button logout">Logout</button>
+              {/* <button onClick={() => navigate('/dashboard')} className="nav-button">Dashboard</button> */}
+              <button onClick={() => navigate('/logout')} title="Logout" className="nav-button logout"><FontAwesomeIcon icon={faSignOutAlt} /></button>
             </>
           ) : (
             <>
