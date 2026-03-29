@@ -1194,7 +1194,6 @@
       align-items: center;
       gap: 0.5rem;
       white-space: nowrap;
-      /* Prevent text wrapping */
       padding: 10px 15px;
       background-color: #4CAF50;
       color: white;
@@ -1202,10 +1201,9 @@
       border-radius: 6px;
       cursor: pointer;
       font-weight: 500;
+      text-decoration: none;
       height: 40px;
-      /* Match search input height */
       box-sizing: border-box;
-      /* Include padding in height */
 
       &:hover {
         background-color: #388E3C;
