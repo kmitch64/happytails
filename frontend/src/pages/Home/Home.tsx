@@ -40,7 +40,7 @@ export default function Home() {
                 <div className="features-grid">
                     <div className="feature-card">
                         <div className="feature-icon">
-                            <FontAwesomeIcon icon={faPaw} size="3x" color="#4CAF50" />
+                            <FontAwesomeIcon icon={faPaw} size="3x" color="var(--primary-color)" />
                         </div>
                         <h3>Adopt a Pet</h3>
                         <p>Browse pets available for adoption and submit applications with ease.</p>
@@ -48,7 +48,7 @@ export default function Home() {
                     </div>
                     <div className="feature-card">
                         <div className="feature-icon">
-                            <FontAwesomeIcon icon={faUser} size="3x" color="#4CAF50" />
+                            <FontAwesomeIcon icon={faUser} size="3x" color="var(--primary-color)" />
                         </div>
                         <h3>Find a Sitter</h3>
                         <p>Book trusted pet sitters for walking, boarding, or daycare.</p>
@@ -56,7 +56,7 @@ export default function Home() {
                     </div>
                     <div className="feature-card">
                         <div className="feature-icon">
-                            <FontAwesomeIcon icon={faRobot} size="3x" color="#4CAF50" />
+                            <FontAwesomeIcon icon={faRobot} size="3x" color="var(--primary-color)" />
                         </div>
                         <h3>AI Care Assistant</h3>
                         <p>Get personalized reminders and advice for your pet's health.</p>
