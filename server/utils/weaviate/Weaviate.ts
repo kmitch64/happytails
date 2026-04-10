@@ -1,8 +1,4 @@
-// import { getSmolVLMImageDescription, } from '../handlers/requesters.mjs';
-// import { learnUrl } from '../handlers/scrape.mjs';
-// import { getChannelMessages, sendMessage, typingIndicator } from '../handlers/messages.mjs';
-// import { determineSentiments, determineEngagement, discordChatCompletion, getPixtralApiImageResponse } from '../completions/ChatCompletions.mjs';
-// import dms from './schemas/DiscordmessageSchema2.mjs';
+
 import { v4 as uuidv4 } from 'uuid';
 import { inspect } from 'util';
 import weaviate, {
@@ -12,12 +8,12 @@ import weaviate, {
   vectors,//vectorizer
   WeaviateClient
 } from 'weaviate-client';
-import type { Collection, ConnectToWeaviateCloudOptions, Text2VecOpenAIConfigCreate, Vectors } from 'weaviate-client';
+import type { Collection, ConnectToWeaviateCloudOptions, Text2VecOpenAIConfigCreate } from 'weaviate-client';
 
-type userType = 'user' | 'assistant';
-type searchType = 'generative' | 'semantic';
-type methodType = 'hybrid' | 'nearText';
-type sourceType = 'history' | 'discord';
+// type userType = 'user' | 'assistant';
+// type searchType = 'generative' | 'semantic';
+// type methodType = 'hybrid' | 'nearText';
+// type sourceType = 'history' | 'discord';
 type ModelProvider = 'mistral' | 'openai'; // anthropic
 
 // const Config = (await import('../../config.json', { with: { type: "json" } })).default.Config;
