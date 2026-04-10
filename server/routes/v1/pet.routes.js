@@ -21,4 +21,5 @@ export default Router()
   .post('/:id/medical-records', isAuthorized, petController.addMedicalRecord)
   .put('/:id/medical-records/:recordId', isAuthorized, petController.updateMedicalRecord)
   .delete('/:id/medical-records/:recordId', isAuthorized, petController.deleteMedicalRecord);
+  
 
