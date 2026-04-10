@@ -1,14 +1,17 @@
 
 import { v4 as uuidv4 } from 'uuid';
 import { inspect } from 'util';
-import weaviate, {
+import type { Collection, ConnectToWeaviateCloudOptions, Text2VecMistralConfigCreate, Text2VecOpenAIConfigCreate } from 'weaviate-client';
+import {
   ApiKey,
+  configure,
+  connectToWeaviateCloud,
   generative,
   TimeoutParams,
-  vectors,//vectorizer
+  vectors,
   WeaviateClient
 } from 'weaviate-client';
-import type { Collection, ConnectToWeaviateCloudOptions, Text2VecOpenAIConfigCreate } from 'weaviate-client';
+import PetSchema from './schemas/PetSchema';
 
 // type userType = 'user' | 'assistant';
 // type searchType = 'generative' | 'semantic';
@@ -16,20 +19,23 @@ import type { Collection, ConnectToWeaviateCloudOptions, Text2VecOpenAIConfigCre
 // type sourceType = 'history' | 'discord';
 type ModelProvider = 'mistral' | 'openai'; // anthropic
 
-// const Config = (await import('../../config.json', { with: { type: "json" } })).default.Config;
 
 /**
  * Manages data operations with Weaviate.
  */
 class WeaviateDataManager {
   private client: WeaviateClient | null = null;
-  private dataCollectionName: string = '';
+  private dataCollectionName: string;
   private modelProvider: ModelProvider;
+  private modelproviderKeys: { [key in ModelProvider]: string };
 
-  private MISTRAL_API_KEY: string | undefined;
-  private OPENAI_API_KEY: string | undefined;
-  private WEAVIATE_REST_HOST: string | undefined;
-  private WEAVIATE_API_KEY: string | undefined;
+  private MISTRAL_API_KEY: string;
+  private OPENAI_API_KEY: string;
+  private WEAVIATE_REST_HOST: string;
+  private WEAVIATE_API_KEY: string;
+
+  private text2vecConfigs: { [key in ModelProvider]: any };
+  private generativeConfigs: { [key in ModelProvider]: any };
 
   activeUserCollection: Collection<undefined, string, undefined> | null = null;
   corpusCollection: { [key: string]: Collection<undefined, string, undefined> } = {};
@@ -41,10 +47,54 @@ class WeaviateDataManager {
     this.modelProvider = modelProvider;
     this.dataCollectionName = collection.replace(/\s+/g, ''); // thnx for the reminder Blahaj :)
 
-    this.MISTRAL_API_KEY = process.env.MISTRAL_API_KEY;
-    this.OPENAI_API_KEY = process.env.OPENAI_API_KEY;
-    this.WEAVIATE_REST_HOST = process.env.WEAVIATE_REST_HOST;
-    this.WEAVIATE_API_KEY = process.env.WEAVIATE_API_KEY;
+    this.MISTRAL_API_KEY = process.env.MISTRAL_API_KEY!;
+    this.OPENAI_API_KEY = process.env.OPENAI_API_KEY!;
+    this.WEAVIATE_REST_HOST = process.env.WEAVIATE_REST_HOST!;
+    this.WEAVIATE_API_KEY = process.env.WEAVIATE_API_KEY!;
+
+    if (this.MISTRAL_API_KEY == undefined || this.OPENAI_API_KEY == undefined ||
+      this.WEAVIATE_REST_HOST == undefined || this.WEAVIATE_API_KEY == undefined
+    ) {
+      throw new Error('Missing required environment variables for WeaviateDataManager initialization');
+    }
+
+    this.modelproviderKeys = {
+      mistral: this.MISTRAL_API_KEY,
+      openai: this.OPENAI_API_KEY
+    }
+
+    const
+      text2VecMistralCreateConfig: Text2VecMistralConfigCreate = {
+        model: "mistral-embed",
+        vectorizeCollectionName: true
+      },
+      text2VecOpenaiCreateConfig: Text2VecOpenAIConfigCreate = {
+        baseURL: "https://api.openai.com/v1/embeddings",//uncomfirmed atm
+        dimensions: 512,
+        model: "text-embedding-3-large",//OLD uncomfirmed
+        modelVersion: "gpt-3.5-turbo",//OLD uncomfirmed
+        type: "text",
+        vectorizeCollectionName: true
+      },
+      generativeMistralCreateConfig = {
+        maxTokens: 1024,
+        model: 'mistral-small-latest',
+        temperature: 0.5
+      },
+      generativeOpenaiCreateConfig = {
+        maxTokens: 1024,
+        model: 'gpt-3.5-turbo',
+        temperature: 0.8
+      };
+
+    this.text2vecConfigs = {
+      mistral: vectors.text2VecMistral({ ...text2VecMistralCreateConfig }),
+      openai: vectors.text2VecOpenAI({ ...text2VecOpenaiCreateConfig })
+    };
+    this.generativeConfigs = {
+      mistral: generative.mistral({ ...generativeMistralCreateConfig }),
+      openai: generative.openAI({ ...generativeOpenaiCreateConfig })
+    };
   }
 
 
@@ -52,11 +102,7 @@ class WeaviateDataManager {
    * Retrieves a Weaviate client instance.
    */
   async getClient() {
-    if (this.MISTRAL_API_KEY == undefined || this.OPENAI_API_KEY == undefined ||
-      this.WEAVIATE_REST_HOST == undefined || this.WEAVIATE_API_KEY == undefined
-    ) {
-      throw new Error('Missing required environment variables for WeaviateDataManager initialization');
-    }
+
     try {
       const
         weaviateCloudClusterUrl = this.WEAVIATE_REST_HOST,
@@ -69,10 +115,10 @@ class WeaviateDataManager {
           timeout: { ...timeoutParams },
           authCredentials: new ApiKey(this.WEAVIATE_API_KEY),
           headers: {
-            [wcdHeaders[this.modelProvider]]: this.MISTRAL_API_KEY//only using mistral atm. should add an object for modelProvider/key
+            [wcdHeaders[this.modelProvider]]: this.modelproviderKeys[this.modelProvider]
           }
         },
-        client = await weaviate.connectToWeaviateCloud(weaviateCloudClusterUrl!, { ...weaviateCloudConnectionOptions }),
+        client = await connectToWeaviateCloud(weaviateCloudClusterUrl, { ...weaviateCloudConnectionOptions }),
         ready = await client.isReady();
 
       while (!ready)
@@ -159,52 +205,22 @@ class WeaviateDataManager {
       if (!this.client) throw new Error('Client not initialized');
 
       const
-        text2VecMistralCreateConfig = {
-          model: "mistral-embed",
-          vectorizeCollectionName: true
-        },
-        text2VecOpenaiCreateConfig: Text2VecOpenAIConfigCreate = {
-          baseURL: "https://api.openai.com/v1/engines/davinci-codex/completions",
-          dimensions: 512,
-          model: "text-embedding-3-large",
-          modelVersion: "gpt-3.5-turbo",
-          type: "text",
-          vectorizeCollectionName: false
-        },
-        generativeMistralCreateConfig = {
-          maxTokens: 1024,
-          model: 'mistral-small-latest',
-          temperature: 0.5
-        },
-        generativeOpenaiCreateConfig = {
-          maxTokens: 1024,
-          model: 'gpt-3.5-turbo',
-          temperature: 0.8
-        },
-        text2vecConfigs = {
-          mistral: vectors.text2VecMistral({ ...text2VecMistralCreateConfig }),
-          openai: vectors.text2VecOpenAI({ ...text2VecOpenaiCreateConfig })
-        },
-        generativeConfigs = {
-          mistral: generative.mistral({ ...generativeMistralCreateConfig }),
-          openai: generative.openAI({ ...generativeOpenaiCreateConfig })
-        },
-        discordCollectionCreateConfig = {
+        multiTenantCollectionCreateConfig = {
           name: this.dataCollectionName,
-          description: dms.description,
-          multiTenancy: weaviate.configure.multiTenancy({
+          description: PetSchema.description,
+          multiTenancy: configure.multiTenancy({
             enabled: true,
             autoTenantCreation: true
           }),
-          properties: dms.properties,
-          vectorizers: text2vecConfigs[this.modelProvider],
-          generative: generativeConfigs[this.modelProvider]
+          properties: PetSchema.properties,
+          vectorizers: this.text2vecConfigs[this.modelProvider],
+          generative: this.generativeConfigs[this.modelProvider]
         },
         createConfig = {
-          discord: discordCollectionCreateConfig
+          weaviate: multiTenantCollectionCreateConfig
         };
 
-      return await this.client.collections.create({ ...createConfig.discord });
+      return await this.client.collections.create({ ...createConfig.weaviate });
     }
     catch (e: any) {
       console.error(e.message || e);
@@ -217,48 +233,18 @@ class WeaviateDataManager {
       if (!this.client) throw new Error('Client not initialized');
 
       const
-        text2VecMistralCreateConfig = {
-          model: "mistral-embed",
-          vectorizeCollectionName: true
-        },
-        text2VecOpenaiCreateConfig: Text2VecOpenAIConfigCreate = {
-          baseURL: "https://api.openai.com/v1/engines/davinci-codex/completions",
-          dimensions: 512,
-          model: "text-embedding-3-large",
-          modelVersion: "gpt-3.5-turbo",
-          type: "text",
-          vectorizeCollectionName: true // if the collection name is contextual to the data, set to true
-        },
-        generativeMistralCreateConfig = {
-          maxTokens: 1024,
-          model: 'mistral-small-latest',
-          temperature: 0.5
-        },
-        generativeOpenaiCreateConfig = {
-          maxTokens: 1024,
-          model: 'gpt-3.5-turbo',
-          temperature: 0.8
-        },
-        text2vecConfigs = {
-          mistral: vectors.text2VecMistral({ ...text2VecMistralCreateConfig }),
-          openai: vectors.text2VecOpenAI({ ...text2VecOpenaiCreateConfig })
-        },
-        generativeConfigs = {
-          mistral: generative.mistral({ ...generativeMistralCreateConfig }),
-          openai: generative.openAI({ ...generativeOpenaiCreateConfig })
-        },
-        discordCollectionCreateConfig = {
+        singleTenantCollectionCreateConfig = {
           name: name,
-          description: dms.description,
-          properties: dms.properties,
-          vectorizers: text2vecConfigs[this.modelProvider],
-          generative: generativeConfigs[this.modelProvider]
+          description: PetSchema.description,
+          properties: PetSchema.properties,
+          vectorizers: this.text2vecConfigs[this.modelProvider],
+          generative: this.generativeConfigs[this.modelProvider]
         },
         createConfig = {
-          discord: discordCollectionCreateConfig
+          singleTenant: singleTenantCollectionCreateConfig
         };
 
-      return await this.client.collections.create({ ...createConfig.discord });
+      return await this.client.collections.create({ ...createConfig.singleTenant });
     }
     catch (e: any) {
       console.error(e.message || e);
