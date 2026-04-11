@@ -117,10 +117,9 @@ export default class WeaviateDataManager {
             [wcdHeaders[this.modelProvider]]: this.modelproviderKeys[this.modelProvider]
           }
         },
-        client = await connectToWeaviateCloud(weaviateCloudClusterUrl, { ...weaviateCloudConnectionOptions }),
-        ready = await client.isReady();
+        client = await connectToWeaviateCloud(weaviateCloudClusterUrl, { ...weaviateCloudConnectionOptions });
 
-      while (!ready)
+      while (!await client.isReady())
         await new Promise(r => setTimeout(r, 2000));
 
       return client;
