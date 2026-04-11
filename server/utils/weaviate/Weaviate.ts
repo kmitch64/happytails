@@ -35,8 +35,8 @@ export default class WeaviateDataManager {
   private text2vecConfigs: { [key in ModelProvider]: any };
   private generativeConfigs: { [key in ModelProvider]: any };
 
-  activeUserCollection: Collection<undefined, string, undefined> | null = null;
-  corpusCollection: { [key: string]: Collection<undefined, string, undefined> } = {};
+  activeUserCollection: Collection | null = null;
+  corpusCollection: { [key: string]: Collection } = {};
 
   /**
    * Creates a new instance of the `WeaviateDataManager` class.
@@ -174,7 +174,7 @@ export default class WeaviateDataManager {
       // corpus of all collections
       const
         all_collections = await client.collections.listAll(),
-        corpus: { [key: string]: Collection<undefined, string, undefined> } = {};
+        corpus: { [key: string]: Collection } = {};
 
       for (const collection of all_collections) {
         // user and corpus still seperated at this point
