@@ -28,7 +28,10 @@ export default class Interactions extends WeaviateDataManager {
    */
   constructor(collection: string, modelProvider: ModelProvider) {
     super(collection, modelProvider);
-    if (!this.activeUserCollection) this.connectCluster();
+
+    //re-examine these and the attached flows..
+    if (!this.activeUserCollection) this.activateCollection();
+    if (!this.corpusCollection) this.gatherCollections();
 
   };
 
@@ -37,6 +40,8 @@ export default class Interactions extends WeaviateDataManager {
     // should move this..
     if (!this.activeUserCollection)
       throw new Error('Error getting activeUserCollection');
+
+    //why did I do this?
     await this.activeUserCollection.tenants.create([
       { name: input.author }
     ])

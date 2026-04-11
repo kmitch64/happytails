@@ -20,7 +20,7 @@ export type ModelProvider = 'mistral' | 'openai'; // anthropic
 export default class WeaviateDataManager {
 
   private client: WeaviateClient | null = null;
-  private dataCollectionName: string;
+  private collectionIdentifier: string;
   private modelProvider: ModelProvider;
   private modelproviderKeys: { [key in ModelProvider]: string };
 
@@ -33,7 +33,7 @@ export default class WeaviateDataManager {
   /**
    * Creates a new instance of the `WeaviateDataManager` class.
    */
-  constructor(collection: string, modelProvider: ModelProvider) {
+  constructor(datasetName: string, modelProvider: ModelProvider) {
 
     if (process.env.MISTRAL_API_KEY == undefined || process.env.OPENAI_API_KEY == undefined ||
       process.env.WEAVIATE_REST_HOST == undefined || process.env.WEAVIATE_API_KEY == undefined
@@ -41,7 +41,7 @@ export default class WeaviateDataManager {
       throw new Error('Missing required environment variables for WeaviateDataManager initialization');
     }
 
-    this.dataCollectionName = collection.replace(/\s+/g, ''); // thnx for the reminder Blahaj :)
+    this.collectionIdentifier = datasetName.replace(/\s+/g, ''); // thnx for the reminder Blahaj :)
 
     this.modelProvider = modelProvider;
 
@@ -87,6 +87,73 @@ export default class WeaviateDataManager {
 
 
   /**
+   * Initializes the active user collection.
+   */
+  async activateCollection() {
+    try {
+      const client = await this.getClient();
+      this.client = client;
+
+      const exists = await client.collections.exists(this.collectionIdentifier);
+      if (!exists) {
+        await this.createMultiTenantCollection();
+      };
+
+      const collection = client.collections.get(this.collectionIdentifier);
+      this.activeUserCollection = collection;
+
+      return true;
+    }
+    catch (e: any) {
+      console.error(e.message || e);
+      return false;
+    };
+  };
+
+
+  /**
+   * Loads all existing collections into a corpus collection.
+   */
+  async gatherCollections() {
+    try {
+      const client = await this.getClient();
+      // this.client = client;
+
+      // active user context collection. multi-tenant to save creating new(visible) collections per user
+      // const exists = await client.collections.exists(this.collectionIdentifier);
+      // if (!exists) {
+      //   await this.createMultiTenantCollection();
+      // };
+
+      // const collection = client.collections.get(this.collectionIdentifier);
+      // this.activeUserCollection = collection;
+
+      // corpus of all collections
+      const
+        all_collections = await client.collections.listAll(),
+        corpus: { [key: string]: Collection } = {};
+
+      for (const collection of all_collections) {
+        // user and corpus still seperated at this point
+        // possibly merge later? users are multi-tenant while corpus members are single tenant
+        if (collection.name !== this.collectionIdentifier) {
+          const collectionName = collection.name;
+          const collectionData = client.collections.get(collectionName);
+          corpus[collectionName] = collectionData;
+        }
+      };
+      this.corpusCollection = corpus;
+
+      return true;
+    }
+    catch (e: any) {
+      console.error(e.message || e);
+      return false;
+    };
+  };
+
+
+  /**
    * Retrieves a Weaviate client instance.
    */
   private async getClient() {
@@ -117,68 +184,6 @@ export default class WeaviateDataManager {
     };
   };
 
-  /**
-   * Opens a client collection channel.
-   */
-  async openCollectionChannel() {
-    try {
-      const client = await this.getClient();
-      this.client = client;
-
-      const exists = await client.collections.exists(this.dataCollectionName);
-      if (!exists) {
-        await this.createMultiTenantCollection();
-      };
-
-      const collection = client.collections.get(this.dataCollectionName);
-      this.activeUserCollection = collection;
-
-      return true;
-    }
-    catch (e: any) {
-      console.error(e.message || e);
-      return false;
-    };
-  };
-
-
-  async connectCluster() {
-    try {
-      const client = await this.getClient();
-      this.client = client;
-
-      // active user context collection. multi-tenant to save creating new(visible) collections per user
-      const exists = await client.collections.exists(this.dataCollectionName);
-      if (!exists) {
-        await this.createMultiTenantCollection();
-      };
-
-      const collection = client.collections.get(this.dataCollectionName);
-      this.activeUserCollection = collection;
-
-      // corpus of all collections
-      const
-        all_collections = await client.collections.listAll(),
-        corpus: { [key: string]: Collection } = {};
-
-      for (const collection of all_collections) {
-        // user and corpus still seperated at this point
-        // possibly merge later? users are multi-tenant while corpus members are single tenant
-        if (collection.name !== this.dataCollectionName) {
-          const collectionName = collection.name;
-          const collectionData = client.collections.get(collectionName);
-          corpus[collectionName] = collectionData;
-        }
-      };
-      this.corpusCollection = corpus;
-
-      return true;
-    }
-    catch (e: any) {
-      console.error(e.message || e);
-      return false;
-    };
-  };
 
   /**
    * Creates a Weaviate Multi-tenancy Collection.
@@ -189,7 +194,7 @@ export default class WeaviateDataManager {
 
       const
         multiTenantCollectionCreateConfig = {
-          name: this.dataCollectionName,
+          name: this.collectionIdentifier,
           description: PetSchema.description,
           multiTenancy: configure.multiTenancy({
             enabled: true,
@@ -211,6 +216,9 @@ export default class WeaviateDataManager {
     };
   };
 
+  /**
+   * Creates a Weaviate Single-tenancy Collection.
+   */
   private async createSingleTenantCollection(name: any) {
     try {
       if (!this.client) throw new Error('Client not initialized');
@@ -234,6 +242,7 @@ export default class WeaviateDataManager {
       return null;
     };
   };
+
 };
 
 
