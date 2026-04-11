@@ -24,11 +24,6 @@ export default class WeaviateDataManager {
   private modelProvider: ModelProvider;
   private modelproviderKeys: { [key in ModelProvider]: string };
 
-  private MISTRAL_API_KEY: string;
-  private OPENAI_API_KEY: string;
-  private WEAVIATE_REST_HOST: string;
-  private WEAVIATE_API_KEY: string;
-
   private text2vecConfigs: { [key in ModelProvider]: any };
   private generativeConfigs: { [key in ModelProvider]: any };
 
@@ -40,14 +35,8 @@ export default class WeaviateDataManager {
    */
   constructor(collection: string, modelProvider: ModelProvider) {
 
-    //move next cleanup..
-    this.MISTRAL_API_KEY = process.env.MISTRAL_API_KEY!;
-    this.OPENAI_API_KEY = process.env.OPENAI_API_KEY!;
-    this.WEAVIATE_REST_HOST = process.env.WEAVIATE_REST_HOST!;
-    this.WEAVIATE_API_KEY = process.env.WEAVIATE_API_KEY!;
-
-    if (this.MISTRAL_API_KEY == undefined || this.OPENAI_API_KEY == undefined ||
-      this.WEAVIATE_REST_HOST == undefined || this.WEAVIATE_API_KEY == undefined
+    if (process.env.MISTRAL_API_KEY == undefined || process.env.OPENAI_API_KEY == undefined ||
+      process.env.WEAVIATE_REST_HOST == undefined || process.env.WEAVIATE_API_KEY == undefined
     ) {
       throw new Error('Missing required environment variables for WeaviateDataManager initialization');
     }
@@ -57,8 +46,8 @@ export default class WeaviateDataManager {
     this.modelProvider = modelProvider;
 
     this.modelproviderKeys = {
-      mistral: this.MISTRAL_API_KEY,
-      openai: this.OPENAI_API_KEY
+      mistral: process.env.MISTRAL_API_KEY!,
+      openai: process.env.OPENAI_API_KEY!
     }
 
     const
@@ -103,7 +92,7 @@ export default class WeaviateDataManager {
   private async getClient() {
     try {
       const
-        weaviateCloudClusterUrl = this.WEAVIATE_REST_HOST,
+        weaviateCloudClusterUrl = process.env.WEAVIATE_REST_HOST!,
         timeoutParams: TimeoutParams = { query: 120000, insert: 30000, init: 30000 },
         wcdHeaders: { [key in ModelProvider]: string } = {
           openai: 'X-Openai-Api-Key',
@@ -111,7 +100,7 @@ export default class WeaviateDataManager {
         },
         weaviateCloudConnectionOptions: ConnectToWeaviateCloudOptions = {
           timeout: { ...timeoutParams },
-          authCredentials: new ApiKey(this.WEAVIATE_API_KEY),
+          authCredentials: new ApiKey(process.env.WEAVIATE_API_KEY!),
           headers: {
             [wcdHeaders[this.modelProvider]]: this.modelproviderKeys[this.modelProvider]
           }

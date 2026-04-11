@@ -26,6 +26,11 @@ const INDEX_AS_STRING = async () => await readFile(INDEX_HTML(), 'utf8');
 const STATIC_ASSETS = () => join(__dirname, 'frontend', 'dist');
 // console.log('Static assets path:', STATIC_ASSETS());
 
+
+/**
+ *  AI 
+ */
+
 const SYSTEM_PROMPT = {
   role: 'system',
   content: "You are a helpful pet care assistant for HappyTails." +
