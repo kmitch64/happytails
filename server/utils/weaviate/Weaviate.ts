@@ -11,10 +11,6 @@ import {
 } from 'weaviate-client';
 import PetSchema from './schemas/PetSchema';
 
-// type userType = 'user' | 'assistant';
-// type searchType = 'generative' | 'semantic';
-// type methodType = 'hybrid' | 'nearText';
-// type sourceType = 'history' | 'discord';
 export type ModelProvider = 'mistral' | 'openai'; // anthropic
 
 
@@ -22,6 +18,7 @@ export type ModelProvider = 'mistral' | 'openai'; // anthropic
  * Manages data operations with Weaviate.
  */
 export default class WeaviateDataManager {
+
   private client: WeaviateClient | null = null;
   private dataCollectionName: string;
   private modelProvider: ModelProvider;
@@ -42,8 +39,6 @@ export default class WeaviateDataManager {
    * Creates a new instance of the `WeaviateDataManager` class.
    */
   constructor(collection: string, modelProvider: ModelProvider) {
-    this.modelProvider = modelProvider;
-    this.dataCollectionName = collection.replace(/\s+/g, ''); // thnx for the reminder Blahaj :)
 
     //move next cleanup..
     this.MISTRAL_API_KEY = process.env.MISTRAL_API_KEY!;
@@ -56,6 +51,10 @@ export default class WeaviateDataManager {
     ) {
       throw new Error('Missing required environment variables for WeaviateDataManager initialization');
     }
+
+    this.dataCollectionName = collection.replace(/\s+/g, ''); // thnx for the reminder Blahaj :)
+
+    this.modelProvider = modelProvider;
 
     this.modelproviderKeys = {
       mistral: this.MISTRAL_API_KEY,
@@ -94,6 +93,7 @@ export default class WeaviateDataManager {
       mistral: generative.mistral({ ...generativeMistralCreateConfig }),
       openai: generative.openAI({ ...generativeOpenaiCreateConfig })
     };
+
   }
 
 
@@ -101,7 +101,6 @@ export default class WeaviateDataManager {
    * Retrieves a Weaviate client instance.
    */
   async getClient() {
-
     try {
       const
         weaviateCloudClusterUrl = this.WEAVIATE_REST_HOST,
@@ -125,8 +124,7 @@ export default class WeaviateDataManager {
       return client;
     }
     catch (e: any) {
-      console.error(e.message || e);
-      return null;
+      throw new Error('Error connecting to Weaviate: ' + (e.message || e));
     };
   };
 
@@ -136,7 +134,6 @@ export default class WeaviateDataManager {
   async openCollectionChannel() {
     try {
       const client = await this.getClient();
-      if (client instanceof Error || !client) throw new Error('Error initializing client: ' + (client ? client.message : 'Unknown error'));
       this.client = client;
 
       const exists = await client.collections.exists(this.dataCollectionName);
@@ -155,10 +152,10 @@ export default class WeaviateDataManager {
     };
   };
 
+
   async connectCluster() {
     try {
       const client = await this.getClient();
-      if (client instanceof Error || !client) throw new Error('Error initializing client: ' + (client ? client.message : 'Unknown error'));
       this.client = client;
 
       // active user context collection. multi-tenant to save creating new(visible) collections per user
