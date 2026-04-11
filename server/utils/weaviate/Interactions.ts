@@ -1,13 +1,13 @@
 
 import { v4 as uuidv4 } from 'uuid';
 import WeaviateDataManager from "./Weaviate";
-import type {ModelProvider} from "./Weaviate";
+import type { ModelProvider } from "./Weaviate";
 
 //wait to move this
 interface Input {
   id: any;
   content: any;
-  author:string;
+  author: string;
   pet: string;
 }
 type FusionType = "Ranked" | "RelativeScore" | undefined;
@@ -33,55 +33,7 @@ export default class Interactions extends WeaviateDataManager {
   };
 
 
-  /**
-   * 
-   */
-  async aiExchange(input: Input) {
-    try {
-
-      // get context
-      const contextData = await this.getContext(input);
-
-      // do completion
-      const aiResponse = await this.doCompletion(contextData, input);
-
-
-      // store message payloads
-      this.storeInteractionPayload("user", input);
-      this.storeInteractionPayload("assistant", aiResponse, input.author);
-
-      return aiResponse;
-
-    }
-    catch (e: any) {
-      console.error(e.message);
-      return e.message ? e.message : e;
-    };
-  };
-
-
-  async getContext(input: Input) {
-    const
-      baseHybridOptions: HybridOptions = {
-        limit: 15,
-        alpha: 0.5,
-        // queryProperties: [], // empty to enable searching all fields
-        fusionType: "Ranked"
-      },
-      hybridCorpusResult = await this.hybridCorpus(input, baseHybridOptions);
-    return hybridCorpusResult;
-  };
-
-  async doCompletion(dataObject: any, input: Input) {
-    return await this.doChatCompletion(
-      dataObject,
-      input
-    );
-  };
-
-
-
-  async hybridCorpus(input: Input, baseHybridOptions: HybridOptions) {
+  private async hybridCorpus(input: Input, baseHybridOptions: HybridOptions) {
     // should move this..
     if (!this.activeUserCollection)
       throw new Error('Error getting activeUserCollection');
@@ -104,10 +56,24 @@ export default class Interactions extends WeaviateDataManager {
     return userData;
   };
 
+
+  private async getContext(input: Input) {
+    const
+      baseHybridOptions: HybridOptions = {
+        limit: 15,
+        alpha: 0.5,
+        // queryProperties: [], // empty to enable searching all fields
+        fusionType: "Ranked"
+      },
+      hybridCorpusResult = await this.hybridCorpus(input, baseHybridOptions);
+    return hybridCorpusResult;
+  };
+
+
   /**
    * 
    */
-  async doChatCompletion(
+  private async doChatCompletion(
     dataObject: any,
     input: Input
   ) {
@@ -115,13 +81,11 @@ export default class Interactions extends WeaviateDataManager {
       const
         // get initial response. 
         response = "hello world";//await discordChatCompletion(dataObject, input),
-        // parsed = await response.json();
+      // parsed = await response.json();
 
-        
+
       if (response/*.ok*/) {
         const text: string = response;// parsed.choices[0].message.content;
-
-
         return text;
       }
       // error response
@@ -138,7 +102,7 @@ export default class Interactions extends WeaviateDataManager {
   /**
    * Stores an interaction payload.
    */
-  storeInteractionPayload(role: string, input: Input, tenant:string | null = null) {
+  private storeInteractionPayload(role: string, input: Input, tenant: string | null = null) {
     try {
       if (this.activeUserCollection === null)
         throw new Error('activeUserCollection equals null');
@@ -157,7 +121,6 @@ export default class Interactions extends WeaviateDataManager {
       };
       replaceNulls(insertObj);
 
-
       const activeTenant = this.activeUserCollection.withTenant(tenant === null ? input.author : tenant);
       activeTenant.data.insert({ id: uuidv4(), properties: { ...insertObj } });
     }
@@ -165,5 +128,32 @@ export default class Interactions extends WeaviateDataManager {
       console.error("storeInteractionPayload::", e.message || e);
     };
   };
+
+
+  /**
+  * 
+  */
+  async aiExchange(input: Input) {
+    try {
+
+      // get context
+      const contextData = await this.getContext(input);
+
+      // do completion
+      const aiResponse = await this.doChatCompletion(contextData, input);
+
+      // store message payloads
+      this.storeInteractionPayload("user", input);
+      this.storeInteractionPayload("assistant", aiResponse, input.author);
+
+      return aiResponse;
+
+    }
+    catch (e: any) {
+      console.error(e.message);
+      return e.message ? e.message : e;
+    };
+  };
+
 };
 

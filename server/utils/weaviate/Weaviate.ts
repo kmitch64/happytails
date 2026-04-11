@@ -100,7 +100,7 @@ export default class WeaviateDataManager {
   /**
    * Retrieves a Weaviate client instance.
    */
-  async getClient() {
+  private async getClient() {
     try {
       const
         weaviateCloudClusterUrl = this.WEAVIATE_REST_HOST,
@@ -194,7 +194,7 @@ export default class WeaviateDataManager {
   /**
    * Creates a Weaviate Multi-tenancy Collection.
    */
-  async createMultiTenantCollection() {
+  private async createMultiTenantCollection() {
     try {
       if (!this.client) throw new Error('Client not initialized');
 
@@ -222,7 +222,7 @@ export default class WeaviateDataManager {
     };
   };
 
-  async createSingleTenantCollection(name: any) {
+  private async createSingleTenantCollection(name: any) {
     try {
       if (!this.client) throw new Error('Client not initialized');
 
