@@ -15,7 +15,7 @@ import PetSchema from './schemas/PetSchema';
 // type searchType = 'generative' | 'semantic';
 // type methodType = 'hybrid' | 'nearText';
 // type sourceType = 'history' | 'discord';
-type ModelProvider = 'mistral' | 'openai'; // anthropic
+export type ModelProvider = 'mistral' | 'openai'; // anthropic
 
 
 /**
@@ -45,6 +45,7 @@ export default class WeaviateDataManager {
     this.modelProvider = modelProvider;
     this.dataCollectionName = collection.replace(/\s+/g, ''); // thnx for the reminder Blahaj :)
 
+    //move next cleanup..
     this.MISTRAL_API_KEY = process.env.MISTRAL_API_KEY!;
     this.OPENAI_API_KEY = process.env.OPENAI_API_KEY!;
     this.WEAVIATE_REST_HOST = process.env.WEAVIATE_REST_HOST!;

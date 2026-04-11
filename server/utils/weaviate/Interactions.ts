@@ -1,13 +1,22 @@
 
 import { v4 as uuidv4 } from 'uuid';
 import WeaviateDataManager from "./Weaviate";
+import type {ModelProvider} from "./Weaviate";
 
+//wait to move this
 interface Input {
   id: any;
   content: any;
-  author: { username: string; };
+  author:string;
+  pet: string;
 }
-type fusionType = "Ranked" | "RelativeScore" | undefined;
+type FusionType = "Ranked" | "RelativeScore" | undefined;
+interface HybridOptions {
+  limit: number;
+  alpha: number;
+  fusionType: FusionType;
+  queryProperties?: string[];
+}
 
 
 /**
@@ -17,8 +26,8 @@ export default class Interactions extends WeaviateDataManager {
   /**
    * 
    */
-  constructor() {
-    super("defaultCollection", "openai");
+  constructor(collection: string, modelProvider: ModelProvider) {
+    super(collection, modelProvider);
     if (!this.activeUserCollection) this.connectCluster();
 
   };
@@ -39,7 +48,7 @@ export default class Interactions extends WeaviateDataManager {
 
       // store message payloads
       this.storeInteractionPayload("user", input);
-      this.storeInteractionPayload("assistant", aiResponse, input.author.username);
+      this.storeInteractionPayload("assistant", aiResponse, input.author);
 
       return aiResponse;
 
@@ -53,11 +62,11 @@ export default class Interactions extends WeaviateDataManager {
 
   async getContext(input: Input) {
     const
-      baseHybridOptions = {
+      baseHybridOptions: HybridOptions = {
         limit: 15,
         alpha: 0.5,
         // queryProperties: [], // empty to enable searching all fields
-        fusionType: "Ranked" as fusionType
+        fusionType: "Ranked"
       },
       hybridCorpusResult = await this.hybridCorpus(input, baseHybridOptions);
     return hybridCorpusResult;
@@ -72,16 +81,16 @@ export default class Interactions extends WeaviateDataManager {
 
 
 
-  async hybridCorpus(input: Input, baseHybridOptions: { limit: number; alpha: number; fusionType: fusionType; }) {
+  async hybridCorpus(input: Input, baseHybridOptions: HybridOptions) {
     // should move this..
     if (!this.activeUserCollection)
       throw new Error('Error getting activeUserCollection');
     await this.activeUserCollection.tenants.create([
-      { name: input.author.username }
+      { name: input.author }
     ])
 
     const
-      activeTenant = this.activeUserCollection.withTenant(input.author.username),
+      activeTenant = this.activeUserCollection.withTenant(input.author),
       userContext = await activeTenant.query.fetchObjects(baseHybridOptions),
       userData = userContext.objects;
 
@@ -96,8 +105,7 @@ export default class Interactions extends WeaviateDataManager {
   };
 
   /**
-   * Generates a response based on the provided user query and data object using a specified model API key and completion options.
-   * Handles different types of tasks, including image description tasks.
+   * 
    */
   async doChatCompletion(
     dataObject: any,
@@ -150,11 +158,11 @@ export default class Interactions extends WeaviateDataManager {
       replaceNulls(insertObj);
 
 
-      const activeTenant = this.activeUserCollection.withTenant(tenant === null ? input.author.username : tenant);
+      const activeTenant = this.activeUserCollection.withTenant(tenant === null ? input.author : tenant);
       activeTenant.data.insert({ id: uuidv4(), properties: { ...insertObj } });
     }
     catch (e: any) {
-      console.error("storeDiscordMessagePayload::", e.message || e);
+      console.error("storeInteractionPayload::", e.message || e);
     };
   };
 };
