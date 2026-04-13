@@ -39,7 +39,7 @@ export default {
 
   createPet: async (req, res) => {
     try {
-      
+
       // console.log('Request body:', req.body);
       const requiredFields = ['name', 'bio', 'type', 'sex', 'age', 'size', 'energyLevel', 'spayedNeutered', 'compatibility'];
       for (const field of requiredFields) {
@@ -73,7 +73,7 @@ export default {
 
       return res.status(201).json(savedPet);
     } catch (error) {
-      
+
       if (error.name === 'ValidationError') {
         const messages = Object.values(error.errors).map(val => val.message);
         return res.status(400).json({ messages });
@@ -96,7 +96,7 @@ export default {
       };
 
       return res.status(200).json(pet);
-    } 
+    }
     catch (error) {
       return res.status(500).json({ message: error.message });
     };
@@ -145,27 +145,35 @@ export default {
 
   updateCareReminder: async (req, res) => {
     try {
-      const { petId, reminderId } = req.params;
+      const { id, reminderId } = req.params;
+
       const pet = await Pet.findOneAndUpdate(
         {
-          _id: petId,
+          _id: id,
           owner: req.user._id,
           'careReminders._id': reminderId
         },
-        { $set: { 'careReminders.$': req.body } },
+        {
+          $set: {
+            'careReminders.$.completed': req.body.completed
+          }
+        },
         { returnDocument: 'after' }
+
       );
 
       if (!pet) {
-        return res.status(404).json({ message: 'Pet or reminder not found or you are not the owner' });
-      };
+        return res.status(404).json({
+          message: 'Pet or reminder not found or you are not the owner'
+        });
+      }
 
       return res.status(200).json(pet);
-    }
-    catch (error) {
+    } catch (error) {
       return res.status(500).json({ message: error.message });
-    };
+    }
   },
+
 
   deleteCareReminder: async (req, res) => {
     try {
@@ -209,10 +217,11 @@ export default {
 
   updateMedicalRecord: async (req, res) => {
     try {
-      const { petId, recordId } = req.params;
+      const { id, recordId } = req.params;
+
       const pet = await Pet.findOneAndUpdate(
         {
-          _id: petId,
+          _id: id,
           owner: req.user._id,
           'medicalRecords._id': recordId
         },
@@ -222,35 +231,38 @@ export default {
 
       if (!pet) {
         return res.status(404).json({ message: 'Pet or record not found or you are not the owner' });
-      };
+      }
 
       return res.status(200).json(pet);
     }
     catch (error) {
       return res.status(500).json({ message: error.message });
-    };
+    }
   },
+
 
   deleteMedicalRecord: async (req, res) => {
     try {
-      const { petId, recordId } = req.params;
+      const { id, recordId } = req.params;
 
       const pet = await Pet.findOneAndUpdate(
-        { _id: petId, owner: req.user._id },
+        { _id: id, owner: req.user._id },
         { $pull: { medicalRecords: { _id: recordId } } },
         { returnDocument: 'after' }
       );
 
       if (!pet) {
         return res.status(404).json({ message: 'Pet not found or you are not the owner' });
-      };
+      }
 
       return res.status(200).json(pet);
     }
     catch (error) {
       return res.status(500).json({ message: error.message });
-    };
+    }
   }
+
+
 
 };
 

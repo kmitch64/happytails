@@ -84,6 +84,13 @@ declare global {
     completed: boolean;
   }
 
+  interface ReminderData {
+  type: string;
+  description: string;
+  date: string;
+  frequency: string;
+}
+
   interface MedicalRecord {
     _id: string;
     type: 'vaccination' | 'surgery' | 'checkup' | 'medication';
@@ -92,6 +99,14 @@ declare global {
     veterinarian: string;
     notes: string;
   }
+
+ interface MedicalRecordData {
+   type: string;
+   description: string;
+   date: string;
+   veterinarian?: string;
+   notes?: string;
+ }
 
 
   /*********************************

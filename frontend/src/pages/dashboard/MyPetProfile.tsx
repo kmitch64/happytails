@@ -9,6 +9,9 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { useAuth } from '../../components/auth/AuthContext';
 import PetCarousel from '../../components/PetCarousel/PetCarousel';
+import ApiReminder from '../../components/Api/ApiReminder';
+import ApiMedReminder from '../../components/Api/ApiMedRecord';
+
 
 import "./MyPetProfile.css";
 
@@ -25,6 +28,41 @@ export default function MyPetProfile() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'profile' | 'care' | 'medical'>('profile');
+
+  const refreshPet = async () => {
+    try {
+      const response = await fetch(`/api/v1/pets/${id}`);
+      const data = await response.json();
+      setPet(data);
+    } catch (err) {
+      console.error("Failed to refresh pet", err);
+    }
+  };
+
+  const handleDeleteRecord = async (recordId: string) => {
+    if (!pet) return;
+
+    try {
+      await ApiMedReminder.deleteMedRecord(pet._id, recordId);
+      await refreshPet();
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+
+
+  const handleComplete = async (reminderId: string) => {
+    if (!pet) return;
+
+    await ApiReminder.FinishReminder(pet._id, reminderId);
+    await refreshPet();
+  };
+
+
+
+
+
 
   // mocked
   useEffect(() => {
@@ -159,90 +197,90 @@ export default function MyPetProfile() {
         <div className="tab-content">
           {activeTab === 'profile' && (
             <>
-            
+
               {/* Carousel Section */}
               <div className="pet-profile-layout">
-              <div className="left-column">
-              <section className="pet-carousel-section">
-                <PetCarousel
-                  petId={pet._id}
-                  images={pet.images || []}
-                  petName={pet.name}
-                />
-              </section>
-              </div>
-
-              {/* Pet Details Section */}
-              <div className="right-column">
-
-              <section className="pet-details-section">
-                <div className="details-grid">
-                  {/* Left Column - Bio and Info */}
-                  <div className="pet-bio">
-                    <div className="pet-header">
-                      <div className="pet-meta">
-                        <span className="pet-type-tag">
-                          <FontAwesomeIcon icon={faPaw} /> {pet.breed}
-                        </span>
-                        <span className="pet-status">
-                          {pet.status}
-                        </span>
-                      </div>
-
-                      <div className="pet-basic-info">
-                        <p><FontAwesomeIcon icon={faBirthdayCake} /> {pet.age}</p>
-                        <p><FontAwesomeIcon icon={faRuler} /> {pet.size}</p>
-                        <p><FontAwesomeIcon icon={faUserFriends} /> {pet.compatibility?.join(', ')}</p>
-                      </div>
-                    </div>
-
-                    <div className="pet-bio-content">
-                      <h3>About {pet.name}</h3>
-                      <p>{pet.bio}</p>
-
-                      <div className="pet-attributes">
-                        <h4>Personality & Care Needs</h4>
-                        <div className="attributes-grid">
-                          <div className="attribute">
-                            <FontAwesomeIcon icon={faBolt} />
-                            <span>Energy: {pet.energyLevel}</span>
-                          </div>
-                          <div className="attribute">
-                            <FontAwesomeIcon icon={faVenusMars} />
-                            <span>Sex: {pet.sex}</span>
-                          </div>
-                          <div className="attribute">
-                            <FontAwesomeIcon icon={faBriefcaseMedical} />
-                            <span>Neutered: {pet.spayedNeutered}</span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Right Column - Info Cards */}
-                  <div className="pet-info-cards">
-                    <h3>Pet Details</h3>
-                    <div className="info-cards-grid">
-                      {infoCards.map((card, index) => (
-                        <div key={index} className="info-card">
-                          <div className="card-header">
-                            <FontAwesomeIcon icon={card.icon} className="card-icon" />
-                            <span className="card-label">{card.label}</span>
-                          </div>
-                          <div className="card-value">{card.value}</div>
-                        </div>
-                      ))}
-                    </div>
-
-                    <div className="created-info">
-                      <p><FontAwesomeIcon icon={faClock} /> Profile created: {new Date(pet.createdAt).toLocaleDateString()}</p>
-                      <p><FontAwesomeIcon icon={faClock} /> Last updated: {new Date(pet.updatedAt).toLocaleDateString()}</p>
-                    </div>
-                  </div>
+                <div className="left-column">
+                  <section className="pet-carousel-section">
+                    <PetCarousel
+                      petId={pet._id}
+                      images={pet.images || []}
+                      petName={pet.name}
+                    />
+                  </section>
                 </div>
-              </section>
-              </div>
+
+                {/* Pet Details Section */}
+                <div className="right-column">
+
+                  <section className="pet-details-section">
+                    <div className="details-grid">
+                      {/* Left Column - Bio and Info */}
+                      <div className="pet-bio">
+                        <div className="pet-header">
+                          <div className="pet-meta">
+                            <span className="pet-type-tag">
+                              <FontAwesomeIcon icon={faPaw} /> {pet.breed}
+                            </span>
+                            <span className="pet-status">
+                              {pet.status}
+                            </span>
+                          </div>
+
+                          <div className="pet-basic-info">
+                            <p><FontAwesomeIcon icon={faBirthdayCake} /> {pet.age}</p>
+                            <p><FontAwesomeIcon icon={faRuler} /> {pet.size}</p>
+                            <p><FontAwesomeIcon icon={faUserFriends} /> {pet.compatibility?.join(', ')}</p>
+                          </div>
+                        </div>
+
+                        <div className="pet-bio-content">
+                          <h3>About {pet.name}</h3>
+                          <p>{pet.bio}</p>
+
+                          <div className="pet-attributes">
+                            <h4>Personality & Care Needs</h4>
+                            <div className="attributes-grid">
+                              <div className="attribute">
+                                <FontAwesomeIcon icon={faBolt} />
+                                <span>Energy: {pet.energyLevel}</span>
+                              </div>
+                              <div className="attribute">
+                                <FontAwesomeIcon icon={faVenusMars} />
+                                <span>Sex: {pet.sex}</span>
+                              </div>
+                              <div className="attribute">
+                                <FontAwesomeIcon icon={faBriefcaseMedical} />
+                                <span>Neutered: {pet.spayedNeutered}</span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Right Column - Info Cards */}
+                      <div className="pet-info-cards">
+                        <h3>Pet Details</h3>
+                        <div className="info-cards-grid">
+                          {infoCards.map((card, index) => (
+                            <div key={index} className="info-card">
+                              <div className="card-header">
+                                <FontAwesomeIcon icon={card.icon} className="card-icon" />
+                                <span className="card-label">{card.label}</span>
+                              </div>
+                              <div className="card-value">{card.value}</div>
+                            </div>
+                          ))}
+                        </div>
+
+                        <div className="created-info">
+                          <p><FontAwesomeIcon icon={faClock} /> Profile created: {new Date(pet.createdAt).toLocaleDateString()}</p>
+                          <p><FontAwesomeIcon icon={faClock} /> Last updated: {new Date(pet.updatedAt).toLocaleDateString()}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </section>
+                </div>
               </div>
             </>
           )}
@@ -283,20 +321,23 @@ export default function MyPetProfile() {
                         </div>
                         <div className="reminder-actions">
                           {!reminder.completed && (
-                            <button className="mark-complete">
+                            <button
+                              className="mark-complete"
+                              onClick={() => handleComplete(reminder._id)}>
                               Mark as Complete
                             </button>
+
                           )}
                         </div>
                       </div>
                     ))}
                   </div>
-                  
+
                   <Link to={`/dashboard/my-pets/${pet._id}/add-reminder`}>
 
-                  <button className="add-reminder-button">
-                    <FontAwesomeIcon icon={faPlus} /> Add New Reminder
-                  </button>
+                    <button className="add-reminder-button">
+                      <FontAwesomeIcon icon={faPlus} /> Add New Reminder
+                    </button>
                   </Link>
 
                 </>
@@ -346,6 +387,22 @@ export default function MyPetProfile() {
                             <p><strong>Notes:</strong> {record.notes}</p>
                           )}
                         </div>
+                        <div className="record-actions">
+                          <button className="editButton"
+                            onClick={() => navigate(`/dashboard/my-pets/${pet._id}/medical-records/${record._id}/edit`)
+                            }>
+                            Edit
+                          </button>
+
+                          <button className="deleteButton"
+                            onClick={() => handleDeleteRecord(record._id)}
+
+                          >
+                            Delete
+                          </button>
+                        </div>
+
+
                       </div>
                     ))}
                   </div>
