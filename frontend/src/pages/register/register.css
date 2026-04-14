@@ -33,10 +33,15 @@
 }
 
 .register-footer a {
-  color: #007bff;
+  color: #7acb6f;
   text-decoration: none;
+  font-weight: 500;
+  display: inline-block;
+  transition: all 0.2s ease;
 }
 
 .register-footer a:hover {
+  color: #5fb85a;
   text-decoration: underline;
+  transform: scale(1.03);
 }

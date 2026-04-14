@@ -50,7 +50,7 @@
   background: #ffffff;
   border-radius: 10px;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
-  padding: 40px 30px 10px 30px; /* reduced bottom padding from 20px → 10px */
+  padding: 40px 30px 30px 30px; /* reduced bottom padding from 10px → 30px */
   width: 100%;
   max-width: 400px;
   transition: transform 0.15s ease, box-shadow 0.15s ease;
@@ -96,10 +96,12 @@
 }
 
 .form-input {
+  width: 100%;
   padding: 12px;
   border: 1px solid #ccc;
   border-radius: 6px;
   font-size: 0.95rem;
+  box-sizing: border-box;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
@@ -114,14 +116,14 @@
   padding: 12px;
   border: none;
   border-radius: 6px;
-  background: #007bff;
+  background: #7acb6f;
   color: white;
   font-weight: 500;
   cursor: pointer;
 }
 
 .btn-submit:hover {
-  background: #0056b3;
+  background: #66b85b;
 }
 
 .btn-submit:disabled {
@@ -141,22 +143,25 @@
 
 /* Footer links */
 .login-footer {
-  margin-top: 5px;
+  margin-top: 10px;
   text-align: center;
-  font-size: 0.9rem;
+  font-size: 1rem;
   color: #555;
 }
 
 .login-footer a {
-  color: #007bff;
+  color: #7acb6f;
   text-decoration: none;
-  transition: color 0.2s;
+  font-weight: 500;
+  display: inline-block;
+  transition: all 0.2s ease;
 }
 
 .login-footer a:hover {
-  color: #0056b3;
+  color: #5fb85a;
   text-decoration: underline;
-}
+  transform: scale(1.03);
+ }
 
 /* Spinner inside button */
 .auth-spinner {

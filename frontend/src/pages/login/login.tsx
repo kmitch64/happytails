@@ -42,12 +42,12 @@ export default function Login() {
           };
         }
         else {
-          setFormMsg(message);
+          setFormMsg('Invalid email or password. Please try again.');
           setIsLoading(false);
         };
       }
       catch (e: any) {
-        e instanceof Error ? setFormMsg(e.message) : setFormMsg('An unexpected error occurred');
+        setFormMsg('Invalid email or password. Please try again.');
         setIsLoading(false);
       };
     };
