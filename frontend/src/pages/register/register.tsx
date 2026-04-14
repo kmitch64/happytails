@@ -60,7 +60,7 @@ export default function Register() {
                 id="username"
                 name="username"
                 className="form-input"
-                placeholder="CollGuyMcFly"
+                placeholder="your_username"
                 value={formData.username}
                 onChange={handleChange}
                 autoComplete="username"
