@@ -29,7 +29,7 @@ export default {
         },
         {
             name: "age",
-            dataType: "int",
+            dataType: "text",
             description: "The age of the pet"
         },
         {
@@ -44,12 +44,12 @@ export default {
         },
         {
             name: "spayedNeutered",
-            dataType: "boolean",
+            dataType: "text",
             description: "Whether the pet is spayed or neutered"
         },
         {
             name: "compatibility",
-            dataType: "text",
+            dataType: "text[]",
             description: "Compatibility information"
         },
         {

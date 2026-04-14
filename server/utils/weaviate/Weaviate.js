@@ -68,8 +68,12 @@ export default class WeaviateDataManager {
             ;
             console.log('Collection activated:', this.collectionIdentifier);
             const collection = client.collections.get(this.collectionIdentifier);
-            this.activeUserCollection = collection;
-            return { client, collection };
+            // this.activeUserCollection = collection;
+            // if (this.client) {
+            //     await this.client.close();
+            //     this.client = null;
+            // }
+            return { collection };
         }
         catch (e) {
             throw new Error('Error activating collection: ' + (e.message || e));
@@ -83,7 +87,7 @@ export default class WeaviateDataManager {
     async gatherCollections() {
         try {
             const client = await this.getClient();
-            this.client = client;
+            // this.client = client;
             // active user context collection. multi-tenant to save creating new(visible) collections per user
             // const exists = await client.collections.exists(this.collectionIdentifier);
             // if (!exists) {
@@ -104,6 +108,8 @@ export default class WeaviateDataManager {
             }
             ;
             this.corpusCollection = corpus;
+            await client.close();
+
             return corpus;
         }
         catch (e) {

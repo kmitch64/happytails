@@ -2,6 +2,8 @@
 import Pet from '../models/pet.model.js';
 import User from '../models/user.model.js';
 
+import Interactions from '../../server/utils/weaviate/Interactions.js';
+
 
 export default {
   getAllPets: async (req, res) => {
@@ -39,6 +41,7 @@ export default {
 
   createPet: async (req, res) => {
     try {
+      const interactions = new Interactions(req.user.username, "mistral");
 
       // console.log('Request body:', req.body);
       const requiredFields = ['name', 'bio', 'type', 'sex', 'age', 'size', 'energyLevel', 'spayedNeutered', 'compatibility'];
@@ -71,6 +74,8 @@ export default {
         { $push: { pets: savedPet._id } }
       );
 
+      await interactions.storeInteractionPayload('system', savedPet, req.user.username);
+
       return res.status(201).json(savedPet);
     } catch (error) {
 
@@ -85,15 +90,32 @@ export default {
 
   updatePet: async (req, res) => {
     try {
+      const interactions = new Interactions(req.user.username, "mistral");
       const pet = await Pet.findOneAndUpdate(
         { _id: req.params.id, owner: req.user._id },
         req.body,
-        { new: true, runValidators: true }
+        { returnDocument: 'after', runValidators: true }
       );
 
       if (!pet) {
         return res.status(404).json({ message: 'Pet not found or you are not the owner' });
       };
+
+      console.log('Updated pet data:', pet);
+      // trim unused fields from pet object to reduce noise in vector database
+      const petContext = {
+        name: pet.name,
+        bio: pet.bio,
+        type: pet.type,
+        breed: pet.breed,
+        sex: pet.sex,
+        age: pet.age,
+        size: pet.size,
+        energyLevel: pet.energyLevel,
+        spayedNeutered: pet.spayedNeutered,
+        compatibility: pet.compatibility
+      };
+      await interactions.storeInteractionPayload('system', petContext, req.user.username);
 
       return res.status(200).json(pet);
     }

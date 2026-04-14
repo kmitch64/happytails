@@ -1,11 +1,4 @@
 import WeaviateDataManager from "./Weaviate";
-import type { ModelProvider } from "./Weaviate";
-interface Input {
-    id: any;
-    content: any;
-    author: string;
-    pet: string;
-}
 /**
  *
  */
@@ -19,6 +12,5 @@ export default class Interactions extends WeaviateDataManager {
     /**
      * Stores an interaction payload.
      */
-    storeInteractionPayload(role: string, input: Input, tenant: string): void;
+    storeInteractionPayload(role: string, input: Input, tenant: string): Promise<void>;
 }
-export {};

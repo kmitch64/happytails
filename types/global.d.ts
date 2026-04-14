@@ -186,6 +186,24 @@ declare global {
 
   }
 
+  type ModelProvider = 'mistral' | 'openai'; // anthropic
+
+  interface Input {
+    id: any;
+    content: any;
+    author: string;
+    pet: string;
+  }
+  
+  type FusionType = "Ranked" | "RelativeScore" | undefined;
+
+  interface HybridOptions {
+    limit: number;
+    alpha: number;
+    fusionType: FusionType;
+    queryProperties?: string[];
+  }
+
 }
 
 export { };

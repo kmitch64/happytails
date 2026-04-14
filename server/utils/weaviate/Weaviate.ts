@@ -11,15 +11,13 @@ import {
 } from 'weaviate-client';
 import PetSchema from './schemas/PetSchema';
 
-export type ModelProvider = 'mistral' | 'openai'; // anthropic
-
 
 /**
  * Manages data operations with Weaviate.
  */
 export default class WeaviateDataManager {
 
-  
+
   private collectionIdentifier: string;
   private modelProvider: ModelProvider;
   private modelproviderKeys: { [key in ModelProvider]: string };
@@ -51,7 +49,7 @@ export default class WeaviateDataManager {
       openai: process.env.OPENAI_API_KEY!
     };
 
-    
+
 
     const
       text2VecMistralCreateConfig: Text2VecMistralConfigCreate = {
@@ -104,9 +102,13 @@ export default class WeaviateDataManager {
       console.log('Collection activated:', this.collectionIdentifier);
 
       const collection = client.collections.get(this.collectionIdentifier);
-      this.activeUserCollection = collection;
+      // this.activeUserCollection = collection;
+      // if (this.client) {
+      //   await this.client.close();
+      //   this.client = null;
+      // }
 
-      return {client, collection};
+      return { collection };
     }
     catch (e: any) {
       throw new Error('Error activating collection: ' + (e.message || e));

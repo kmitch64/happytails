@@ -12,13 +12,14 @@ export default {
       // console.log('interactions instance created:', interactions);
 
       const pet_context = await interactions.getContext(username, { content: message });
-      // console.log('Pet context retrieved:', pet_context);
+      console.log('Pet context retrieved:', pet_context);
+      await interactions.client.close();
 
       // Prepare the conversation history for Mistral API
       const mistralMessages = [
         {
           role: 'system',
-          content: SYSTEM_PROMPT + (pet_context ? `\n\nPet Context:\n${pet_context}` : '')
+          content: SYSTEM_PROMPT + (pet_context ? `\nPet Context:\n${pet_context.map((meta) => JSON.stringify(meta.properties)).join('\n')}` : '')
         },
         ...conversationHistory,
         {

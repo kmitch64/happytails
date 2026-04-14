@@ -22,7 +22,7 @@ export default class Interactions extends WeaviateDataManager {
     }
     ;
     async hybridCorpus(username, input, baseHybridOptions) {
-        const { client, collection } = await this.activateCollection();
+        const { collection } = await this.activateCollection();
         await collection.tenants.create([
             { name: username }
         ]);
@@ -40,10 +40,9 @@ export default class Interactions extends WeaviateDataManager {
     /**
      * Stores an interaction payload.
      */
-    storeInteractionPayload(role, input, tenant) {
+    async storeInteractionPayload(role, input, tenant) {
         try {
-            if (this.activeUserCollection === null)
-                throw new Error('activeUserCollection equals null');
+            const { collection } = await this.activateCollection();
             const insertObj = { ...input, messageID: input.id, role };
             // remove id from insertObj (id is a reserved item with Weaviate)
             delete insertObj.id;
@@ -58,8 +57,8 @@ export default class Interactions extends WeaviateDataManager {
                 ;
             };
             replaceNulls(insertObj);
-            const activeTenant = this.activeUserCollection.withTenant(tenant);
-            activeTenant.data.insert({ id: uuidv4(), properties: { ...insertObj } });
+            const activeTenant = collection.withTenant(tenant);
+            await activeTenant.data.insert({ id: uuidv4(), properties: { ...insertObj } });
         }
         catch (e) {
             console.log("storeInteractionPayload::", e.message || e);

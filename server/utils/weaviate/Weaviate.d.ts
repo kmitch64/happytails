@@ -1,6 +1,5 @@
 import type { Collection } from 'weaviate-client';
 import { WeaviateClient } from 'weaviate-client';
-export type ModelProvider = 'mistral' | 'openai';
 /**
  * Manages data operations with Weaviate.
  */
