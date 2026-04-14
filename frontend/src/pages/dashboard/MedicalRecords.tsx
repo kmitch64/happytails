@@ -28,7 +28,7 @@ export default function MedicalRecords() {
 
   useEffect(() => {
     const fetchPets = async () => {
-      const res = await fetch('/api/v1/pets', { credentials: 'include' });
+      const res = await fetch('/api/v1/pets/user', { credentials: 'include' });
       const pets: Pet[] = await res.json();
 
       const all: MedicalRecordWithPet[] = pets.flatMap((pet: Pet) =>

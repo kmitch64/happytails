@@ -1,7 +1,7 @@
-const BASE_URL = import.meta.env.VITE_API_URL;
+// const BASE_URL = import.meta.env.VITE_API_URL;
 
 const createReminder = async (petId: string, reminderData: ReminderData) => {
-  return fetch(`${BASE_URL}/api/v1/pets/${petId}/reminders`, {
+  return fetch(`/api/v1/pets/${petId}/reminders`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     credentials: "include",
@@ -10,7 +10,7 @@ const createReminder = async (petId: string, reminderData: ReminderData) => {
 };
 
 const FinishReminder = async (petId: string, reminderId: string) => {
-  return fetch(`${BASE_URL}/api/v1/pets/${petId}/reminders/${reminderId}`, {
+  return fetch(`/api/v1/pets/${petId}/reminders/${reminderId}`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
     credentials: "include",

@@ -1,7 +1,7 @@
-const BASE_URL = import.meta.env.VITE_API_URL;
+// const BASE_URL = import.meta.env.VITE_API_URL;
 
 const createMedRecord = async (petId: string, recordData: MedicalRecordData) => {
-  return fetch(`${BASE_URL}/api/v1/pets/${petId}/medical-records`, {
+  return fetch(`/api/v1/pets/${petId}/medical-records`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     credentials: "include",
@@ -10,7 +10,7 @@ const createMedRecord = async (petId: string, recordData: MedicalRecordData) => 
 };
 
 const getMedRecord = async (petId: string, recordId: string) => {
-  return fetch(`${BASE_URL}/api/v1/pets/${petId}/medical-records/${recordId}`, {
+  return fetch(`/api/v1/pets/${petId}/medical-records/${recordId}`, {
     method: "GET",
     credentials: "include",
   });
@@ -21,7 +21,7 @@ const updateMedRecord = async (
   recordId: string,
   recordData: MedicalRecordData
 ) => {
-  return fetch(`${BASE_URL}/api/v1/pets/${petId}/medical-records/${recordId}`, {
+  return fetch(`/api/v1/pets/${petId}/medical-records/${recordId}`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
     credentials: "include",
@@ -30,7 +30,7 @@ const updateMedRecord = async (
 };
 
 const deleteMedRecord = async (petId: string, recordId: string) => {
-  return fetch(`${BASE_URL}/api/v1/pets/${petId}/medical-records/${recordId}`, {
+  return fetch(`/api/v1/pets/${petId}/medical-records/${recordId}`, {
     method: "DELETE",
     credentials: "include",
   });
