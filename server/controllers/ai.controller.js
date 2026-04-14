@@ -12,7 +12,7 @@ export default {
       // console.log('interactions instance created:', interactions);
 
       const pet_context = await interactions.getContext(username, { content: message });
-      console.log('Pet context retrieved:', pet_context);
+      // console.log('Pet context retrieved:', pet_context);
       await interactions.client.close();
 
       // Prepare the conversation history for Mistral API
@@ -44,7 +44,7 @@ export default {
 
       if (!response.ok) {
         const errorData = await response.json();
-        console.log('Mistral API error:', errorData);
+        console.error('Mistral API error:', errorData);
         throw new Error(errorData.detail || 'Mistral API error');
       }
 

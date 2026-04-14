@@ -44,12 +44,12 @@ export default {
         },
         {
             name: "spayedNeutered",
-            dataType: "boolean" as const,
+            dataType: "text" as const,
             description: "Whether the pet is spayed or neutered"
         },
         {
             name: "compatibility",
-            dataType: "text" as const,
+            dataType: "text[]" as const,
             description: "Compatibility information"
         },
         {

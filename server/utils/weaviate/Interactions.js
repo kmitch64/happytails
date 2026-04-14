@@ -61,7 +61,7 @@ export default class Interactions extends WeaviateDataManager {
             await activeTenant.data.insert({ id: uuidv4(), properties: { ...insertObj } });
         }
         catch (e) {
-            console.log("storeInteractionPayload::", e.message || e);
+            console.error("storeInteractionPayload::", e.message || e);
         }
         ;
     }

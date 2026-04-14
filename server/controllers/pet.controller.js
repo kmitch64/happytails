@@ -101,7 +101,7 @@ export default {
         return res.status(404).json({ message: 'Pet not found or you are not the owner' });
       };
 
-      console.log('Updated pet data:', pet);
+      // console.log('Updated pet data:', pet);
       // trim unused fields from pet object to reduce noise in vector database
       const petContext = {
         name: pet.name,

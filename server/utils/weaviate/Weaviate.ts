@@ -99,7 +99,7 @@ export default class WeaviateDataManager {
       if (!exists) {
         await this.createMultiTenantCollection();
       };
-      console.log('Collection activated:', this.collectionIdentifier);
+      // console.log('Collection activated:', this.collectionIdentifier);
 
       const collection = client.collections.get(this.collectionIdentifier);
       // this.activeUserCollection = collection;
