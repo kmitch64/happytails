@@ -49,6 +49,12 @@ import BrowseAdoptables from './pages/dashboard/DashboardBrowseAdoptables';
 // import AIAdvice from './pages/dashboard/AIAdvice';
 // import Sitters from './pages/dashboard/Sitters';
 
+import SitterForm from "./pages/Sitter/SitterForm";
+import PublicAdoptableProfile from './pages/Adopt/AdoptableProfile';
+import PublicBrowseAdoptables from './pages/Adopt/BrowseAdoptables';
+import AdoptionApplication from './pages/Adopt/AdoptionApplication';
+
+
 //global styles
 import './App.css';
 
@@ -61,6 +67,12 @@ export default function App(): JSX.Element {
 
           <Route element={<DefaultLayout />}>
             <Route path="/" index element={<Home />} />
+            
+            <Route path="sitters" element={<SitterForm />} />
+            <Route path="adopt" element={<PublicBrowseAdoptables />} />
+            <Route path="adopt/:id" element={<PublicAdoptableProfile />} />
+            <Route path="adopt-form" element={<AdoptionApplication />} />
+            
 
             <Route path="/privacy" element={<PrivacyPolicy />} />
             <Route path="/terms" element={<TermsOfService />} />
@@ -85,13 +97,17 @@ export default function App(): JSX.Element {
               <Route path="medical-records" element={<MedicalRecords />} />
               <Route path="my-pets/:id/add-medical-record" element={<AddMedicalRecord />} />
 
-              {/* <Route path='my-applications' element={<MyApplications />} />
-              <Route path='favorites' element={<Favorites />} />
-              <Route path='sitters' element={<Sitters />} /> */}
             </Route>
           </Route>
 
-          <Route path="/dashboard/admin" element={<ProtectedRoute><AdminLayout /></ProtectedRoute>} >
+          <Route
+            path="/dashboard/admin"
+            element={
+              <ProtectedRoute>
+                <AdminLayout />
+              </ProtectedRoute>
+            }
+          >
             <Route index element={<UserManagement />} />
             <Route path="users" element={<UserManagement />} />
             <Route path="users/create" element={<UserForm />} />
@@ -102,4 +118,4 @@ export default function App(): JSX.Element {
       </BrowserRouter>
     </AuthProvider>
   );
-};
+}

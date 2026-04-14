@@ -114,8 +114,15 @@ export default function AuthProvider({ children }: AuthProviderProps) {
         credentials: 'include',
       });
 
+      let data = null;
+      const text = await res.text();
+
+      if (text) {
+        data = JSON.parse(text);
+      }
+
       if (!res.ok)
-        return { success: false, message: (await res.json()).message };
+        return { success: false, message: data?.message || 'Registration failed. Please make sure all fields are filled in correctly.' };
 
       return { success: true, message: '' };
     }
@@ -139,10 +146,12 @@ export default function AuthProvider({ children }: AuthProviderProps) {
         credentials: 'include',
       });
 
-      if (!res.ok)
-        return { success: false, message: (await res.json()).message };
+      const text = await res.text();
+      const data = text ? JSON.parse(text) : null;
 
-      const data = await res.json();
+      if (!res.ok)
+        return { success: false, message: data?.message || 'Request failed' };
+
       setIsLoggedIn(true);
       setUser(data.user);
 
@@ -163,6 +172,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
     setIsLoading(true);
     try {
       if (!user) return { success: false, message: 'No user logged in' };
+
       const res = await fetch('/api/v1/auth/2fa/disable', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -170,10 +180,12 @@ export default function AuthProvider({ children }: AuthProviderProps) {
         credentials: 'include',
       });
 
-      if (!res.ok)
-        return { success: false, message: (await res.json()).message };
+      const text = await res.text();
+      const data = text ? JSON.parse(text) : null;
 
-      const data = await res.json();
+      if (!res.ok)
+        return { success: false, message: data?.message || 'Request failed' };
+
       setUser(data.user);
 
       return { success: true, message: '' };
@@ -183,8 +195,8 @@ export default function AuthProvider({ children }: AuthProviderProps) {
     }
     finally {
       setIsLoading(false);
-    };
-  };
+    }
+  }
 
   return (
     <AuthContext.Provider value={{ isLoading, isLoggedIn, user, register, login, logout, verify2FA, disable2FA }}>

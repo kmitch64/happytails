@@ -8,7 +8,7 @@
 .main-header {
   background: linear-gradient(90deg, #49c96f 0%, #5bcf7c 50%, #43c28a 100%);
   color: var(--light-text);
-  padding: 0.85rem 1rem;
+  padding: 0.85rem 0;
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
   position: sticky;
   top: 0;
@@ -19,9 +19,11 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  max-width: 1200px;
-  margin: 0 auto;
+  max-width: none;
+  margin: 0;
+  padding: 0 32px;
   width: 100%;
+  box-sizing: border-box;
 }
 
 .logo-section h1 {
