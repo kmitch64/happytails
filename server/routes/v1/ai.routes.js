@@ -7,7 +7,7 @@ const router = Router();
 
 router.post('/assistant',
   isAuthorized,
-  aiController.handleAIRequest
+  aiController.fetchMistralresponse
 );
 
 export default router;

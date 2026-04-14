@@ -3,12 +3,16 @@ import { useState, useRef, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faRobot, faPaperPlane, faSpinner, faTimes } from '@fortawesome/free-solid-svg-icons';
 
+import { useAuth } from '../../components/auth/AuthContext';
+
 
 export default function AIAssistant() {
+  const { user } = useAuth();
+  if(!user) return null;
   const [messages, setMessages] = useState([
     {
       id: 'welcome',
-      content: "Hello! I'm your HappyTails AI Assistant. How can I help you with your pet today?",
+      content: `Hello ${user?.username || ''}! I'm your HappyTails AI Assistant. How can I help you with your pet today?`,
       sender: 'assistant',
       timestamp: new Date()
     }
@@ -30,7 +34,7 @@ export default function AIAssistant() {
     const userMessage = {
       id: Date.now().toString(),
       content: inputValue,
-      sender: 'user' as const,
+      sender: 'user',
       timestamp: new Date()
     };
 
@@ -45,6 +49,7 @@ export default function AIAssistant() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
+          username: user.username,
           message: inputValue,
           conversationHistory: messages.map(m => ({
             role: m.sender,
@@ -59,14 +64,14 @@ export default function AIAssistant() {
 
       const data = await response.json();
 
-    // Add AI response
-    setMessages(prev => [...prev, {
-      id: Date.now().toString(),
-      content: data.response,
-      sender: 'assistant',
-      timestamp: new Date()
-    }]);
-  } catch (error) {
+      // Add AI response
+      setMessages(prev => [...prev, {
+        id: Date.now().toString(),
+        content: data.response,
+        sender: 'assistant',
+        timestamp: new Date()
+      }]);
+    } catch (error) {
       console.error('Error:', error);
       setMessages(prev => [...prev, {
         id: Date.now().toString(),
