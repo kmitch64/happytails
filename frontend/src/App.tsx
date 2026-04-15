@@ -55,7 +55,6 @@ import PublicAdoptableProfile from './pages/Adopt/AdoptableProfile';
 import PublicBrowseAdoptables from './pages/Adopt/BrowseAdoptables';
 import AdoptionApplication from './pages/Adopt/AdoptionApplication';
 
-
 //global styles
 import './App.css';
 
@@ -68,12 +67,9 @@ export default function App(): JSX.Element {
 
           <Route element={<DefaultLayout />}>
             <Route path="/" index element={<Home />} />
-            
-            <Route path="sitters" element={<SitterForm />} />
-            <Route path="adopt" element={<PublicBrowseAdoptables />} />
-            <Route path="adopt/:id" element={<PublicAdoptableProfile />} />
-            <Route path="adopt-form" element={<AdoptionApplication />} />
-            
+
+
+
 
             <Route path="/privacy" element={<PrivacyPolicy />} />
             <Route path="/terms" element={<TermsOfService />} />
@@ -88,6 +84,10 @@ export default function App(): JSX.Element {
               <Route path='adopt' element={<Adopt />} />
               <Route path='adopt/browse' element={<BrowseAdoptables />} />
               <Route path='adopt/pet/:id' element={<AdoptableProfile />} />
+              <Route path="sitters" element={<SitterForm />} />
+              <Route path="adopt" element={<PublicBrowseAdoptables />} />
+              <Route path="adopt/:id" element={<PublicAdoptableProfile />} />
+              <Route path="adopt-form" element={<AdoptionApplication />} />
               <Route path='my-pets' element={<MyPets />} />
               <Route path='my-pets/add' element={<AddEditPet />} />
               <Route path='my-pets/edit/:id' element={<AddEditPet />} />

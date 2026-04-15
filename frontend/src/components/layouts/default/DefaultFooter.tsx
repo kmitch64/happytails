@@ -16,8 +16,8 @@ export default function DefaultFooter({ path }: { path?: string }) {
             <h3>Quick Links</h3>
             <ul>
               {isLoggedIn && <li><Link to="/dashboard">Dashboard</Link></li>}
-              <li><Link to="/adopt">Adopt a Pet</Link></li>
-              <li><Link to="/sitters">Find a Sitter</Link></li>
+              <li><Link to="/dashboard/adopt">Adopt a Pet</Link></li>
+              <li><Link to="/dashboard/sitters">Find a Sitter</Link></li>
               <li><Link to="/dashboard/ai-assistant">AI Care Assistant</Link></li>
             </ul>
           </div>

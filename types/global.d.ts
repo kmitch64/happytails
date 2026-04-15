@@ -204,6 +204,8 @@ declare global {
     queryProperties?: string[];
   }
 
+  
+
 }
 
 export { };
