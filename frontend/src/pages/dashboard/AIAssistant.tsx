@@ -2,18 +2,15 @@
 import { useState, useRef, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
 import DOMPurify from 'dompurify';
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { atomDark } from 'react-syntax-highlighter/dist/cjs/styles/prism';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faRobot, faPaperPlane, faSpinner, faTimes } from '@fortawesome/free-solid-svg-icons';
-import type { CSSProperties } from 'react';
 
 import { useAuth } from '../../components/auth/AuthContext';
 
 
 export default function AIAssistant() {
   const { user } = useAuth();
-  if (!user) return null;
+  if(!user) return null;
   const [messages, setMessages] = useState([
     {
       id: 'welcome',
@@ -116,33 +113,7 @@ export default function AIAssistant() {
               className={`ai-message ${message.sender}`}
             >
               <div className="message-content">
-                <ReactMarkdown
-                  children={message.content}
-                  components={{
-                    code({ node, className, children, ...props }: any) {
-                      const match = /language-(\w+)/.exec(className || '');
-                      return !className && match ? (
-                        <SyntaxHighlighter
-                          style={atomDark}
-                          language={match[1]}
-                          PreTag="div"
-                        >
-                          {String(children).replace(/\n$/, '')}
-                        </SyntaxHighlighter>
-                      ) : (
-                        <code className={className} {...props}>
-                          {DOMPurify.sanitize(String(children))}
-                        </code>
-                      );
-                    },
-                    p: ({ children }) => <p className="message-paragraph">{children}</p>,
-                    a: ({ children, href }) => (
-                      <a href={href} target="_blank" rel="noopener noreferrer" className="message-link">
-                        {DOMPurify.sanitize(String(children))}
-                      </a>
-                    )
-                  }}
-                />
+                <ReactMarkdown children={DOMPurify.sanitize(message.content)} />
               </div>
               <div className="message-time">
                 {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
