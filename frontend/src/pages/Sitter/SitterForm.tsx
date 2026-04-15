@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./Sitter.css";
-import sitterImg from "../../assets/Sitter.jpg";
+import sitterImg from "../../assets/sitter.jpg";
 
 export default function SitterForm() {
     const [formData, setFormData] = useState({
