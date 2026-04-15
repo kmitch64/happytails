@@ -1,0 +1,231 @@
+.form-container {
+    min-height: 100vh;
+    padding: 40px 20px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.form-card {
+    width: 100%;
+    max-width: 780px;
+    background: white;
+    border-radius: 18px;
+    padding: 24px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    box-sizing: border-box;
+}
+
+.form-group select,
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 14px 16px;
+    border: 1px solid #d7d7d7;
+    border-radius: 12px;
+    font-size: 15px;
+    font-family: inherit;
+    color: #333;
+    background: #fff;
+    box-sizing: border-box;
+    display: block;
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+    color: #666;
+    opacity: 1;
+}
+
+.form-group select:focus,
+.form-group input:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #7acb6f;
+    box-shadow: 0 0 0 3px rgba(122, 203, 111, 0.15);
+}
+
+.form-group {
+    margin-bottom: 16px;
+}
+
+.form-group textarea {
+    min-height: 120px;
+    line-height: 1.5;
+    resize: vertical;
+}
+
+.form-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.form-image-wrap {
+    width: 100%;
+    height: 320px;
+    border-radius: 14px;
+    overflow: hidden;
+}
+
+.form-header {
+    text-align: center;
+    margin: 22px 0 28px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.form-title {
+    margin: 0 auto 10px auto;
+    font-size: 36px;
+    font-weight: 700;
+    color: #7acb6f;
+    text-align: center;
+    display: block;
+    width: 100%;
+}
+
+.form-divider {
+    width: 100%;
+    height: 4px;
+    background: #7acb6f;
+    border-radius: 999px;
+    margin: 14px 0 16px;
+}
+
+.form-subtitle {
+    margin: 0 auto 16px auto;
+    font-size: 16px;
+    color: #666;
+    line-height: 1.5;
+    text-align: center;
+    display: block;
+    max-width: 620px;
+}
+
+.btn-primary {
+    width: 100%;
+    padding: 14px 18px;
+    margin-top: 8px;
+    background: #7acb6f;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-primary:hover {
+    background: #5fb85a;
+    transform: translateY(-1px);
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 3px;
+    font-size: 15px;
+    font-weight: 600;
+    color: #333;
+}
+
+.form-group select {
+    appearance: none;
+    background-image: url("data:image/svg+xml;utf8,<svg fill='%23333' height='20' viewBox='0 0 20 20' width='20'><path d='M5 7l5 5 5-5z'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 16px;
+}
+
+.success-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.35);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+    animation: fadeIn 0.3s ease;
+}
+
+.success-modal {
+    background: #fff;
+    width: 90%;
+    max-width: 420px;
+    border-radius: 18px;
+    padding: 32px 24px;
+    text-align: center;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+    animation: slideUp 0.35s ease;
+}
+
+.success-icon {
+    width: 70px;
+    height: 70px;
+    margin: 0 auto 18px;
+    border-radius: 50%;
+    background: #7acb6f;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 32px;
+    font-weight: 700;
+}
+
+.success-modal h3 {
+    margin: 0 0 12px;
+    font-size: 28px;
+    color: #333;
+}
+
+.success-modal p {
+    margin: 0 0 22px;
+    font-size: 15px;
+    line-height: 1.5;
+    color: #666;
+}
+
+.success-btn {
+    background: #7acb6f;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 12px 28px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.success-btn:hover {
+    background: #69b95e;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
