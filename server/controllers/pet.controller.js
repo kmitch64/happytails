@@ -2,6 +2,8 @@
 import Pet from '../models/pet.model.js';
 import User from '../models/user.model.js';
 
+import Interactions from '../../server/utils/weaviate/Interactions.js';
+
 
 export default {
   getAllPets: async (req, res) => {
@@ -39,9 +41,9 @@ export default {
 
   createPet: async (req, res) => {
     try {
-      
-      // console.log('Request body:', req.body);
+      const interactions = new Interactions(req.user.username, "mistral");
       const requiredFields = ['name', 'bio', 'type', 'sex', 'age', 'size', 'energyLevel', 'spayedNeutered', 'compatibility'];
+      
       for (const field of requiredFields) {
         if (!req.body[field]) {
           return res.status(400).json({ message: `${field} is required` });
@@ -60,7 +62,21 @@ export default {
         spayedNeutered: req.body.spayedNeutered,
         compatibility: req.body.compatibility,
         owner: req.user._id,
-        images: req.body.images || []
+        // images: req.body.images || [], // this needs formatting otherwise we'll get a stack exception
+        careReminders: pet.careReminders.map(reminder => ({
+          type: reminder.type,
+          description: reminder.description,
+          date: reminder.date,
+          frequency: reminder.frequency,
+          completed: reminder.completed
+        })),
+        medicalRecords: pet.medicalRecords.map(record => ({
+          type: record.type,
+          description: record.description,
+          date: record.date,
+          veterinarian: record.veterinarian,
+          notes: record.notes
+        }))
       };
 
       const pet = new Pet(petData);
@@ -71,9 +87,11 @@ export default {
         { $push: { pets: savedPet._id } }
       );
 
+      await interactions.storeInteractionPayload(req.user.username, savedPet);
+
       return res.status(201).json(savedPet);
     } catch (error) {
-      
+
       if (error.name === 'ValidationError') {
         const messages = Object.values(error.errors).map(val => val.message);
         return res.status(400).json({ messages });
@@ -85,18 +103,50 @@ export default {
 
   updatePet: async (req, res) => {
     try {
+      const interactions = new Interactions(req.user.username, "mistral");
       const pet = await Pet.findOneAndUpdate(
         { _id: req.params.id, owner: req.user._id },
         req.body,
-        { new: true, runValidators: true }
+        { returnDocument: 'after', runValidators: true }
       );
 
       if (!pet) {
         return res.status(404).json({ message: 'Pet not found or you are not the owner' });
       };
 
+      // trim unused fields from pet object to reduce noise in vector database
+      const petContext = {
+        name: pet.name,
+        bio: pet.bio,
+        type: pet.type,
+        breed: pet.breed,
+        sex: pet.sex,
+        age: pet.age,
+        size: pet.size,
+        energyLevel: pet.energyLevel,
+        spayedNeutered: pet.spayedNeutered,
+        compatibility: pet.compatibility,
+        owner: pet.owner.toString(),
+        // images: pet.images,
+        careReminders: pet.careReminders.map(reminder => ({
+          type: reminder.type,
+          description: reminder.description,
+          date: reminder.date,
+          frequency: reminder.frequency,
+          completed: reminder.completed
+        })),
+        medicalRecords: pet.medicalRecords.map(record => ({
+          type: record.type,
+          description: record.description,
+          date: record.date,
+          veterinarian: record.veterinarian,
+          notes: record.notes
+        }))
+      };
+      await interactions.storeInteractionPayload(req.user.username, petContext );
+
       return res.status(200).json(pet);
-    } 
+    }
     catch (error) {
       return res.status(500).json({ message: error.message });
     };
@@ -145,27 +195,35 @@ export default {
 
   updateCareReminder: async (req, res) => {
     try {
-      const { petId, reminderId } = req.params;
+      const { id, reminderId } = req.params;
+
       const pet = await Pet.findOneAndUpdate(
         {
-          _id: petId,
+          _id: id,
           owner: req.user._id,
           'careReminders._id': reminderId
         },
-        { $set: { 'careReminders.$': req.body } },
+        {
+          $set: {
+            'careReminders.$.completed': req.body.completed
+          }
+        },
         { returnDocument: 'after' }
+
       );
 
       if (!pet) {
-        return res.status(404).json({ message: 'Pet or reminder not found or you are not the owner' });
-      };
+        return res.status(404).json({
+          message: 'Pet or reminder not found or you are not the owner'
+        });
+      }
 
       return res.status(200).json(pet);
-    }
-    catch (error) {
+    } catch (error) {
       return res.status(500).json({ message: error.message });
-    };
+    }
   },
+
 
   deleteCareReminder: async (req, res) => {
     try {
@@ -209,10 +267,11 @@ export default {
 
   updateMedicalRecord: async (req, res) => {
     try {
-      const { petId, recordId } = req.params;
+      const { id, recordId } = req.params;
+
       const pet = await Pet.findOneAndUpdate(
         {
-          _id: petId,
+          _id: id,
           owner: req.user._id,
           'medicalRecords._id': recordId
         },
@@ -222,35 +281,38 @@ export default {
 
       if (!pet) {
         return res.status(404).json({ message: 'Pet or record not found or you are not the owner' });
-      };
+      }
 
       return res.status(200).json(pet);
     }
     catch (error) {
       return res.status(500).json({ message: error.message });
-    };
+    }
   },
+
 
   deleteMedicalRecord: async (req, res) => {
     try {
-      const { petId, recordId } = req.params;
+      const { id, recordId } = req.params;
 
       const pet = await Pet.findOneAndUpdate(
-        { _id: petId, owner: req.user._id },
+        { _id: id, owner: req.user._id },
         { $pull: { medicalRecords: { _id: recordId } } },
         { returnDocument: 'after' }
       );
 
       if (!pet) {
         return res.status(404).json({ message: 'Pet not found or you are not the owner' });
-      };
+      }
 
       return res.status(200).json(pet);
     }
     catch (error) {
       return res.status(500).json({ message: error.message });
-    };
+    }
   }
+
+
 
 };
 

@@ -2,37 +2,33 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useState, FormEvent } from "react";
 import ApiMedical from "../Api/ApiMedRecord";
 
-export default function AddMedicalRecord() {
-  const { id } = useParams<{ id: string }>();
+export default function EditMedicalRecord() {
+  const { id, recordId } = useParams();
   const navigate = useNavigate();
 
-  const [type, setType] = useState<string>("");
-  const [date, setDate] = useState<string>("");
-  const [description, setDescription] = useState<string>("");
+  const [type, setType] = useState("");
+  const [date, setDate] = useState("");
+  const [description, setDescription] = useState("");
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
-    const recordData = {
+    await ApiMedical.updateMedRecord(id!, recordId!, {
       type,
-      description,
-      date
-    };
-
-    await ApiMedical.createMedRecord(id!, recordData);
+      date,
+      description
+    });
 
     navigate(`/dashboard/my-pets/${id}`);
   };
 
   return (
     <div className="add-medical-container">
-      <h1>Add Medical Record for Pet</h1>
+      <h1>Edit Medical Record</h1>
 
       <form onSubmit={handleSubmit}>
-
         <label>Record Type</label>
         <select value={type} onChange={(e) => setType(e.target.value)}>
-          <option value="">Select Type</option>
           <option value="vaccination">Vaccination</option>
           <option value="surgery">Surgery</option>
           <option value="checkup">Check-Up</option>
@@ -52,7 +48,7 @@ export default function AddMedicalRecord() {
           onChange={(e) => setDescription(e.target.value)}
         />
 
-        <button type="submit">Save Record</button>
+        <button type="submit">Update Record</button>
       </form>
     </div>
   );

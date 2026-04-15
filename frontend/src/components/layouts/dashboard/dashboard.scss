@@ -1788,6 +1788,39 @@
             }
           }
         }
+         .record-actions {
+          text-align: right;
+
+          .editButton {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            margin-right: 10px;
+
+
+            &:hover {
+              background-color: #388E3C;
+            }
+          }
+
+          .deleteButton {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+
+            &:hover {
+              background-color: #388E3C;
+            }
+          }
+        }
       }
     }
 

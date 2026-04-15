@@ -1,18 +1,25 @@
 
+import { SYSTEM_PROMPT } from "../../enums/SERVER_ENUMS.js";
+import Interactions from '../../server/utils/weaviate/Interactions.js';
 
 export default {
-  handleAIRequest: async (req, res) => {
+  fetchMistralresponse: async (req, res) => {
+    // console.log('Received request:', req.body);
     try {
-      const { message, conversationHistory } = req.body;
+      const { username, message, conversationHistory } = req.body;
+
+      const interactions = new Interactions(username, "mistral");
+      // console.log('interactions instance created:', interactions);
+
+      const pet_context = await interactions.getContext(username, { content: message });
+      // console.log('Pet context retrieved:', pet_context);
+      await interactions.client.close();
 
       // Prepare the conversation history for Mistral API
       const mistralMessages = [
         {
           role: 'system',
-          content: `You are a helpful pet care assistant for HappyTails.
-          Provide concise, accurate advice about pet care, health, and training.
-          Always prioritize pet safety and well-being.
-          If you're unsure about medical advice, suggest consulting a veterinarian.`
+          content: SYSTEM_PROMPT + (pet_context ? `\nPet Context:\n${pet_context.map((meta) => JSON.stringify(meta.properties)).join('\n')}` : '')
         },
         ...conversationHistory,
         {
@@ -21,7 +28,7 @@ export default {
         }
       ];
 
-      const response = await fetch('https://api.mistral.ai/v1/chat/completions', {
+      const response = await fetch(process.env.MISTRAL_COMPLETION_ENDPOINT, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -37,7 +44,7 @@ export default {
 
       if (!response.ok) {
         const errorData = await response.json();
-        console.log('Mistral API error:', errorData);
+        console.error('Mistral API error:', errorData);
         throw new Error(errorData.detail || 'Mistral API error');
       }
 

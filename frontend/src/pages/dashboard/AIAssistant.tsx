@@ -1,14 +1,20 @@
 
 import { useState, useRef, useEffect } from 'react';
+import ReactMarkdown from 'react-markdown';
+import DOMPurify from 'dompurify';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faRobot, faPaperPlane, faSpinner, faTimes } from '@fortawesome/free-solid-svg-icons';
 
+import { useAuth } from '../../components/auth/AuthContext';
+
 
 export default function AIAssistant() {
+  const { user } = useAuth();
+  if(!user) return null;
   const [messages, setMessages] = useState([
     {
       id: 'welcome',
-      content: "Hello! I'm your HappyTails AI Assistant. How can I help you with your pet today?",
+      content: `Hello ${user?.username || ''}! I'm your HappyTails AI Assistant. How can I help you with your pet today?`,
       sender: 'assistant',
       timestamp: new Date()
     }
@@ -30,7 +36,7 @@ export default function AIAssistant() {
     const userMessage = {
       id: Date.now().toString(),
       content: inputValue,
-      sender: 'user' as const,
+      sender: 'user',
       timestamp: new Date()
     };
 
@@ -45,6 +51,7 @@ export default function AIAssistant() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
+          username: user.username,
           message: inputValue,
           conversationHistory: messages.map(m => ({
             role: m.sender,
@@ -59,14 +66,14 @@ export default function AIAssistant() {
 
       const data = await response.json();
 
-    // Add AI response
-    setMessages(prev => [...prev, {
-      id: Date.now().toString(),
-      content: data.response,
-      sender: 'assistant',
-      timestamp: new Date()
-    }]);
-  } catch (error) {
+      // Add AI response
+      setMessages(prev => [...prev, {
+        id: Date.now().toString(),
+        content: data.response,
+        sender: 'assistant',
+        timestamp: new Date()
+      }]);
+    } catch (error) {
       console.error('Error:', error);
       setMessages(prev => [...prev, {
         id: Date.now().toString(),
@@ -106,7 +113,7 @@ export default function AIAssistant() {
               className={`ai-message ${message.sender}`}
             >
               <div className="message-content">
-                {message.content}
+                <ReactMarkdown children={DOMPurify.sanitize(message.content)} />
               </div>
               <div className="message-time">
                 {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
@@ -128,7 +135,7 @@ export default function AIAssistant() {
           <textarea
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
-            onKeyPress={handleKeyPress}
+            onKeyDown={handleKeyPress}
             placeholder="Ask me about pet care, health, training..."
             rows={1}
             disabled={isLoading}

@@ -39,6 +39,9 @@ app
     .use(cors(
         {
             origin: process.env.DOMAIN,
+            origin: true,
+
+
             credentials: true
         }
     ))

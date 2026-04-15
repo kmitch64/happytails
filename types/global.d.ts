@@ -84,6 +84,13 @@ declare global {
     completed: boolean;
   }
 
+  interface ReminderData {
+  type: string;
+  description: string;
+  date: string;
+  frequency: string;
+}
+
   interface MedicalRecord {
     _id: string;
     type: 'vaccination' | 'surgery' | 'checkup' | 'medication';
@@ -92,6 +99,14 @@ declare global {
     veterinarian: string;
     notes: string;
   }
+
+ interface MedicalRecordData {
+   type: string;
+   description: string;
+   date: string;
+   veterinarian?: string;
+   notes?: string;
+ }
 
 
   /*********************************
@@ -169,6 +184,24 @@ declare global {
      */
     disable2FA: () => Promise<AuthResponse>;
 
+  }
+
+  type ModelProvider = 'mistral' | 'openai'; // anthropic
+
+  interface Input {
+    id: any;
+    content: any;
+    author: string;
+    pet: string;
+  }
+  
+  type FusionType = "Ranked" | "RelativeScore" | undefined;
+
+  interface HybridOptions {
+    limit: number;
+    alpha: number;
+    fusionType: FusionType;
+    queryProperties?: string[];
   }
 
 }

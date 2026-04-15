@@ -38,6 +38,7 @@ import CareReminders from './pages/dashboard/CareReminders';
 import AddReminder from './components/dashboard/AddReminder';
 import MedicalRecords from './pages/dashboard/MedicalRecords';
 import AddMedicalRecord from './components/dashboard/AddMedicalRecord';
+import EditMedicalRecord from './components/dashboard/AddMedRecordEdit';
 
 //adopt pages
 import Adopt from './pages/dashboard/DashboardAdopt';
@@ -96,6 +97,7 @@ export default function App(): JSX.Element {
               <Route path='my-pets/:id/add-reminder' element={<AddReminder />} />
               <Route path="medical-records" element={<MedicalRecords />} />
               <Route path="my-pets/:id/add-medical-record" element={<AddMedicalRecord />} />
+              <Route path="my-pets/:id/medical-records/:recordId/edit" element={<EditMedicalRecord />} />
 
             </Route>
           </Route>
