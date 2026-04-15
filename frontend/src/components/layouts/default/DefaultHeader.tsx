@@ -30,7 +30,7 @@ export default function DefaultHeader({ path }: { path?: string }) {
           {isLoggedIn ? (
             <>
               <span className="user-greeting">Welcome, {user?.username || 'User'}!</span>
-              {/* <button onClick={() => navigate('/dashboard')} className="nav-button">Dashboard</button> */}
+              <button onClick={() => navigate('/dashboard')} className="nav-button">Dashboard</button>
               <button onClick={() => navigate('/logout')} title="Logout" className="nav-button logout"><FontAwesomeIcon icon={faSignOutAlt} /></button>
             </>
           ) : (
