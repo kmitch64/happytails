@@ -57,29 +57,15 @@ export default class Interactions extends WeaviateDataManager {
   /**
    * Stores an interaction payload.
    */
-  async storeInteractionPayload(role: string, input: Input, tenant: string) {
+  async storeInteractionPayload(tenant: string, input: Input) {
     try {
       const {collection} = await this.activateCollection();
-
-      const insertObj = { ...input, messageID: input.id, role };
-      // remove id from insertObj (id is a reserved item with Weaviate)
-      delete insertObj.id;
-      // make any null values as undefined
-      const replaceNulls = (obj: { [x: string]: any; }) => {
-        for (const key in obj) {
-          if (obj[key] === null)
-            obj[key] = undefined;
-          else if (typeof obj[key] === 'object' && obj[key] !== null)
-            replaceNulls(obj[key]);
-        };
-      };
-      replaceNulls(insertObj);
-
       const activeTenant = collection.withTenant(tenant);
-      await activeTenant.data.insert({ id: uuidv4(), properties: { ...insertObj } });
+
+      await activeTenant.data.insert(input);
     }
     catch (e: any) {
-      console.error("storeInteractionPayload::", e.message || e);
+      console.error("storeInteractionPayload::", e);
     };
   };
 

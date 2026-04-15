@@ -42,9 +42,8 @@ export default {
   createPet: async (req, res) => {
     try {
       const interactions = new Interactions(req.user.username, "mistral");
-
-      // console.log('Request body:', req.body);
       const requiredFields = ['name', 'bio', 'type', 'sex', 'age', 'size', 'energyLevel', 'spayedNeutered', 'compatibility'];
+      
       for (const field of requiredFields) {
         if (!req.body[field]) {
           return res.status(400).json({ message: `${field} is required` });
@@ -63,7 +62,21 @@ export default {
         spayedNeutered: req.body.spayedNeutered,
         compatibility: req.body.compatibility,
         owner: req.user._id,
-        images: req.body.images || []
+        // images: req.body.images || [], // this needs formatting otherwise we'll get a stack exception
+        careReminders: pet.careReminders.map(reminder => ({
+          type: reminder.type,
+          description: reminder.description,
+          date: reminder.date,
+          frequency: reminder.frequency,
+          completed: reminder.completed
+        })),
+        medicalRecords: pet.medicalRecords.map(record => ({
+          type: record.type,
+          description: record.description,
+          date: record.date,
+          veterinarian: record.veterinarian,
+          notes: record.notes
+        }))
       };
 
       const pet = new Pet(petData);
@@ -74,7 +87,7 @@ export default {
         { $push: { pets: savedPet._id } }
       );
 
-      await interactions.storeInteractionPayload('system', savedPet, req.user.username);
+      await interactions.storeInteractionPayload(req.user.username, savedPet);
 
       return res.status(201).json(savedPet);
     } catch (error) {
@@ -101,7 +114,6 @@ export default {
         return res.status(404).json({ message: 'Pet not found or you are not the owner' });
       };
 
-      // console.log('Updated pet data:', pet);
       // trim unused fields from pet object to reduce noise in vector database
       const petContext = {
         name: pet.name,
@@ -113,9 +125,25 @@ export default {
         size: pet.size,
         energyLevel: pet.energyLevel,
         spayedNeutered: pet.spayedNeutered,
-        compatibility: pet.compatibility
+        compatibility: pet.compatibility,
+        owner: pet.owner.toString(),
+        // images: pet.images,
+        careReminders: pet.careReminders.map(reminder => ({
+          type: reminder.type,
+          description: reminder.description,
+          date: reminder.date,
+          frequency: reminder.frequency,
+          completed: reminder.completed
+        })),
+        medicalRecords: pet.medicalRecords.map(record => ({
+          type: record.type,
+          description: record.description,
+          date: record.date,
+          veterinarian: record.veterinarian,
+          notes: record.notes
+        }))
       };
-      await interactions.storeInteractionPayload('system', petContext, req.user.username);
+      await interactions.storeInteractionPayload(req.user.username, petContext );
 
       return res.status(200).json(pet);
     }
