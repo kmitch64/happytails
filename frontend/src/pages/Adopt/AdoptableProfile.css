@@ -213,10 +213,10 @@
 }
 
 .pet-intro {
-    font-size: 30px;
-    font-weight: 600;
-    color: #5fae55;
-    margin-bottom: 10px;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #222;
+    margin-bottom: 1rem;
 }
 
 /* Responsive */

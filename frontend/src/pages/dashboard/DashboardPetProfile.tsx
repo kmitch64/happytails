@@ -1,154 +1,151 @@
-import { useParams, Link } from "react-router-dom";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faVenusMars, faBirthdayCake, faRuler, faBolt, faBriefcaseMedical, faPaw, faHeart, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
+import { Link, useParams } from "react-router-dom";
 
-// mocked
-const getPetById = (id: string | undefined) => {
-  const mockPets: Record<string, any> = {
-    "1": {
-      id: "1",
-      name: "Max",
-      type: "Dog",
-      breed: "Labrador Retriever",
-      bio: "Max is a friendly and energetic Labrador who loves to play fetch. He's great with kids and other dogs. Max was found as a stray but has adapted well to shelter life. He's looking for an active family that can give him the exercise and attention he needs.",
-      sex: "Male",
-      age: "2 years old",
-      size: "Large (60 lbs)",
-      energyLevel: "High",
-      spayedNeutered: "Yes",
-      compatibility: "Good with dogs and children",
-      images: [
-        "https://via.placeholder.com/600x400/4CAF50/FFFFFF?text=Max+1",
-        "https://via.placeholder.com/600x400/4CAF50/FFFFFF?text=Max+2",
-        "https://via.placeholder.com/600x400/4CAF50/FFFFFF?text=Max+3"
-      ],
-      adoptionStatus: "Available",
-      location: "Happy Tails Shelter, Toronto"
-    }
-  };
-  return mockPets[id || "1"];
-};
+import dog1 from "../../assets/dog1.jpg";
+import dog2 from "../../assets/dog2.jpg";
+import cat1 from "../../assets/cat1.jpg";
+import cat2 from "../../assets/cat2.jpg";
 
 export default function DashboardPetProfile() {
   const { id } = useParams();
-  const pet = getPetById(id);
 
-  const infoCards = [
-    { label: "Sex", value: pet.sex, icon: faVenusMars },
-    { label: "Age", value: pet.age, icon: faBirthdayCake },
-    { label: "Size", value: pet.size, icon: faRuler },
-    { label: "Energy Level", value: pet.energyLevel, icon: faBolt },
-    { label: "Spayed/Neutered", value: pet.spayedNeutered, icon: faBriefcaseMedical },
-    { label: "Compatibility", value: pet.compatibility, icon: faPaw },
+  const pets = [
+    {
+      id: "1",
+      name: "Mocha",
+      type: "Dog",
+      breed: "Mixed Breed",
+      age: "11 months",
+      sex: "Female",
+      size: "Medium (35 lbs)",
+      energyLevel: "High",
+      spayedNeutered: "Yes",
+      compatibility: "Good with dogs and children",
+      bio: "Mocha is a playful and affectionate puppy who loves attention and short walks. She would do well in a home that can give her time, patience, and lots of love.",
+      image: dog1,
+      adoptionStatus: "Available",
+      location: "Happy Tails Shelter, Toronto"
+    },
+    {
+      id: "2",
+      name: "Leo",
+      type: "Dog",
+      breed: "Labrador / Hound Mix",
+      age: "1 year",
+      sex: "Male",
+      size: "Large (60 lbs)",
+      energyLevel: "High",
+      spayedNeutered: "Yes",
+      compatibility: "Good with active households",
+      bio: "Leo is friendly, energetic, and curious. He enjoys outdoor time and would be a great match for an active household looking for a loyal companion.",
+      image: dog2,
+      adoptionStatus: "Available",
+      location: "Happy Tails Shelter, Toronto"
+    },
+    {
+      id: "3",
+      name: "Luna",
+      type: "Cat",
+      breed: "Tabby",
+      age: "8 months",
+      sex: "Female",
+      size: "Small",
+      energyLevel: "Medium",
+      spayedNeutered: "No",
+      compatibility: "Good with calm households",
+      bio: "Luna is sweet, calm, and loves cozy spaces by the window. She would be a wonderful fit for someone looking for a gentle and affectionate cat.",
+      image: cat1,
+      adoptionStatus: "Available",
+      location: "Happy Tails Shelter, Toronto"
+    },
+    {
+      id: "4",
+      name: "Bella",
+      type: "Cat",
+      breed: "Tabby",
+      age: "2 months",
+      sex: "Female",
+      size: "Small",
+      energyLevel: "High",
+      spayedNeutered: "No",
+      compatibility: "Good with playful households",
+      bio: "Bella is curious, adorable, and full of kitten energy. She loves to explore and would thrive in a home ready for a playful young pet.",
+      image: cat2,
+      adoptionStatus: "Available",
+      location: "Happy Tails Shelter, Toronto"
+    }
   ];
+
+  const pet = pets.find((item) => item.id === id);
+
+  if (!pet) {
+    return (
+      <div className="dashboard-page">
+        <div className="page-header">
+          <h1>Pet not found</h1>
+          <p>We couldn’t find that pet profile.</p>
+          <Link to="/dashboard/adopt/browse" className="cta-button primary">
+            Back to Browse
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="dashboard-page pet-profile-page">
       <div className="page-header">
         <Link to="/dashboard/adopt/browse" className="back-button">
-          <FontAwesomeIcon icon={faArrowLeft} /> Back to Browse
+          Back to Browse
         </Link>
         <h1>{pet.name}'s Profile</h1>
+        <p>Learn more about {pet.name} and start the adoption process.</p>
       </div>
 
       <div className="page-content">
-        {/* Carousel Section */}
-        <section className="pet-carousel">
-          <div className="carousel-container">
-            {pet.images.map((image: string, index: number) => (
-              <div key={index} className="carousel-slide">
-                <img src={image} alt={`${pet.name} - Photo ${index + 1}`} className="pet-photo" />
-              </div>
-            ))}
-          </div>
-          <div className="carousel-nav">
-            {pet.images.map((_: string, index: number) => (
-              <button key={index} className="carousel-dot"></button>
-            ))}
-          </div>
-        </section>
-
-        {/* Pet Details Section */}
-        <section className="pet-details-section">
-          <div className="details-grid">
-            {/* Left Column - Bio and Info */}
-            <div className="pet-bio">
-              <div className="pet-header">
-                <h2>{pet.name} <span className="adoption-status">{pet.adoptionStatus}</span></h2>
-                <p className="pet-breed">{pet.breed} • {pet.age} • {pet.sex}</p>
-                <p className="pet-location"><FontAwesomeIcon icon={faPaw} /> {pet.location}</p>
-              </div>
-
-              <div className="pet-bio-content">
-                <h3>About {pet.name}</h3>
-                <p>{pet.bio}</p>
-              </div>
+        <section className="dashboard-section pet-profile-card">
+          <div className="pet-profile-layout">
+            <div className="pet-image-wrap">
+              <img
+                src={pet.image}
+                alt={pet.name}
+                className="pet-main-image"
+              />
             </div>
 
-            {/* Right Column - Info Cards */}
-            <div className="pet-info-cards">
-              <h3>Pet Information</h3>
-              <div className="info-cards-grid">
-                {infoCards.map((card, index) => (
-                  <div key={index} className="info-card">
-                    <div className="card-header">
-                      <FontAwesomeIcon icon={card.icon} className="card-icon" />
-                      <span className="card-label">{card.label}</span>
-                    </div>
-                    <div className="card-value">{card.value}</div>
-                  </div>
-                ))}
+            <div className="pet-details-wrap">
+              <h2 className="pet-intro">Hi, I’m {pet.name}</h2>
+
+              <h3 className="about-title">About {pet.name}</h3>
+              <p className="pet-bio-text">{pet.bio}</p>
+
+              <div className="status-row">
+                <span className="status-label">Status:</span>
+                <span className="status-badge">{pet.adoptionStatus}</span>
               </div>
-            </div>
-          </div>
-        </section>
 
-        {/* Adoption Application Section */}
-        <section className="adoption-section">
-          <h2>Adopt {pet.name}</h2>
-          <p>Ready to give {pet.name} a forever home? Start your adoption application today!</p>
+              <p><strong>Type:</strong> {pet.type}</p>
+              <p><strong>Breed:</strong> {pet.breed}</p>
+              <p><strong>Age:</strong> {pet.age}</p>
+              <p><strong>Sex:</strong> {pet.sex}</p>
+              <p><strong>Size:</strong> {pet.size}</p>
+              <p><strong>Energy Level:</strong> {pet.energyLevel}</p>
+              <p><strong>Spayed/Neutered:</strong> {pet.spayedNeutered}</p>
+              <p><strong>Compatibility:</strong> {pet.compatibility}</p>
+              <p><strong>Location:</strong> {pet.location}</p>
 
-          <div className="adoption-steps">
-            <h3>Adoption Process</h3>
-            <ol>
-              <li>Submit an application (5-10 minutes)</li>
-              <li>Our team reviews your application (1-3 business days)</li>
-              <li>We'll contact you to schedule a meet-and-greet</li>
-              <li>Finalize the adoption and welcome your new family member!</li>
-            </ol>
-          </div>
-
-          <div className="adoption-actions">
-            <button className="cta-button primary">
-              <FontAwesomeIcon icon={faHeart} /> Start Adoption Application
-            </button>
-            <button className="cta-button secondary">
-              <FontAwesomeIcon icon={faHeart} /> Save to Favorites
-            </button>
-          </div>
-        </section>
-
-        {/* Similar Pets Section */}
-        <section className="similar-pets">
-          <h2>You Might Also Like</h2>
-          <div className="similar-pets-grid">
-            {[2, 3, 4].map((id: number) => {
-              const similarPet = getPetById(id.toString());
-              return (
-                <Link key={id} to={`/dashboard/adopt/profile/${id}`} className="pet-card-link">
-                  <div className="pet-card">
-                    <img src={similarPet.images[0]} alt={similarPet.name} className="pet-card-image" />
-                    <div className="pet-card-info">
-                      <h3>{similarPet.name}</h3>
-                      <p>{similarPet.breed} • {similarPet.age}</p>
-                    </div>
-                  </div>
+              <div className="profile-actions">
+                <Link to="/adopt-form" className="cta-button primary">
+                  Apply to Adopt
                 </Link>
-              );
-            })}
+
+                <Link to="/dashboard/adopt/browse" className="cta-button secondary">
+                  Back to Browse
+                </Link>
+              </div>
+            </div>
           </div>
         </section>
       </div>
     </div>
   );
-};
+}

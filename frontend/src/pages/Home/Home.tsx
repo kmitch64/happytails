@@ -44,7 +44,7 @@ export default function Home() {
                         </div>
                         <h3>Adopt a Pet</h3>
                         <p>Browse pets available for adoption and submit applications with ease.</p>
-                        <Link to="/adopt" className="feature-link">Learn More</Link>
+                        <Link to="/dashboard/adopt" className="feature-link">Learn More</Link>
                     </div>
                     <div className="feature-card">
                         <div className="feature-icon">
@@ -52,7 +52,7 @@ export default function Home() {
                         </div>
                         <h3>Find a Sitter</h3>
                         <p>Book trusted pet sitters for walking, boarding, or daycare.</p>
-                        <Link to="/sitters" className="feature-link">Learn More</Link>
+                        <Link to="/dashboard/sitters" className="feature-link">Learn More</Link>
                     </div>
                     <div className="feature-card">
                         <div className="feature-icon">
@@ -60,7 +60,7 @@ export default function Home() {
                         </div>
                         <h3>AI Care Assistant</h3>
                         <p>Get personalized reminders and advice for your pet's health.</p>
-                        <Link to="/ai-assistant" className="feature-link">Learn More</Link>
+                        <Link to="/dashboard/ai-assistant" className="feature-link">Learn More</Link>
                     </div>
                 </div>
             </section>
