@@ -11,6 +11,8 @@ export default Router()
   .put('/update/:id', isAuthorized, Controller.updateUser)
   .put('/preferences', isAuthorized, Controller.updateUserPreferences)
   .delete('/:id', isAuthorized, Controller.deleteUser)
+  
+  .post('/verify-email/:uid', Controller.verifyEmail)
 
   .get('/:id/pets', isAuthorized, Controller.getUserPets)
   .post('/:id/pets/:petId', isAuthorized, Controller.addPetToUser)
@@ -18,4 +20,7 @@ export default Router()
 
   .get('/:id/saved-pets', isAuthorized, Controller.getSavedPets)
   .post('/:id/saved-pets/:petId', isAuthorized, Controller.savePet)
-  .delete('/:id/saved-pets/:petId', isAuthorized, Controller.unsavePet);
+  .delete('/:id/saved-pets/:petId', isAuthorized, Controller.unsavePet)
+  
+  
+

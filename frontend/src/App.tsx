@@ -19,6 +19,9 @@ import Register from './pages/register/register';
 import Logout from './pages/logout/logout';
 import TwoFactorAuth from './pages/2fa/2fa';
 
+import Verify from './pages/verify/Verify';
+import VerifyEmailSentNotice from './pages/emailnotice/VerifyEmailSentNotice';
+
 //home page
 import Home from "./pages/Home/Home";
 
@@ -59,6 +62,7 @@ import AdoptionApplication from './pages/Adopt/AdoptionApplication';
 import './App.css';
 
 
+
 export default function App(): JSX.Element {
   return (
     <AuthProvider>
@@ -78,6 +82,8 @@ export default function App(): JSX.Element {
             <Route path='/register' element={<Register />} />
             <Route path='/logout' element={<Logout />} />
             <Route path='/2fa' element={<TwoFactorAuth />} />
+            <Route path='/verify/:uid' element={<Verify />} />
+            <Route path='/verify-email-sent' element={<VerifyEmailSentNotice />} />
 
             <Route path='/dashboard/*' element={<ProtectedRoute><DashboardLayout /></ProtectedRoute>}>
               <Route index element={<DashboardOverview />} />

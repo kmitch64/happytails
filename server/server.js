@@ -44,13 +44,9 @@ function enforceWWW(req, res, next) {
 };
 
 app
-    .use(enforceWWW)
     .use(cors(
         {
             origin: process.env.DOMAIN,
-            origin: true,
-
-
             credentials: true
         }
     ))
@@ -62,7 +58,7 @@ app
     .use(express.static(STATIC_ASSETS()))
 
     .get('/health', (_, res) => { rateLimit, res.status(200).json({ status: 'OK' }); })
-    .get(/^(?!\/api).*/, rateLimit, async (_, res) => res.send(await INDEX_AS_STRING()));
+    .use(/^(?!\/api).*/, rateLimit, enforceWWW, async (_, res) => res.send(await INDEX_AS_STRING()));
 
 await routeMaster(app);
 await serverListener(app);
