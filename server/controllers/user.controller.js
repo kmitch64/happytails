@@ -57,7 +57,7 @@ export default {
       await user.save();
 
       const html = `<p>Your OTP for email verification is: <strong>${otp}</strong></p>
-      Go to <a href="${process.env.DOMAIN}/verify/${user._id}">${process.env.DOMAIN}/verify/${user._id}</a> to verify your email.`;
+      Go to <a href="https://www.${process.env.DOMAIN}/verify/${user._id}">https://www.${process.env.DOMAIN}/verify/${user._id}</a> to verify your email.`;
       // Go to <a href="http://localhost:5173/verify/${user._id}">http://localhost:5173/verify/${user._id}</a> to verify your email.`;
 
       await sendEmail(user.email, 'Email Verification', `Your OTP is: ${otp}`, html);
