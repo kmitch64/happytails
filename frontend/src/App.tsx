@@ -36,7 +36,7 @@ import CareReminders from './pages/dashboard/CareReminders';
 import AddReminder from './components/dashboard/AddReminder';
 import MedicalRecords from './pages/dashboard/MedicalRecords';
 import AddMedicalRecord from './components/dashboard/AddMedicalRecord';
-import EditMedicalRecord from './components/dashboard/EditMedicalRecord';
+import AddMedRecordEdit from './components/dashboard/AddMedRecordEdit';
 
 // adopt pages
 import Adopt from './pages/dashboard/DashboardAdopt';
