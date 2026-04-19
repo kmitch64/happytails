@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import sitterImg from "../../assets/Sitter.jpg";
+import sitterImg from "../../assets/sitter.jpg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCalendarAlt } from "@fortawesome/free-solid-svg-icons";
 
