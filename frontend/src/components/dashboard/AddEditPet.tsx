@@ -115,7 +115,7 @@ export default function AddEditPet() {
       });
 
       if (response.ok) {
-        const data = await response.json();
+        // const data = await response.json(); // is this meant for something?
         navigate('/dashboard/my-pets');
       } 
       else {
@@ -124,7 +124,7 @@ export default function AddEditPet() {
       };
     } 
     catch (err) {
-      setError('Failed to save pet profile');
+      setError(err instanceof Error ? err.message : 'Failed to save pet profile');
     };
   };
 

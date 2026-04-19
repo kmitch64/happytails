@@ -62,21 +62,9 @@ export default {
         spayedNeutered: req.body.spayedNeutered,
         compatibility: req.body.compatibility,
         owner: req.user._id,
-        // images: req.body.images || [], // this needs formatting otherwise we'll get a stack exception
-        careReminders: pet.careReminders.map(reminder => ({
-          type: reminder.type,
-          description: reminder.description,
-          date: reminder.date,
-          frequency: reminder.frequency,
-          completed: reminder.completed
-        })),
-        medicalRecords: pet.medicalRecords.map(record => ({
-          type: record.type,
-          description: record.description,
-          date: record.date,
-          veterinarian: record.veterinarian,
-          notes: record.notes
-        }))
+        images: req.body.images || [],
+        careReminders: [],
+        medicalRecords: []
       };
 
       const pet = new Pet(petData);
@@ -90,8 +78,8 @@ export default {
       await interactions.storeInteractionPayload(req.user.username, savedPet);
 
       return res.status(201).json(savedPet);
-    } catch (error) {
-
+    } 
+    catch (error) {
       if (error.name === 'ValidationError') {
         const messages = Object.values(error.errors).map(val => val.message);
         return res.status(400).json({ messages });
