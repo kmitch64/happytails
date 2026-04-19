@@ -12,6 +12,32 @@ export default function UserManagement() {
   const [searchTerm, setSearchTerm] = useState('');
   const [error, setError] = useState('');
 
+  const handleDelete = async (userId: string) => {
+    if (!window.confirm('Are you sure you want to delete this user? This action cannot be undone.')) {
+      return;
+    }
+
+    try {
+      const response = await fetch(`/api/v1/users/${userId}`, {
+        method: 'DELETE',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to delete user');
+      }
+
+      setUsers(users.filter(user => user._id !== userId));
+    }
+    catch (err) {
+      setError('Failed to delete user');
+      console.error(err);
+    }
+  };
+
   useEffect(() => {
     const fetchUsers = async () => {
       try {
@@ -45,6 +71,9 @@ export default function UserManagement() {
     return <Loading message="Loading users..." />;
   };
 
+  if (error) {
+    return <div className="error-message">{error}</div>;
+  }
 
   return (
     <div className="user-management">
@@ -100,7 +129,7 @@ export default function UserManagement() {
                     <Link to={`/dashboard/admin/users/${user._id}/edit`} className="action-button">
                       <FontAwesomeIcon icon={faEdit} />
                     </Link>
-                    <button className="action-button">
+                    <button onClick={() => handleDelete(user._id)} className="action-button delete-button">
                       <FontAwesomeIcon icon={faTrash} />
                     </button>
                   </div>
