@@ -78,9 +78,9 @@
 
 .form-title {
     margin: 0 auto 10px auto;
-    font-size: 36px;
+    font-size: 28px;
     font-weight: 700;
-    color: #7acb6f;
+    color: #000000;
     text-align: center;
     display: block;
     width: 100%;
@@ -96,7 +96,7 @@
 
 .form-subtitle {
     margin: 0 auto 16px auto;
-    font-size: 16px;
+    font-size: 0.95rem;
     color: #666;
     line-height: 1.5;
     text-align: center;

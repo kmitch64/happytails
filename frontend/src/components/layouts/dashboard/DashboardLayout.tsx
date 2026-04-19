@@ -41,7 +41,7 @@ export default function DashboardLayout() {
 
         <nav className="sidebar-nav">
           <ul>
-            
+
             <li>
               <Link to="/dashboard" className="nav-link active">
                 <FontAwesomeIcon icon={faHome} />
@@ -66,6 +66,12 @@ export default function DashboardLayout() {
               <Link to="/dashboard/my-pets" className="nav-link">
                 <FontAwesomeIcon icon={faPaw} />
                 <span>My Pets</span>
+              </Link>
+            </li>
+            <li>
+              <Link to="/dashboard/sitters" className="nav-link">
+                <FontAwesomeIcon icon={faUser} />
+                <span>Book a Sitter</span>
               </Link>
             </li>
             <li>
@@ -124,7 +130,7 @@ export default function DashboardLayout() {
                 </li>
               </>
             )}
-            
+
 
             {(user?.role === 'PetSitter' || user?.isAdmin) && (
               <>
