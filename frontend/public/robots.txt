@@ -8,4 +8,4 @@ Disallow: /2fa
 
 Allow: /
 
-Sitemap: https://www.happytails.com/sitemap.xml
+Sitemap: https://www.happytails.xyz/sitemap.xml

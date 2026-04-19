@@ -32,7 +32,7 @@ export default function Register() {
       if (!success) {
         throw new Error(message || 'Registration failed');
       }
-      navigate('/login');
+      navigate('/verify-email-sent');
     }
     catch (e: any) {
       setIsLoading(false);

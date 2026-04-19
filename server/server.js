@@ -33,15 +33,20 @@ if (hasMongo) {
     catch (err) {
         console.error('MongoDB connection error:', err);
     };
-}
+};
+
+function enforceWWW(req, res, next) {
+    const host = req.headers.host;
+    if (host && !host.startsWith('www.')) {
+        return res.redirect(301, `https://www.${host}${req.url}`);
+    }
+    next();
+};
 
 app
     .use(cors(
         {
             origin: process.env.DOMAIN,
-            origin: true,
-
-
             credentials: true
         }
     ))
@@ -53,8 +58,8 @@ app
     .use(express.static(STATIC_ASSETS()))
 
     .get('/health', (_, res) => { rateLimit, res.status(200).json({ status: 'OK' }); })
-    .get(/^(?!\/api).*/, rateLimit, async (_, res) => res.send(await INDEX_AS_STRING()));
-    
+    .use(/^(?!\/api).*/, rateLimit, enforceWWW, async (_, res) => res.send(await INDEX_AS_STRING()));
+
 await routeMaster(app);
 await serverListener(app);
 

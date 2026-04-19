@@ -19,6 +19,11 @@ import TwoFactorAuth from './pages/2fa/2fa';
 
 // home page
 import Home from './pages/Home/Home';
+import Verify from './pages/verify/Verify';
+import VerifyEmailSentNotice from './pages/emailnotice/VerifyEmailSentNotice';
+
+//home page
+import Home from "./pages/Home/Home";
 
 // admin dashboard
 import AdminLayout from './components/layouts/admin/AdminLayout';
@@ -52,6 +57,13 @@ import PublicBrowseAdoptables from './pages/Adopt/BrowseAdoptables';
 // global styles
 import './App.css';
 
+import AdoptionApplication from './pages/Adopt/AdoptionApplication';
+
+//global styles
+import './App.css';
+
+
+
 export default function App(): JSX.Element {
   return (
     <AuthProvider>
@@ -63,6 +75,8 @@ export default function App(): JSX.Element {
             <Route path="adopt" element={<PublicBrowseAdoptables />} />
             <Route path="adopt/:id" element={<PublicAdoptableProfile />} />
             <Route path="adopt-form" element={<AdoptionApplication />} />
+
+
 
             <Route path="/privacy" element={<PrivacyPolicy />} />
             <Route path="/terms" element={<TermsOfService />} />
@@ -105,6 +119,34 @@ export default function App(): JSX.Element {
               path="my-pets/:id/medical-records/:recordId/edit"
               element={<EditMedicalRecord />}
             />
+            <Route path='/login' element={<Login />} />
+            <Route path='/register' element={<Register />} />
+            <Route path='/logout' element={<Logout />} />
+            <Route path='/2fa' element={<TwoFactorAuth />} />
+            <Route path='/verify/:uid' element={<Verify />} />
+            <Route path='/verify-email-sent' element={<VerifyEmailSentNotice />} />
+
+            <Route path='/dashboard/*' element={<ProtectedRoute><DashboardLayout /></ProtectedRoute>}>
+              <Route index element={<DashboardOverview />} />
+              <Route path='adopt' element={<Adopt />} />
+              <Route path='adopt/browse' element={<BrowseAdoptables />} />
+              <Route path='adopt/pet/:id' element={<AdoptableProfile />} />
+              <Route path="sitters" element={<SitterForm />} />
+              <Route path="adopt" element={<PublicBrowseAdoptables />} />
+              <Route path="adopt/:id" element={<PublicAdoptableProfile />} />
+              <Route path="adopt-form" element={<AdoptionApplication />} />
+              <Route path='my-pets' element={<MyPets />} />
+              <Route path='my-pets/add' element={<AddEditPet />} />
+              <Route path='my-pets/edit/:id' element={<AddEditPet />} />
+              <Route path='my-pets/:id' element={<MyPetProfile />} />
+              <Route path='ai-assistant' element={<AIAssistant />} />
+              <Route path='reminders' element={<CareReminders />} />
+              <Route path='my-pets/:id/add-reminder' element={<AddReminder />} />
+              <Route path="medical-records" element={<MedicalRecords />} />
+              <Route path="my-pets/:id/add-medical-record" element={<AddMedicalRecord />} />
+              <Route path="my-pets/:id/medical-records/:recordId/edit" element={<EditMedicalRecord />} />
+
+            </Route>
           </Route>
 
           <Route

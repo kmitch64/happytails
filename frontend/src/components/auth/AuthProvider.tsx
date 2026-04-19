@@ -56,16 +56,20 @@ export default function AuthProvider({ children }: AuthProviderProps) {
         return { success: false, message: (await res.json()).message };
 
       const data = await res.json();
-      // console.log("User data from login:", data);
+
+      if (!data.user.isVerified)
+        return { success: false, message: 'Please verify your email before logging in.' };
+
       if (data.user.isAdmin)
         data.user.role = 'Admin';
+
       if (data.user.is2FAEnabled)
         return { success: true, message: '', requires2FA: true, userEmail: data.user.email };
 
       setIsLoggedIn(true);
       setUser(data.user);
-      return { success: true, message: '' };
 
+      return { success: true, message: '' };
     }
     catch (e: any) {
       return { success: false, message: e.message };
@@ -83,7 +87,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
     try {
       await fetch('/api/v1/auth/logout', {
         method: 'POST',
-        credentials: 'include',
+        credentials: 'include'
       });
 
       setIsLoggedIn(false);
@@ -111,23 +115,18 @@ export default function AuthProvider({ children }: AuthProviderProps) {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, email, password }),
-        credentials: 'include',
+        credentials: 'include'
       });
 
-      let data = null;
-      const text = await res.text();
-
-      if (text) {
-        data = JSON.parse(text);
-      }
-
       if (!res.ok)
-        return { success: false, message: data?.message || 'Registration failed. Please make sure all fields are filled in correctly.' };
+        return { success: false, message: (await res.json()).message || 'Registration failed' };
 
-      return { success: true, message: '' };
+      const data = await res.json();
+
+      return { success: true, message: data.message || 'Registration successful' };
     }
     catch (e: any) {
-      return { success: false, message: e.message };
+      return { success: false, message: e.message || 'We encountered an error during registration, Please try again later. If the problem persists, contact support.' };
     };
   };
 
@@ -143,15 +142,13 @@ export default function AuthProvider({ children }: AuthProviderProps) {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, token }),
-        credentials: 'include',
+        credentials: 'include'
       });
 
-      const text = await res.text();
-      const data = text ? JSON.parse(text) : null;
-
       if (!res.ok)
-        return { success: false, message: data?.message || 'Request failed' };
+        return { success: false, message: (await res.json()).message || '2FA verification failed' };
 
+      const data = await res.json();
       setIsLoggedIn(true);
       setUser(data.user);
 
@@ -171,21 +168,20 @@ export default function AuthProvider({ children }: AuthProviderProps) {
   async function disable2FA() {
     setIsLoading(true);
     try {
-      if (!user) return { success: false, message: 'No user logged in' };
+      if (!user)
+        return { success: false, message: 'No user logged in' };
 
       const res = await fetch('/api/v1/auth/2fa/disable', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: user.email }),
-        credentials: 'include',
+        credentials: 'include'
       });
 
-      const text = await res.text();
-      const data = text ? JSON.parse(text) : null;
-
       if (!res.ok)
-        return { success: false, message: data?.message || 'Request failed' };
+        return { success: false, message: (await res.json()).message || 'Failed to disable 2FA' };
 
+      const data = await res.json();
       setUser(data.user);
 
       return { success: true, message: '' };
@@ -195,8 +191,8 @@ export default function AuthProvider({ children }: AuthProviderProps) {
     }
     finally {
       setIsLoading(false);
-    }
-  }
+    };
+  };
 
   return (
     <AuthContext.Provider value={{ isLoading, isLoggedIn, user, register, login, logout, verify2FA, disable2FA }}>

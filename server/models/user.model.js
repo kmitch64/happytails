@@ -16,6 +16,7 @@ const userSchema = new mongoose.Schema({
   otpSecret: { type: String, default: null },
   is2FAEnabled: { type: Boolean, default: false },
   isAdmin: { type: Boolean, default: false },
+  isVerified: { type: Boolean, default: false },
   role: {
     type: String,
     enum: ['PetOwner', 'PetSitter', 'ShelterStaff', 'Admin'],

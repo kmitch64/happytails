@@ -50,7 +50,45 @@ export default {
         throw new Error(e);
       };
 
+      const { sendEmail } = await import('../utils/sendEmail.js');
+      const otp = Math.floor(100000 + Math.random() * 900000).toString();
+
+      user.otpSecret = otp;
+      await user.save();
+
+      const html = `<p>Your OTP for email verification is: <strong>${otp}</strong></p>
+      Go to <a href="https://www.${process.env.DOMAIN}/verify/${user._id}">https://www.${process.env.DOMAIN}/verify/${user._id}</a> to verify your email.`;
+      // Go to <a href="http://localhost:5173/verify/${user._id}">http://localhost:5173/verify/${user._id}</a> to verify your email.`;
+
+      await sendEmail(user.email, 'Email Verification', `Your OTP is: ${otp}`, html);
+
       return res.status(201).json(user);
+    }
+    catch (e) {
+      return res.status(500).json({ message: e.message || 'Failed to create user' });
+    };
+  },
+
+  verifyEmail: async (req, res) => {
+    try {
+      const { uid } = req.params;
+      const { otp } = req.body;
+      const user = await UserModel.findById(uid);
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+      };
+
+      if (user.otpSecret === otp) {
+        user.isVerified = true;
+        user.otpSecret = undefined;
+
+        await user.save();
+
+        return res.status(200).json({ success: true, message: 'Email verified successfully' });
+      }
+      else {
+        return res.status(400).json({ message: 'Invalid OTP' });
+      };
     }
     catch (e) {
       return res.status(500).json({ message: e.message });
@@ -154,7 +192,7 @@ export default {
       };
 
       return res.status(200).json(user);
-    } 
+    }
     catch (error) {
       return res.status(500).json({ message: error.message });
     };

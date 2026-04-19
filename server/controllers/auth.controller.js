@@ -37,6 +37,7 @@ export default {
         user = await UserModel.findOne({ email });
 
       if (!user) return res.status(404).json({ success: false, message: 'User not found' });
+      // if (!user.isVerified) return res.status(403).json({ success: false, message: 'Email not verified. Please check your inbox.' });
       if (!await user.comparePassword(password)) return res.status(401).json({ success: false, message: 'Invalid password' });
 
       const token = await generateToken(user);
@@ -53,7 +54,8 @@ export default {
         email: user.email,
         username: user.username,
         is2FAEnabled: user.is2FAEnabled,
-        isAdmin: user.isAdmin
+        isAdmin: user.isAdmin,
+        isVerified: user.isVerified
       };
 
       return res.status(200).json({ user: req.user });

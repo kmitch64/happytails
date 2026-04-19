@@ -3,6 +3,7 @@ import "./Sitter.css";
 import sitterImg from "../../assets/Sitter.jpg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCalendarAlt } from "@fortawesome/free-solid-svg-icons";
+import sitterImg from "../../assets/sitter.jpg";
 
 export default function SitterForm() {
     const [formData, setFormData] = useState({
