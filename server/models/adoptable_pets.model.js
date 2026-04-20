@@ -1,8 +1,8 @@
 
 import mongoose from 'mongoose';
 
-const petSchema = new mongoose.Schema({
-  id: {
+const AdoptablePetSchema = new mongoose.Schema({
+  petid: {
     type: String,
     required: true,
     unique: true,
@@ -37,28 +37,33 @@ const petSchema = new mongoose.Schema({
   spayedNeutered: {
     type: String,
     enum: ['Y', 'N', 'Unknown'],
-    required: true,
+    required: true
   },
   compatibility: {
     type: [String],
-    required: true,
+    required: true
   },
   breed: {
-    type: String,
+    type: String
   },
   images: {
     type: [{ data: String, contentType: String }],
-    default: [],
+    default: []
   },
   status: {
     type: String,
-    enum: ['Available', 'Adopted', 'Pending', 'Reserved'],
-    default: 'Available',
+    enum: ['Active', 'Deceased', 'Missing'],
+    default: 'Active'
   },
-  adoptionStatus: {
+  adoption_status: {
+    type: String,
+    enum: ['Available', 'Adopted', 'Pending', 'Reserved', ''],
+    default: 'Available'
+  },
+  adoption_process_status: {
     type: String,
     enum: ['Not Started', 'In Progress', 'Completed'],
-    default: 'Not Started',
+    default: 'Not Started'
   },
   createdAt: {
     type: Date,
@@ -70,9 +75,9 @@ const petSchema = new mongoose.Schema({
   },
 });
 
-petSchema.pre('save', function(next) {
+AdoptablePetSchema.pre('save', async function(/*next*/) {
   this.updatedAt = Date.now();
-  next();
+  //next();
 });
 
-export default mongoose.model('Pet', petSchema);
+export default mongoose.model('AdoptablePet', AdoptablePetSchema);

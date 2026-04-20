@@ -20,10 +20,16 @@
   --bg-yellow-100: #fff8e8;
   --bg-purple-100: #f7f2fb;
 
+  --form-background: #ffffff;
+  --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+
   --card-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
   --card-shadow-hover: 0 12px 28px rgba(0, 0, 0, 0.12);
   --border-radius: 14px;
   --transition: all 0.3s ease;
+
+  --error-color: #e74c3c;
+  --success-color: #2ecc71;
 
   --font-brand: 'Montserrat', sans-serif;
   --font-heading: 'Poppins', sans-serif;
@@ -114,29 +120,6 @@ h3 {
   padding: 1rem 2rem;
   font-size: 1.1rem;
 }
-
-
-
-
-.loader {
-  animation: spin 1s linear infinite;
-  border-radius: 50%;
-  height: 48px;
-  width: 48px;
-  border-bottom: 2px solid var(--teal-accent);
-  margin: 0 auto 16px;
-}
-
-@keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
-
-  to {
-    transform: rotate(360deg);
-  }
-}
-
 
 .reminder-form-container {
   max-width: 450px;

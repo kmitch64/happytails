@@ -42,8 +42,11 @@ import EditMedicalRecord from './components/dashboard/EditMedicalRecord';
 // adopt pages
 import Adopt from './pages/dashboard/DashboardAdopt';
 import DashboardPetProfile from './pages/dashboard/DashboardPetProfile';
-import BrowseAdoptables from './pages/dashboard/DashboardBrowseAdoptables';
+import DashboardBrowseAdoptables from './pages/dashboard/DashboardBrowseAdoptables';
+
 import AdoptionApplication from './pages/Adopt/AdoptionApplication';
+import AdoptionApplications from './pages/dashboard/AdoptionApplications';
+
 import DashboardSitterForm from './pages/dashboard/DashboardSitterForm';
 
 // public pages
@@ -52,6 +55,7 @@ import PublicBrowseAdoptables from './pages/Adopt/BrowseAdoptables';
 
 // global styles
 import './App.css';
+
 
 
 export default function App() {
@@ -64,7 +68,7 @@ export default function App() {
           <Route element={<DefaultLayout />}>
             <Route path="/" index element={<Home />} />
 
-            <Route path="adopt" element={<PublicBrowseAdoptables />} />
+            <Route path="adopt" element={<PublicBrowseAdoptables />} />  {/* this is the basic no show stuff page. */}
             <Route path="adopt/:id" element={<PublicAdoptableProfile />} />
             <Route path="adopt-form" element={<AdoptionApplication />} />
 
@@ -86,12 +90,12 @@ export default function App() {
               <Route path='ai-assistant' element={<AIAssistant />} />
               
               <Route path='adopt' element={<Adopt />} />
-              <Route path="adopt" element={<PublicBrowseAdoptables />} />
-
               <Route path="adopt/:id" element={<PublicAdoptableProfile />} />
               <Route path="adopt-form" element={<AdoptionApplication />} />
-              <Route path='adopt/browse' element={<BrowseAdoptables />} />
-              <Route path='adopt/pet/:id' element={<DashboardPetProfile />} />              
+              <Route path='adopt/browse' element={<DashboardBrowseAdoptables />} />
+              <Route path='adopt/pet/:id' element={<DashboardPetProfile />} />  
+
+              <Route path='my-applications' element={<AdoptionApplications />} />           
               
               <Route path='my-pets' element={<MyPets />} />
               <Route path='my-pets/add' element={<AddEditPet />} />

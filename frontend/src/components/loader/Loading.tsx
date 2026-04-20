@@ -1,10 +1,12 @@
 
+import './loading.css';
+
 export default function Loading({ message = "Loading..." }: { message?: string }) {
   return (
-    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh' }}>
-      <div style={{ textAlign: 'center' }}>
-        <div className='loader' />
-        <p style={{ color: '#4b5563' }}>{message}</p>
+    <div className="loading-container">
+      <div className="loading-content">
+        <div className='loading-animation' />
+        <p className="loading-message">{message}</p>
       </div>
     </div>
   );

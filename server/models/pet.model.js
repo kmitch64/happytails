@@ -133,6 +133,14 @@ const petSchema = new mongoose.Schema({
       type: String
     }
   }],
+  adoption_status: {
+    type: String,
+    enum: {
+      values: ['Available', 'Adopted', 'Pending', 'Reserved', ''],
+      message: 'Invalid adoption status value'
+    },
+    default: ''
+  },
   createdAt: {
     type: Date,
     default: Date.now

@@ -1,13 +1,14 @@
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+
+import Loading from '../../components/loader/Loading';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  faPaw, faSave, faArrowLeft, faVenusMars, faBirthdayCake,
-  faRuler, faBolt, faBriefcaseMedical, faDog, faCat,
-  faPlus, faTimes
+  faSave, faArrowLeft, faPlus, faTimes
 } from '@fortawesome/free-solid-svg-icons';
-import Loading from '../../components/loader/Loading';
+
 
 export default function AddEditPet() {
   const { id } = useParams();
@@ -23,12 +24,12 @@ export default function AddEditPet() {
     compatibility: [] as string[],
     breed: '',
     type: 'Dog',
-    images: [] as { data: string; contentType: string }[]
+    images: [] as { data: string; contentType: string }[],
+    adoption_status: ''
   });
+
   const [isLoading, setIsLoading] = useState(!!id);
   const [error, setError] = useState('');
-  const [imageFiles, setImageFiles] = useState<File[]>([]);
-  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (id) {
@@ -59,15 +60,21 @@ export default function AddEditPet() {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value, type } = e.target;
+    console.log(`Field changed: ${name}, Value: ${value}, Type: ${type}`);
     const checked = (e.target as HTMLInputElement).checked;
 
-    if (type === 'checkbox') {
-      if (checked) {
-        setPet(prev => ({ ...prev, [name]: [...prev[name as keyof typeof pet], value] }));
-      } else {
-        setPet(prev => ({ ...prev, [name]: (prev[name as keyof typeof pet] as string[]).filter((item: string) => item !== value) }));
-      }
-    } else {
+    if (type === 'checkbox' && name === 'compatibility') {
+      setPet(prev => {
+        const compatibility = checked
+          ? [...prev.compatibility, value]
+          : prev.compatibility.filter(item => item !== value);
+        return { ...prev, compatibility };
+      });
+    }
+    else if (name === 'adoption_status') {
+      setPet(prev => ({ ...prev, adoption_status: value }));
+    }
+    else {
       setPet(prev => ({ ...prev, [name]: value }));
     }
   };
@@ -75,7 +82,6 @@ export default function AddEditPet() {
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const filesArray = Array.from(e.target.files).slice(0, 5 - pet.images.length);
-      setImageFiles(prev => [...prev, ...filesArray]);
 
       filesArray.forEach(file => {
         const reader = new FileReader();
@@ -111,18 +117,42 @@ export default function AddEditPet() {
         body: JSON.stringify(pet),
         headers: {
           'Content-Type': 'application/json'
-        }
+        },
+        credentials: 'include'
       });
 
       if (response.ok) {
-        // const data = await response.json(); // is this meant for something?
+
+        const savedPet = await response.json();
+
+        if (savedPet.adoption_status !== '') {
+
+
+          savedPet.petid = savedPet._id;
+          const add_pet = await fetch('/api/v1/adoptions/pets', {
+            method: 'POST',
+            body: JSON.stringify(savedPet),
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            credentials: 'include'
+          });
+
+          if (add_pet.ok) {
+            console.log('Adoptable pet profile created successfully');
+          }
+          else {
+            const errorData = await add_pet.json();
+            console.error('Failed to create adoptable pet profile:', errorData.message || 'Unknown error');
+          };
+        }
         navigate('/dashboard/my-pets');
-      } 
+      }
       else {
         const errorData = await response.json();
         setError(errorData.message || 'Failed to save pet profile');
       };
-    } 
+    }
     catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to save pet profile');
     };
@@ -410,6 +440,24 @@ export default function AddEditPet() {
                   ))}
                 </div>
               )}
+            </div>
+          </div>
+
+          <div className="form-section">
+            <h2>Adoption Status</h2>
+            <div className="form-group">
+              <label htmlFor="adoption_status">Is this pet currently available for adoption?</label>
+              <select
+                id="adoption_status"
+                name="adoption_status"
+                value={pet.adoption_status}
+                onChange={handleChange}
+              >
+                <option value="">Select an option</option>
+                <option value="Available">Available</option>
+                <option value="Adopted">Adopted</option>
+                <option value="Pending">Pending</option>
+              </select>
             </div>
           </div>
 

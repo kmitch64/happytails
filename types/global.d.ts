@@ -1,6 +1,16 @@
 
 declare global {
 
+  // popup component
+  type SubmitStatus = {
+  showStatus: boolean;
+  hasError: boolean;
+  showLoading: boolean;
+  showButton: boolean;
+  title: string;
+  message: string;
+};
+
 
   /*********************************
    * User interface
@@ -39,13 +49,22 @@ declare global {
    *********************************/
   interface Pet {
     _id: string;
-    id: string;
     name: string;
-    type?: string;
+    bio: string;
+    type: 'Dog' | 'Cat' | 'Bird' | 'Reptile' | 'SmallMammal' | 'Other';
     breed: string;
+    sex: 'M' | 'F' | 'Unknown';
     age: string;
+    size: 'XS' | 'S' | 'M' | 'L' | 'XL' | 'XXL';
+    energyLevel: 'Low' | 'Moderate' | 'High' | 'Very High';
+    spayedNeutered: 'Y' | 'N' | 'Unknown';
+    compatibility: string[];
     images: { data: string; contentType: string }[];
-    status: 'Active' | 'Available' | 'Adopted' | 'Pending' | 'Reserved';
+    status: 'Active' | 'Deceased' | 'Missing';
+    owner: string;
+    careReminders: CareReminder[];
+    medicalRecords: MedicalRecord[];
+    adoption_status?: 'Available' | 'Adopted' | 'Pending' | 'Reserved' | '';
   }
 
   interface MyPet extends Pet {

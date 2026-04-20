@@ -1,19 +1,21 @@
+
+import { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch, faFilter, faDog, faCat, faHeart } from '@fortawesome/free-solid-svg-icons';
-import { useState } from 'react';
 
-import dog1 from "../../assets/dog1.jpg";
-import dog2 from "../../assets/dog2.jpg";
-import cat1 from "../../assets/cat1.jpg";
-import cat2 from "../../assets/cat2.jpg";
+// import dog1 from "../../assets/dog1.jpg";
+// import dog2 from "../../assets/dog2.jpg";
+// import cat1 from "../../assets/cat1.jpg";
+// import cat2 from "../../assets/cat2.jpg";
 
-const mockPets = [
-  { id: 1, name: "Mocha", type: "Dog", breed: "Mixed Breed", size: "Small", age: "11 months", image: dog1 },
-  { id: 2, name: "Leo", type: "Dog", breed: "Labrador / Hound Mix", size: "Medium", age: "1 year", image: dog2 },
-  { id: 3, name: "Luna", type: "Cat", breed: "Tabby", size: "Small", age: "8 months", image: cat1 },
-  { id: 4, name: "Bella", type: "Cat", breed: "Tabby", size: "Small", age: "2 months", image: cat2 },
-];
+// const mockPets = [
+//   { id: 1, name: "Mocha", type: "Dog", breed: "Mixed Breed", size: "Small", age: "11 months", image: dog1 },
+//   { id: 2, name: "Leo", type: "Dog", breed: "Labrador / Hound Mix", size: "Medium", age: "1 year", image: dog2 },
+//   { id: 3, name: "Luna", type: "Cat", breed: "Tabby", size: "Small", age: "8 months", image: cat1 },
+//   { id: 4, name: "Bella", type: "Cat", breed: "Tabby", size: "Small", age: "2 months", image: cat2 },
+// ];
 
 export default function DashboardBrowse() {
   const [searchParams] = useSearchParams();
@@ -28,7 +30,35 @@ export default function DashboardBrowse() {
     setFilters(prev => ({ ...prev, [filterType]: value }));
   };
 
-  const filteredPets = mockPets.filter(pet => {
+  const [pets, setPets] = useState<any[]>([]);
+
+  useEffect(() => {
+    const fetchAdoptables = async () => {
+      try {
+        const response = await fetch('/api/v1/adoptions', {
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          credentials: 'include'
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch pets");
+        }
+        const data = await response.json();
+
+        const adoptables = data.filter((pet: any) => pet.adoption_status === "Available");
+        setPets(adoptables);
+      } 
+      catch (err) {
+        console.error("Error fetching adoptables:", err);
+      };
+    };
+
+    fetchAdoptables();
+  }, []);
+
+  const filteredPets = pets.filter(pet => {
     if (filters.type !== 'all' && pet.type.toLowerCase() !== filters.type) return false;
     if (filters.age !== 'all') {
       const age = parseInt(pet.age);
@@ -70,7 +100,7 @@ export default function DashboardBrowse() {
         <h1><FontAwesomeIcon icon={faSearch} /> Browse Adoptable Pets</h1>
         <p>At Happy Tails, we believe every animal deserves a second chance.
           Each pet has their own story and is ready to find a loving home.
-          From playful puppies to calm companions, we’re here to help you find the perfect match.</p>
+          From playful puppies to calm companions, we're here to help you find the perfect match.</p>
       </div>
 
       <div className="page-content browse-layout">
@@ -132,8 +162,8 @@ export default function DashboardBrowse() {
         <div className="adopt-grid-container">
           <div className="adopt-grid">
             {filteredPets.map((pet) => (
-              <div key={pet.id} className="adopt-card">
-                <img src={pet.image} alt={pet.name} className="adopt-image" />
+              <div key={pet._id} className="adopt-card">
+                <img src={pet.images[0]?.data} alt={pet.name} className="adopt-image" />
 
                 <div className="adopt-card-content">
                   <h3>{pet.name}</h3>
@@ -143,12 +173,12 @@ export default function DashboardBrowse() {
                   <p><strong>Age:</strong> {pet.age}</p>
 
                   <div className="adopt-card-buttons">
-                    <Link to={`/dashboard/adopt/pet/${pet.id}`} className="profile-btn">
+                    <Link to={`/dashboard/adopt/pet/${pet._id}`} className="profile-btn">
                       View Profile
                     </Link>
 
                     <Link
-                      to={`/dashboard/adopt/apply?pet=${encodeURIComponent(pet.name)}`}
+                      to={`/dashboard/adopt/${pet._id}`}
                       className="apply-btn"
                     >
                       Apply to Adopt

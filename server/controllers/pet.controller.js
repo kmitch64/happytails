@@ -64,7 +64,8 @@ export default {
         owner: req.user._id,
         images: req.body.images || [],
         careReminders: [],
-        medicalRecords: []
+        medicalRecords: [],
+        adoption_status: req.body.adoption_status || ''
       };
 
       const pet = new Pet(petData);
